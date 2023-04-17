@@ -3,6 +3,7 @@ import * as path from 'path';
 import TranslateModel from './translate/translator/gpt3';
 import { program } from 'commander';
 import 'dotenv/config';
+import SubtitleProcessor from './utils/fileStream';
 
 program
   .option('-i, --input_file <filename>', 'Specify the original file name')
@@ -18,9 +19,10 @@ const options = program.opts();
 const originalFile = options.input_file;
 const targetFile = options.output_file;
 
-const fileStream = new FileStream(
+const fileStream = new SubtitleProcessor(
   path.resolve(__dirname, '..', 'test_subtitles', originalFile),
   path.resolve(__dirname, '..', 'test_subtitles', targetFile),
+  '',
   (text) => {
     const model = new TranslateModel({
       baseUrl: options.base_url ?? process.env.BASE_URL,
@@ -32,7 +34,7 @@ const fileStream = new FileStream(
 );
 
 fileStream
-  .start()
+  .process()
   .then(() => {
     console.log('tranlate success, new filePath');
   })
