@@ -28,11 +28,11 @@ BASE_URL=
 本项目提供了脚本文件 `translate.ts` 用于执行翻译任务。在命令行中输入以下指令即可开始翻译：
 
 ```sh
-npx ts-node src/translate.ts -i The.Super.Mario.Bros.Movie.2023.1080p.Cam.X264.Will1869.srt -o output.srt
+npx ts-node src/translate.ts -i The.Super.Mario.Bros.Movie.2023.1080p.Cam.X264.Will1869.srt -o output.srt -l Chinese
 ```
 
 翻译文件夹在 `test_subtitles`
 
-其中 `input.srt` 是输入的英文字幕文件名，`zh` 是输出的翻译目标语言代码。目前本项目支持的翻译目标语言包括中文（`zh`），用户可自行根据需要修改 `l` 参数。
+其中 `input.srt` 是输入的英文字幕文件名，`Chinese` 是输出的翻译目标语言。用户可自行根据需要修改 `l` 参数。
 
 翻译完成后，你将在 `output.srt` 文件中看到翻译好的字幕。如果运行时出现错误，请检查输入文件路径是否正确，OpenAI API KEY 是否已经正确配置。

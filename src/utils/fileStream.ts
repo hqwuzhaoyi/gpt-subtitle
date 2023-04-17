@@ -79,7 +79,7 @@ class SubtitleStream extends Transform {
 class SubtitleProcessor {
   private input: string;
   private output: string;
-  private prefix: string;
+  private prefix?: string;
   private lineCallback?: (content: string) => Promise<string>;
 
   constructor(

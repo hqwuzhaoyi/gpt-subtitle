@@ -33,7 +33,7 @@ class TranslateModel {
     Names:`;
   }
 
-  async translate(id) {
+  async translate(text, language = 'Chinese') {
     try {
       const completion = await this.model.createChatCompletion({
         model: 'gpt-3.5-turbo',
@@ -42,7 +42,7 @@ class TranslateModel {
           { role: 'system', content: '' },
           {
             role: 'user',
-            content: `Please help me to translate,\`{${id}}\` to Chinese, please return only translated content not include the origin text`,
+            content: `Please help me to translate,\`{${text}}\` to ${language}, please return only translated content not include the origin text`,
           },
         ],
       });
