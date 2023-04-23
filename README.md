@@ -1,4 +1,3 @@
-
 # Using OpenAI to Translate Subtitles
 
 This project uses OpenAI's GPT-3 language model to provide online translation of subtitles, supporting multiple languages. It makes it easy to translate English subtitles into subtitles in other languages.
@@ -8,10 +7,10 @@ This project uses OpenAI's GPT-3 language model to provide online translation of
 
 ## System Requirements
 
-This project runs on the Node.js platform, so you need to install Node.js first. After installing Node.js, you need to open the command-line tool, navigate to the project root directory, and install the dependencies required for the project using the following command:
+This project runs on the Node.js platform, so you need to install Node.js first. After installing Node.js, you need to open the command-line tool, navigate to the project root directory, and install pnpm, then install the dependencies required for the project using the following command:
 
 ```sh
-npm install
+pnpm install
 ```
 
 ## Usage
