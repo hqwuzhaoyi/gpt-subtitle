@@ -1,38 +1,50 @@
-# 使用 OpenAI 翻译字幕
 
-本项目使用 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) 实现了字幕的线上翻译功能，支持多种语言翻译，可以方便地将英文字幕翻译成其它语言的字幕。
+# Using OpenAI to Translate Subtitles
 
-## 运行环境
+This project uses OpenAI's GPT-3 language model to provide online translation of subtitles, supporting multiple languages. It makes it easy to translate English subtitles into subtitles in other languages.
 
-本项目使用 Node.js 平台运行，需要先在本地安装 Node.js 环境。在安装 Node.js 环境后，你需要打开命令行工具，进入项目根目录，然后安装项目所需的依赖：
+![preview](pictures/preview.png)
+![preview-translated](pictures/preview2.png)
+
+## System Requirements
+
+This project runs on the Node.js platform, so you need to install Node.js first. After installing Node.js, you need to open the command-line tool, navigate to the project root directory, and install the dependencies required for the project using the following command:
 
 ```sh
 npm install
 ```
 
-## 使用方法
+## Usage
 
-### 1. 设置 API KEY
+### 1. Set up API Key
 
-在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，你可以在根目录下新建一个名为 `.env` 的文件，并在其中添加如下配置：
+Before using the translation feature, you need to register an account on the [OpenAI website](https://beta.openai.com/signup/) and apply for an API key. After obtaining the API key, you can create a file named `.env` in the root directory and add the following configuration:
 
 ```sh
 OPENAI_API_KEY=your_api_key
 BASE_URL=
 ```
 
-将 `your_api_key` 替换成你申请到的 API KEY。
+Replace `your_api_key` with your own API key.
 
-### 2. 运行翻译任务
+### 2. Run Translation Task
 
-本项目提供了脚本文件 `translate.ts` 用于执行翻译任务。在命令行中输入以下指令即可开始翻译：
+### Start the web application
+
+```sh
+npm run dev
+```
+
+### Or using command line tasks
+
+This project provides a script file `translate.ts` for executing translation tasks. Enter the following command in the command line to start translation:
 
 ```sh
 npx ts-node src/translate.ts -i The.Super.Mario.Bros.Movie.2023.1080p.Cam.X264.Will1869.srt -o output.srt -l Chinese
 ```
 
-翻译文件夹在 `test_subtitles`
+The subtitle folder is located in `test_subtitles`.
 
-其中 `input.srt` 是输入的英文字幕文件名，`Chinese` 是输出的翻译目标语言。用户可自行根据需要修改 `l` 参数。
+`input.srt` is the input English subtitle file name, and `Chinese` is the target language for translation output. You can modify the `l` parameter as needed.
 
-翻译完成后，你将在 `output.srt` 文件中看到翻译好的字幕。如果运行时出现错误，请检查输入文件路径是否正确，OpenAI API KEY 是否已经正确配置。
+After the translation is completed, you will see the translated subtitles in the `output.srt` file. If an error occurs during the runtime, please check if the input file path is correct and if the OpenAI API key has been configured correctly.
