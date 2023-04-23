@@ -6,18 +6,24 @@ import {
   Patch,
   Param,
   Delete,
-} from '@nestjs/common';
-import { TranslateService } from './translate.service';
-import { CreateTranslateDto } from './dto/create-translate.dto';
-import { UpdateTranslateDto } from './dto/update-translate.dto';
+} from "@nestjs/common";
+import { TranslateService } from "./translate.service";
+import { CreateTranslateDto } from "./dto/create-translate.dto";
+import { UpdateTranslateDto } from "./dto/update-translate.dto";
 
-@Controller('translate')
+@Controller("translate")
 export class TranslateController {
   constructor(private readonly translateService: TranslateService) {}
 
+  // @Post()
+  // create(@Body() createTranslateDto: CreateTranslateDto) {
+  //   return this.translateService.create(createTranslateDto);
+  // }
   @Post()
-  create(@Body() createTranslateDto: CreateTranslateDto) {
-    return this.translateService.create(createTranslateDto);
+  async translateOne(@Body("filename") filename: string) {
+    // return this.translateService.create(createTranslateDto);
+    const result = await this.translateService.translateFile(filename);
+    return result;
   }
 
   @Get()
@@ -25,21 +31,21 @@ export class TranslateController {
     return this.translateService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.translateService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id') id: string,
-    @Body() updateTranslateDto: UpdateTranslateDto,
+    @Param("id") id: string,
+    @Body() updateTranslateDto: UpdateTranslateDto
   ) {
     return this.translateService.update(+id, updateTranslateDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.translateService.remove(+id);
   }
 }

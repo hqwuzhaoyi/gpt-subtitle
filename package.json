@@ -9,6 +9,9 @@
     "test": "turbo run test"
   },
   "devDependencies": {
+    "@types/node": "^18.11.9",
+    "commander": "^10.0.1",
+    "dotenv": "^16.0.3",
     "prettier": "^2.7.1",
     "turbo": "latest"
   },

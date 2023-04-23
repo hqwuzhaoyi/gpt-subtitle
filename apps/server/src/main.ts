@@ -6,6 +6,7 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 async function bootstrap2() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   await app.listen(3001);
 }
 bootstrap();
