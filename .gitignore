@@ -14,3 +14,7 @@ public/dist
 .turbo
 
 server/uploads
+
+samples/*
+
+packages/whisper/models/*

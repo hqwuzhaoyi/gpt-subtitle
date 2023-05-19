@@ -8,6 +8,7 @@ import { UploadModule } from "./upload/upload.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
+import { OsrtModule } from './osrt/osrt.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { join } from "path";
     TranslateModule,
     FileLoaderModule,
     UploadModule,
+    OsrtModule,
   ],
   controllers: [AppController],
   providers: [AppService],
