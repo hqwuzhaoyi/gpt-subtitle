@@ -149,12 +149,21 @@ importers:
       axios:
         specifier: ^1.3.5
         version: 1.3.5
+      class-variance-authority:
+        specifier: ^0.6.0
+        version: 0.6.0(typescript@5.0.4)
+      clsx:
+        specifier: ^1.2.1
+        version: 1.2.1
       eslint:
         specifier: 8.38.0
         version: 8.38.0
       eslint-config-next:
         specifier: 13.3.0
         version: 13.3.0(eslint@8.38.0)(typescript@5.0.4)
+      lucide-react:
+        specifier: ^0.221.0
+        version: 0.221.0(react@18.2.0)
       next:
         specifier: 13.3.0
         version: 13.3.0(react-dom@18.2.0)(react@18.2.0)
@@ -170,9 +179,15 @@ importers:
       swr:
         specifier: ^2.1.3
         version: 2.1.3(react@18.2.0)
+      tailwind-merge:
+        specifier: ^1.12.0
+        version: 1.12.0
       tailwindcss:
         specifier: 3.3.1
         version: 3.3.1(postcss@8.4.22)
+      tailwindcss-animate:
+        specifier: ^1.0.5
+        version: 1.0.5(tailwindcss@3.3.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -3161,6 +3176,18 @@ packages:
       isobject: 3.0.1
       static-extend: 0.1.2
 
+  /class-variance-authority@0.6.0(typescript@5.0.4):
+    resolution: {integrity: sha512-qdRDgfjx3GRb9fpwpSvn+YaidnT7IUJNe4wt5/SWwM+PmUwJUhQRk/8zAyNro0PmVfmen2635UboTjIBXXxy5A==}
+    peerDependencies:
+      typescript: '>= 4.5.5 < 6'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      clsx: 1.2.1
+      typescript: 5.0.4
+    dev: false
+
   /cli-cursor@3.1.0:
     resolution: {integrity: sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw==}
     engines: {node: '>=8'}
@@ -3211,6 +3238,11 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /clsx@1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
 
   /co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
@@ -6546,6 +6578,14 @@ packages:
     engines: {node: 14 || >=16.14}
     dev: true
 
+  /lucide-react@0.221.0(react@18.2.0):
+    resolution: {integrity: sha512-g99pn2/lBaCEAA0cbi4eaCO+3rY4mSfjCaDlo8Z30F0wk8MXoBXhCR1TaUS9cmNdOP9VGxgUpoB4qMg7/vyC8A==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /macos-release@2.5.1:
     resolution: {integrity: sha512-DXqXhEM7gW59OjZO8NIjBCz9AQ1BEMrfiOAl4AYByHCtVHRF4KoGNO8mqQeM8lRCtQe/UnJ4imO/d2HdkKsd+A==}
     engines: {node: '>=6'}
@@ -8279,6 +8319,18 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
     dev: true
+
+  /tailwind-merge@1.12.0:
+    resolution: {integrity: sha512-Y17eDp7FtN1+JJ4OY0Bqv9OA41O+MS8c1Iyr3T6JFLnOgLg3EvcyMKZAnQ8AGyvB5Nxm3t9Xb5Mhe139m8QT/g==}
+    dev: false
+
+  /tailwindcss-animate@1.0.5(tailwindcss@3.3.1):
+    resolution: {integrity: sha512-UU3qrOJ4lFQABY+MVADmBm+0KW3xZyhMdRvejwtXqYOL7YjHYxmuREFAZdmVG5LPe5E9CAst846SLC4j5I3dcw==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+    dependencies:
+      tailwindcss: 3.3.1(postcss@8.4.22)
+    dev: false
 
   /tailwindcss@3.3.1(postcss@8.4.22):
     resolution: {integrity: sha512-Vkiouc41d4CEq0ujXl6oiGFQ7bA3WEhUZdTgXAhtKxSy49OmKs8rEfQmupsfF0IGW8fv2iQkp1EVUuapCFrZ9g==}
