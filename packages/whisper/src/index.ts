@@ -7,8 +7,10 @@ import * as child_process from "child_process";
 
 // const __dirname = path.dirname(__filename);
 // const child = child_process.spawn("node", ["./path/to/other/script.js"]);
+
+let mainProcess = null;
+
 export const whisper = async (targetPath, videoLanguage) => {
-  console.log('11111111')
   const whisperRoot = path.resolve(__dirname, "..");
   const mainPath = path.join(whisperRoot, "main");
   const model = path.join(whisperRoot, "models", "ggml-medium.bin");
@@ -24,16 +26,27 @@ export const whisper = async (targetPath, videoLanguage) => {
   // );
 
   return new Promise((resolve, reject) => {
-    const main = child_process.spawn(
+    mainProcess = child_process.spawn(
       mainPath,
       ["-f", targetPath, "-osrt", "-l", videoLanguage, "-m", model],
       { shell: true }
     );
-    main.stdout.pipe(process.stdout);
-    main.stderr.pipe(process.stderr);
-    main.on("error", reject);
-    main.on("close", resolve);
+    mainProcess.stdout.pipe(process.stdout);
+    mainProcess.stderr.pipe(process.stderr);
+    mainProcess.on("error", reject);
+    mainProcess.on("close", (code) => {
+      mainProcess = null;
+      resolve(code);
+    });
   });
+};
+
+export const stopWhisper = () => {
+  if (mainProcess) {
+    console.log("stopWhisper");
+    mainProcess.kill();
+    mainProcess = null;
+  }
 };
 
 export const extractAudio = async (targetPath, aduioPath) => {

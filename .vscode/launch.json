@@ -1,34 +1,45 @@
 {
+  "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "name": "Launch Chrome",
+      "name": "Nest.js",
+      "type": "node-terminal",
       "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "port": 5422,
-      "runtimeArgs": [
-        "--load-extension=/Users/wuzhaoyi/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_1"
-      ]
+      "cwd": "${workspaceFolder}/apps/server",
+      "command": "npm run dev"
     },
     {
-      "type": "node",
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
       "request": "launch",
-      "name": "Launch Webpack",
-      "program": "${workspaceFolder}/node_modules/webpack/bin/webpack.js",
-      "env": {
-        "NODE_ENV": "development",
-        "NODE_OPTIONS": "--max-old-space-size=12288 --max-http-header-size=200000"
-      },
-      "console": "integratedTerminal",
-      "args": [
-        "serve",
-        "--config",
-        "config/webpack.dev.js",
-        "--env",
-        "lazyCompilation=true"
-      ]
+      "cwd": "${workspaceFolder}/apps/web",
+      "command": "npm run dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/apps/web",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "web/app",
+      "configurations": ["Next.js: debug full stack", "Nest.js"],
+      // "preLaunchTask": "${defaultBuildTask}",
+      "stopAll": true
     }
   ]
 }

@@ -53,3 +53,24 @@ export const translateFile = async (
     throw new Error("Error uploading file");
   }
 };
+export const outPutSrt = async (
+  language: string,
+  filename: string
+): Promise<FileUploadResponse> => {
+  try {
+    const response = await instance.get(`/osrt/${language}/${filename}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const outPutSrtStop = async (): Promise<FileUploadResponse> => {
+  try {
+    const response = await instance.get(`/osrt/stop`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};

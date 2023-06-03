@@ -25,6 +25,11 @@ export class OsrtController {
     return this.osrtService.findAll();
   }
 
+  @Get("stop")
+  stop() {
+    return this.osrtService.stop();
+  }
+
   @Get(":ln/:file")
   findOne(@Param("ln") ln: string, @Param("file") file: string) {
     return this.osrtService.findOne(file, ln);

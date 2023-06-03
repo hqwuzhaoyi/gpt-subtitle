@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
-import { whisper, extractAudio } from "whisper";
+import { whisper, extractAudio, stopWhisper } from "whisper";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -19,6 +19,10 @@ export class OsrtService {
   findOne(file: string, ln: string) {
     this.findVideo(file, ln);
     return `This action returns a #${file} osrt`;
+  }
+
+  stop() {
+    stopWhisper();
   }
 
   async findVideo(fileName: string, ln: string) {
