@@ -17,4 +17,4 @@ server/uploads
 
 samples/*
 
-packages/whisper/models/*
+# packages/whisper/models/*
