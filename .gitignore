@@ -12,11 +12,3 @@ dist-ssr
 server/dist
 public/dist
 .turbo
-
-server/uploads
-
-samples/*
-
-# packages/whisper/models/*
-
-uploads/*
