@@ -11,7 +11,8 @@ import * as child_process from "child_process";
 let mainProcess = null;
 
 export const whisper = async (targetPath, videoLanguage) => {
-  const whisperRoot = path.resolve(__dirname, "..");
+  const whisperRoot = path.join(__dirname, "..", "..", "..", 'whisper');
+  console.log("whisperRoot", whisperRoot);
   const mainPath = path.join(whisperRoot, "main");
   const model = path.join(whisperRoot, "models", "ggml-medium.bin");
   console.log("model", model);
