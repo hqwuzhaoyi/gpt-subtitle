@@ -18,3 +18,5 @@ server/uploads
 samples/*
 
 # packages/whisper/models/*
+
+uploads/*

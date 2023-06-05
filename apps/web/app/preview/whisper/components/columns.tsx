@@ -122,7 +122,6 @@ export const columns: ColumnDef<Task>[] = [
       const language = languages.find(
         (language) => language.value === row.getValue("language")
       );
-      console.debug("language", language, table);
       if (!language) {
         return null;
       }

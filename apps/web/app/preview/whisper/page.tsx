@@ -8,6 +8,8 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { UserNav } from "./components/user-nav";
 import { taskSchema } from "./data/schema";
+import { vi } from "@faker-js/faker";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -16,10 +18,10 @@ export const metadata: Metadata = {
 
 async function getFiles(dirType: string) {
   const taskPath = path.join(process.cwd(), "../../samples", dirType);
-  console.log(taskPath);
   try {
     const files = await fs.readdir(taskPath);
-    const filePaths = files.map((file) => {
+    const visibleFiles = (file: string) => !file.startsWith(".");
+    const filePaths = files.filter(visibleFiles).map((file) => {
       return {
         path: path.join(taskPath, file),
         title: path.basename(file),
@@ -37,13 +39,13 @@ async function getFiles(dirType: string) {
 }
 
 async function getVideos() {
-  const videos = await getFiles("video");
-  console.log(videos);
+  const videos = (await getFiles("video")) ?? [];
   return videos;
 }
 
 export default async function TaskPage() {
   const videos = (await getVideos()) ?? [];
+  const audios = (await getFiles("audio")) ?? [];
   return (
     <>
       <div className="md:hidden">
@@ -74,7 +76,11 @@ export default async function TaskPage() {
             <UserNav />
           </div>
         </div>
+        <h2 className="text-xl tracking-tight">Video</h2>
         <DataTable data={videos} columns={columns} />
+        <Separator />
+        <h2 className="text-xl  tracking-tight">Audio</h2>
+        <DataTable data={audios} columns={columns} />
       </div>
     </>
   );

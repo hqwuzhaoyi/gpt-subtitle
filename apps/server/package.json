@@ -75,5 +75,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/../src/$1",
+    "^@Helper/(.*)$": "<rootDir>/../src/common/helper/$1"
   }
 }

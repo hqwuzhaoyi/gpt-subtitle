@@ -20,9 +20,9 @@ import { OsrtModule } from './osrt/osrt.module';
         ".env.local",
       ],
     }),
-    MulterModule.register({
-      dest: "./uploads",
-    }),
+    // MulterModule.register({
+    //   dest: "./uploads",
+    // }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploads"),
       serveRoot: '/static'

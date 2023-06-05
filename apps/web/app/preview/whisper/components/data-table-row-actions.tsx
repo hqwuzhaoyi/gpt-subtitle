@@ -41,7 +41,6 @@ export function DataTableRowActions<TData>({
   const task = taskSchema.parse(row.original);
 
   const startWhisper = async () => {
-    console.log(row);
     outPutSrt(row.getValue("language"), row.getValue("id"));
   };
   const stopWhisper = async () => {
