@@ -25,35 +25,50 @@ export class OsrtService {
     stopWhisper();
   }
 
+  private samplesDir = path.join(__dirname, "..", "..", "..", "..", "samples");
+  private videoDir = path.join(this.samplesDir, "video");
+  private audioDir = path.join(this.samplesDir, "audio");
+
   async findVideo(fileName: string, ln: string) {
-    const samplesDir = path.join(__dirname, "..", "..", "..", "..", "samples");
+    const videoPath = this.findFile(this.videoDir, fileName);
+    const audioPath = this.findFile(this.audioDir, fileName);
+    const srtPath = this.findFile(this.audioDir, fileName + ".srt");
 
-    const videoDir = path.join(samplesDir, "video");
-    const audioDir = path.join(samplesDir, "audio");
-
-    const videoPath = this.findFile(videoDir, fileName);
-
-    if (videoPath) {
+    if (srtPath) {
+      console.info("srtPath exist", srtPath+ ".srt");
+    } else if (audioPath) {
+      console.info("audioPath exist", audioPath);
+      const result = await whisper(audioPath, ln);
+    } else if (videoPath) {
       console.info("videoPath exist", videoPath);
-      let audioPath = this.findFile(audioDir, fileName);
-      if (audioPath) {
-        console.info("audioPath exist", audioPath);
-      } else {
-        try {
-          audioPath = path.join(samplesDir, "audio", fileName + ".wav");
-          await extractAudio(videoPath, audioPath);
-
-          console.info("extractAudio done");
-          console.info("audioPath:", audioPath);
-        } catch (error) {
-          console.warn("extractAudio error", error);
-        }
-      }
-
-      whisper(audioPath, ln);
+      const finalAudioPath = await this.handleAudio(
+        audioPath,
+        fileName,
+        videoPath
+      );
+      const result = await whisper(finalAudioPath, ln);
+      console.log("result", result);
     } else {
       console.warn("videoPath not exist");
     }
+  }
+
+  private async handleAudio(
+    audioPath: string,
+    fileName: string,
+    videoPath?: string
+  ) {
+    if (!audioPath && videoPath) {
+      try {
+        audioPath = path.join(this.samplesDir, "audio", fileName + ".wav");
+        await extractAudio(videoPath, audioPath);
+        console.info("extractAudio done");
+        console.info("audioPath:", audioPath);
+      } catch (error) {
+        console.warn("extractAudio error", error);
+      }
+    }
+    return audioPath;
   }
 
   findFile(dirPath, targetName) {
