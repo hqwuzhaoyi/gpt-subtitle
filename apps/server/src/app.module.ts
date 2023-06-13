@@ -24,7 +24,7 @@ import { OsrtModule } from './osrt/osrt.module';
     //   dest: "./uploads",
     // }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "uploads"),
+      rootPath: join(__dirname, "..","..","..", "uploads"),
       serveRoot: '/static'
     }),
 

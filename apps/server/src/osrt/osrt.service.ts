@@ -12,12 +12,67 @@ export class OsrtService {
   }
 
   findAll() {
-    whisper("jfk.wav", "en");
-    return `This action returns all osrt`;
+    const subtitles = this.findAllSrt();
+    const videos = this.findAllVideo();
+    const audios = this.findAllAudio();
+
+    const result = videos
+      .map((file) => path.parse(file).name)
+      .map((videoName) => {
+        const audioExists = audios.find((file) =>
+          path.parse(file).name.includes(videoName)
+        );
+
+        const subtitleExists = subtitles.find((file) =>
+          path.parse(file).name.includes(videoName)
+        );
+
+        return {
+          name: videoName,
+          exist: {
+            audio: audioExists,
+            subtitle: subtitleExists,
+            subtitlePath: subtitleExists
+              ? `http://localhost:3001/static/${subtitleExists}`
+              : undefined,
+          },
+        };
+      });
+
+    return result;
+
+    return this.findAllVideo();
   }
 
-  findOne(file: string, ln: string) {
-    this.findVideo(file, ln);
+  findOne(ln: string, fileName: string) {
+    const srtPath = this.findFile(this.audioDir, fileName + ".srt");
+    if (srtPath) {
+      return srtPath;
+    } else {
+      return null;
+    }
+  }
+
+  findFiles(dir: string) {
+    const visibleFiles = (file: string) => !file.startsWith(".");
+    const files = fs.readdirSync(dir).filter(visibleFiles);
+    return files;
+  }
+
+  findAllSrt() {
+    return this.findFiles(this.staticDir);
+  }
+  findAllAudio() {
+    return this.findFiles(this.audioDir);
+  }
+
+  // 查找所有video文件
+  findAllVideo() {
+    return this.findFiles(this.videoDir);
+  }
+
+  translate(ln: string, file: string) {
+    this.findVideo(ln, file);
     return `This action returns a #${file} osrt`;
   }
 
@@ -26,19 +81,24 @@ export class OsrtService {
   }
 
   private samplesDir = path.join(__dirname, "..", "..", "..", "..", "samples");
+  private staticDir = path.join(__dirname, "..", "..", "..", "..", "uploads");
   private videoDir = path.join(this.samplesDir, "video");
   private audioDir = path.join(this.samplesDir, "audio");
 
-  async findVideo(fileName: string, ln: string) {
+  async findVideo(ln: string, fileName: string) {
     const videoPath = this.findFile(this.videoDir, fileName);
     const audioPath = this.findFile(this.audioDir, fileName);
-    const srtPath = this.findFile(this.audioDir, fileName + ".srt");
+    const srtPath = this.findFile(this.staticDir, fileName + ".srt");
 
     if (srtPath) {
-      console.info("srtPath exist", srtPath+ ".srt");
+      console.info("srtPath exist", srtPath + ".srt");
     } else if (audioPath) {
       console.info("audioPath exist", audioPath);
-      const result = await whisper(audioPath, ln);
+      await whisper(audioPath, ln);
+      fs.renameSync(
+        audioPath + ".srt",
+        path.join(this.staticDir, fileName + ".srt")
+      );
     } else if (videoPath) {
       console.info("videoPath exist", videoPath);
       const finalAudioPath = await this.handleAudio(
@@ -46,8 +106,11 @@ export class OsrtService {
         fileName,
         videoPath
       );
-      const result = await whisper(finalAudioPath, ln);
-      console.log("result", result);
+      await whisper(finalAudioPath, ln);
+      fs.renameSync(
+        finalAudioPath + ".srt",
+        path.join(this.staticDir, fileName + ".srt")
+      );
     } else {
       console.warn("videoPath not exist");
     }

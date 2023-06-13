@@ -20,9 +20,13 @@ export class OsrtController {
     return this.osrtService.create(createOsrtDto);
   }
 
-  @Get()
+  @Get("list")
   findAll() {
     return this.osrtService.findAll();
+  }
+  @Get("/find/:ln/:file")
+  findOne(@Param("ln") ln: string, @Param("file") file: string) {
+    return this.osrtService.findOne(ln, file);
   }
 
   @Get("stop")
@@ -31,8 +35,8 @@ export class OsrtController {
   }
 
   @Get(":ln/:file")
-  findOne(@Param("ln") ln: string, @Param("file") file: string) {
-    return this.osrtService.findOne(file, ln);
+  translate(@Param("ln") ln: string, @Param("file") file: string) {
+    return this.osrtService.translate(ln, file);
   }
 
   @Patch(":id")
