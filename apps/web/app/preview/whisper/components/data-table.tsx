@@ -27,15 +27,42 @@ import {
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
+import { outPutSrtList } from "../../upload/file";
+import useSWR from "swr";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data?: TData[];
+}
+
+const queryList = async () => {
+  const list = await outPutSrtList();
+  const result = list.map((task) => {
+    return {
+      title: task.name,
+      id: task.name,
+      label: task.name,
+      status: task.exist.subtitle ? "done" : "in progress",
+      path: task.exist.subtitlePath,
+      priority: "medium",
+      language: "auto",
+    };
+  });
+  return result;
+};
+
+function useList() {
+  const { data, error, isLoading } = useSWR("/osrt/list", queryList);
+  return {
+    list: data,
+    isLoading,
+    error,
+  };
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data: initData,
+  data: initData = [],
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -44,8 +71,13 @@ export function DataTable<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const { list } = useList();
 
   const [data, setData] = React.useState(initData);
+
+  React.useEffect(() => {
+    setData((list ?? []) as TData[]);
+  }, [list]);
 
   const table = useReactTable({
     data,

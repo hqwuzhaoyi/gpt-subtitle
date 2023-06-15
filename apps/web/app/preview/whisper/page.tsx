@@ -10,6 +10,7 @@ import { UserNav } from "./components/user-nav";
 import { taskSchema } from "./data/schema";
 import { vi } from "@faker-js/faker";
 import { Separator } from "@/components/ui/separator";
+import { outPutSrtList } from "../upload/file";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -42,6 +43,10 @@ async function getVideos() {
   const videos = (await getFiles("video")) ?? [];
   return videos;
 }
+
+const VideoTable = () => {
+  return <DataTable columns={columns} />;
+};
 
 export default async function TaskPage() {
   const videos = (await getVideos()) ?? [];
@@ -77,10 +82,7 @@ export default async function TaskPage() {
           </div>
         </div>
         <h2 className="text-xl tracking-tight">Video</h2>
-        <DataTable data={videos} columns={columns} />
-        <Separator />
-        <h2 className="text-xl  tracking-tight">Audio</h2>
-        <DataTable data={audios} columns={columns} />
+        <VideoTable />
       </div>
     </>
   );

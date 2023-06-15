@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { whisper, extractAudio, stopWhisper } from "whisper";
+import { FileListResult } from "utils";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -11,7 +12,9 @@ export class OsrtService {
     return "This action adds a new osrt";
   }
 
-  findAll() {
+  // 帮我写下面这段代码的typescript类型
+
+  findAll(): FileListResult[] {
     const subtitles = this.findAllSrt();
     const videos = this.findAllVideo();
     const audios = this.findAllAudio();
@@ -30,8 +33,8 @@ export class OsrtService {
         return {
           name: videoName,
           exist: {
-            audio: audioExists,
-            subtitle: subtitleExists,
+            audio: !!audioExists,
+            subtitle: !!subtitleExists,
             subtitlePath: subtitleExists
               ? `http://localhost:3001/static/${subtitleExists}`
               : undefined,
@@ -40,8 +43,6 @@ export class OsrtService {
       });
 
     return result;
-
-    return this.findAllVideo();
   }
 
   findOne(ln: string, fileName: string) {

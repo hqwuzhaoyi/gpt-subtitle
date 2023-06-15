@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { FileListResult } from "utils";
 const baseURL = process.env.API_URL || "http://localhost:3001";
 
 const instance = axios.create({
@@ -68,6 +68,15 @@ export const outPutSrt = async (
 export const outPutSrtStop = async (): Promise<FileUploadResponse> => {
   try {
     const response = await instance.get(`/osrt/stop`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const outPutSrtList = async (): Promise<FileListResult[]> => {
+  try {
+    const response = await instance.get(`/osrt/list`);
     return response.data;
   } catch (error) {
     console.error(error);

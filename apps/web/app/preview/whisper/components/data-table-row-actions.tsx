@@ -9,7 +9,8 @@ import {
   Tags,
   Trash,
   Play,
-  Ban
+  Ban,
+  DownloadCloud,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,11 +32,15 @@ import { labels } from "../data/data";
 import { taskSchema } from "../data/schema";
 import { outPutSrt, outPutSrtStop } from "../../upload/file";
 
+interface DataRow {
+  path?: string;
+}
+
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends DataRow>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
@@ -46,7 +51,10 @@ export function DataTableRowActions<TData>({
   const stopWhisper = async () => {
     outPutSrtStop();
   };
-
+  const downLoad = async () => {
+    console.debug("downLoad", row.original.path);
+    window.open(row.original.path);
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -66,6 +74,10 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem onClick={stopWhisper}>
           <Ban className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
           Stop
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={downLoad}>
+          <DownloadCloud className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Download
         </DropdownMenuItem>
         {/* <DropdownMenuItem>
           <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
