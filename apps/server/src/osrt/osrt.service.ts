@@ -22,11 +22,14 @@ export class OsrtService {
 
   // 帮我写下面这段代码的typescript类型
 
-  findAll(): FileListResult[] {
+  async findAll(): Promise<FileListResult[]> {
     const subtitles = this.findAllSrt();
     const videos = this.findAllVideo();
     const audios = this.findAllAudio();
-
+    const currentJobs = await this.audioQueue.getActive();
+    const currentJobsFiles = currentJobs.map((job) => {
+      return job.data.file;
+    });
     const result = videos
       .map((file) => path.parse(file).name)
       .map((videoName) => {
@@ -47,6 +50,7 @@ export class OsrtService {
               ? `http://localhost:3001/static/${subtitleExists}`
               : undefined,
           },
+          isProcessing: currentJobsFiles.includes(videoName),
         };
       });
 

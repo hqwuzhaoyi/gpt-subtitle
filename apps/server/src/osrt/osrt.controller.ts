@@ -21,8 +21,8 @@ export class OsrtController {
   }
 
   @Get("list")
-  findAll() {
-    return this.osrtService.findAll();
+  async findAll() {
+    return await this.osrtService.findAll();
   }
   @Get("/find/:ln/:file")
   findOne(@Param("ln") ln: string, @Param("file") file: string) {

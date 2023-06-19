@@ -5,4 +5,5 @@ export type FileListResult = {
     subtitle: boolean;
     subtitlePath?: string;
   };
+  isProcessing: boolean;
 };

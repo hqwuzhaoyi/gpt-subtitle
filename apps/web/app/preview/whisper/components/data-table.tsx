@@ -38,11 +38,16 @@ interface DataTableProps<TData, TValue> {
 const queryList = async () => {
   const list = await outPutSrtList();
   const result = list.map((task) => {
+    const status = task.isProcessing
+      ? "in progress"
+      : task.exist.subtitle
+      ? "done"
+      : "todo";
     return {
       title: task.name,
       id: task.name,
       label: task.name,
-      status: task.exist.subtitle ? "done" : "in progress",
+      status,
       path: task.exist.subtitlePath,
       priority: "medium",
       language: "auto",
