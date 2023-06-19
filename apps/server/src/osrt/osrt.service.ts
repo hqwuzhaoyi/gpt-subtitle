@@ -5,9 +5,17 @@ import { whisper, extractAudio, stopWhisper } from "whisper";
 import { FileListResult } from "utils";
 import * as path from "path";
 import * as fs from "fs";
+import { Queue } from "bull";
+import { InjectQueue } from "@nestjs/bull";
 
 @Injectable()
 export class OsrtService {
+  constructor(@InjectQueue("audio") private audioQueue: Queue) {}
+
+  async getActiveJobs() {
+    return await this.audioQueue.getActive();
+  }
+
   create(createOsrtDto: CreateOsrtDto) {
     return "This action adds a new osrt";
   }
@@ -72,9 +80,13 @@ export class OsrtService {
     return this.findFiles(this.videoDir);
   }
 
-  translate(ln: string, file: string) {
-    this.findVideo(ln, file);
+  async translate(ln: string, file: string) {
+    await this.addTranslationJob(ln, file);
     return `This action returns a #${file} osrt`;
+  }
+
+  async addTranslationJob(ln: string, file: string): Promise<void> {
+    await this.audioQueue.add("translate", { ln, file });
   }
 
   stop() {
@@ -86,7 +98,7 @@ export class OsrtService {
   private videoDir = path.join(this.samplesDir, "video");
   private audioDir = path.join(this.samplesDir, "audio");
 
-  async findVideo(ln: string, fileName: string) {
+  async findFileThenTranslate(ln: string, fileName: string) {
     const videoPath = this.findFile(this.videoDir, fileName);
     const audioPath = this.findFile(this.audioDir, fileName);
     const srtPath = this.findFile(this.staticDir, fileName + ".srt");

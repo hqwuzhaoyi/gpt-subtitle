@@ -34,6 +34,11 @@ export class OsrtController {
     return this.osrtService.stop();
   }
 
+  @Get("currentJobs")
+  currentJobs() {
+    return this.osrtService.getActiveJobs();
+  }
+
   @Get(":ln/:file")
   translate(@Param("ln") ln: string, @Param("file") file: string) {
     return this.osrtService.translate(ln, file);
