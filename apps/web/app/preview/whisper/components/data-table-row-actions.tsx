@@ -31,9 +31,10 @@ import {
 import { labels } from "../data/data";
 import { taskSchema } from "../data/schema";
 import { outPutSrt, outPutSrtStop } from "../../upload/file";
-
+import { useSWRConfig } from "swr";
 interface DataRow {
   path?: string;
+  processingJobId?: string;
 }
 
 interface DataTableRowActionsProps<TData> {
@@ -44,12 +45,14 @@ export function DataTableRowActions<TData extends DataRow>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
-
+  const { mutate } = useSWRConfig();
   const startWhisper = async () => {
-    outPutSrt(row.getValue("language"), row.getValue("id"));
+    await outPutSrt(row.getValue("language"), row.getValue("id"));
+    mutate("/osrt/list");
   };
   const stopWhisper = async () => {
-    outPutSrtStop();
+    await outPutSrtStop(row.original.processingJobId);
+    mutate("/osrt/list");
   };
   const downLoad = async () => {
     console.debug("downLoad", row.original.path);

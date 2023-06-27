@@ -6,4 +6,5 @@ export type FileListResult = {
     subtitlePath?: string;
   };
   isProcessing: boolean;
+  processingJobId?: string;
 };

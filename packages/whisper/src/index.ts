@@ -10,12 +10,12 @@ import * as child_process from "child_process";
 
 let mainProcess = null;
 
-export const whisper = async (targetPath, videoLanguage) => {
+export const whisper = async (targetPath, videoLanguage, model = 'ggml-medium.bin') => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", 'whisper');
   console.log("whisperRoot", whisperRoot);
   const mainPath = path.join(whisperRoot, "main");
-  const model = path.join(whisperRoot, "models", "ggml-medium.bin");
-  console.log("model", model);
+  const modelPath = path.join(whisperRoot, "models", model);
+  console.log("modelPath", modelPath);
 
   // const targetPath = path.join(
   //   __dirname,
@@ -29,7 +29,7 @@ export const whisper = async (targetPath, videoLanguage) => {
   return new Promise((resolve, reject) => {
     mainProcess = child_process.spawn(
       mainPath,
-      ["-f", targetPath, "-osrt", "-l", videoLanguage, "-m", model],
+      ["-f", targetPath, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
     );
     mainProcess.stdout.pipe(process.stdout);

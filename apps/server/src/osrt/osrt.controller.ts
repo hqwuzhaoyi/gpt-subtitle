@@ -29,9 +29,9 @@ export class OsrtController {
     return this.osrtService.findOne(ln, file);
   }
 
-  @Get("stop")
-  stop() {
-    return this.osrtService.stop();
+  @Get("stop/:processingJobId")
+  stop(@Param("processingJobId") processingJobId: string) {
+    return this.osrtService.stop(processingJobId);
   }
 
   @Get("currentJobs")

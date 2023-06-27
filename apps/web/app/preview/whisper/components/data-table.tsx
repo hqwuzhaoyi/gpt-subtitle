@@ -29,6 +29,13 @@ import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
 import { outPutSrtList } from "../../upload/file";
 import useSWR from "swr";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3002");
+
+socket.on("connection", (message) => {
+  console.debug("ws connection", message);
+});
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,6 +58,7 @@ const queryList = async () => {
       path: task.exist.subtitlePath,
       priority: "medium",
       language: "auto",
+      processingJobId: task.processingJobId,
     };
   });
   return result;
@@ -83,6 +91,40 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     setData((list ?? []) as TData[]);
   }, [list]);
+
+  socket.on("jobUpdate", ({ jobId, status, data }) => {
+    // 处理任务更新
+    console.log(jobId, status, data);
+    if (status === "start") {
+      console.debug("start", jobId, data.file);
+      setData((old) =>
+        old.map((row, index) => {
+          if ((row as any).title === data.file) {
+            return {
+              ...old[index],
+              status: "in progress",
+            };
+          }
+          return row;
+        })
+      );
+    } else if (status === "completed") {
+      console.debug("completed", jobId, data.url);
+      setData((old) =>
+        old.map((row, index) => {
+          if ((row as any).title === data.file) {
+            return {
+              ...old[index],
+              status: "done",
+              path: data.url,
+            };
+          }
+          console.debug("row", row, index);
+          return row;
+        })
+      );
+    }
+  });
 
   const table = useReactTable({
     data,

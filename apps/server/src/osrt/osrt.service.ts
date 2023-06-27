@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { whisper, extractAudio, stopWhisper } from "whisper";
@@ -7,10 +7,13 @@ import * as path from "path";
 import * as fs from "fs";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
+const staticHost = process.env.STATIC_HOST || "http://localhost:3001/static";
 
 @Injectable()
 export class OsrtService {
   constructor(@InjectQueue("audio") private audioQueue: Queue) {}
+
+  private logger: Logger = new Logger("OsrtService");
 
   async getActiveJobs() {
     return await this.audioQueue.getActive();
@@ -30,7 +33,11 @@ export class OsrtService {
     const currentJobsFiles = currentJobs.map((job) => {
       return job.data.file;
     });
-    const result = videos
+    const currentJobsIdMap = currentJobs.reduce((acc, job) => {
+      acc[job.data.file] = job.id;
+      return acc;
+    }, {});
+    const result = audios
       .map((file) => path.parse(file).name)
       .map((videoName) => {
         const audioExists = audios.find((file) =>
@@ -47,10 +54,11 @@ export class OsrtService {
             audio: !!audioExists,
             subtitle: !!subtitleExists,
             subtitlePath: subtitleExists
-              ? `http://localhost:3001/static/${subtitleExists}`
+              ? `${staticHost}/${subtitleExists}`
               : undefined,
           },
           isProcessing: currentJobsFiles.includes(videoName),
+          processingJobId: currentJobsIdMap[videoName],
         };
       });
 
@@ -93,7 +101,24 @@ export class OsrtService {
     await this.audioQueue.add("translate", { ln, file });
   }
 
-  stop() {
+  async deleteJob(jobId: string) {
+    const job = await this.audioQueue.getJob(jobId);
+    console.info("job", job);
+    if (job) {
+      await job.remove();
+      return `Job ${jobId} has been removed`;
+    } else {
+      throw new NotFoundException(`Job ${jobId} not found`);
+    }
+  }
+
+  async stop(processingJobId) {
+    try {
+      await this.deleteJob(processingJobId);
+    } catch (error) {
+      console.error('Could not remove job', error);
+      this.logger.error(error);
+    }
     stopWhisper();
   }
 
@@ -105,17 +130,18 @@ export class OsrtService {
   async findFileThenTranslate(ln: string, fileName: string) {
     const videoPath = this.findFile(this.videoDir, fileName);
     const audioPath = this.findFile(this.audioDir, fileName);
-    const srtPath = this.findFile(this.staticDir, fileName + ".srt");
+    const srtFile = fileName + ".srt";
+    const srtPath = this.findFile(this.staticDir, srtFile);
 
+    const targetSrtPath = path.join(this.staticDir, srtFile);
     if (srtPath) {
       console.info("srtPath exist", srtPath + ".srt");
+      return `${staticHost}/${srtFile}`;
     } else if (audioPath) {
       console.info("audioPath exist", audioPath);
-      await whisper(audioPath, ln);
-      fs.renameSync(
-        audioPath + ".srt",
-        path.join(this.staticDir, fileName + ".srt")
-      );
+      await whisper(audioPath, ln, "ggml-large.bin");
+      fs.renameSync(audioPath + ".srt", targetSrtPath);
+      return `${staticHost}/${srtFile}`;
     } else if (videoPath) {
       console.info("videoPath exist", videoPath);
       const finalAudioPath = await this.handleAudio(
@@ -124,10 +150,8 @@ export class OsrtService {
         videoPath
       );
       await whisper(finalAudioPath, ln);
-      fs.renameSync(
-        finalAudioPath + ".srt",
-        path.join(this.staticDir, fileName + ".srt")
-      );
+      fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
+      return `${staticHost}/${srtFile}`;
     } else {
       console.warn("videoPath not exist");
     }

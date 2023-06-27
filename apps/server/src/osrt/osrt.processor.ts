@@ -2,10 +2,14 @@
 import { Processor, Process } from "@nestjs/bull";
 import { Job } from "bull";
 import { OsrtService } from "./osrt.service";
+import { OsrtGateway } from "./osrt.gateway";
 
 @Processor("audio")
 export class QueueProcessor {
-  constructor(private readonly osrtService: OsrtService) {}
+  constructor(
+    private readonly osrtService: OsrtService,
+    private readonly osrtGateway: OsrtGateway
+  ) {}
 
   @Process("transcode")
   async transcode(job: Job<unknown>) {
@@ -19,12 +23,22 @@ export class QueueProcessor {
   async handleTranslationJob(
     job: Job<{ ln: string; file: string }>
   ): Promise<void> {
+    this.osrtGateway.notifyClient(job.id as string, "start", job.data);
+
     const { ln, file } = job.data;
-    const result = await this.osrtService.findFileThenTranslate(ln, file);
+    try {
+      const url = await this.osrtService.findFileThenTranslate(ln, file);
 
-    // 你可以通过 job.progress 更新任务进度
-    // 你也可以使用 job.log 来记录任务的日志
+      this.osrtGateway.notifyClient(job.id as string, "completed", {
+        ...job.data,
+        url,
+      });
 
-    // return result;
+      // 你可以通过 job.progress 更新任务进度
+      // 你也可以使用 job.log 来记录任务的日志
+    } catch (error) {
+      // 任务失败，通知客户端
+      this.osrtGateway.notifyClient(job.id as string, "failed", error.message);
+    }
   }
 }

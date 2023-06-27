@@ -65,9 +65,11 @@ export const outPutSrt = async (
     throw new Error("Error uploading file");
   }
 };
-export const outPutSrtStop = async (): Promise<FileUploadResponse> => {
+export const outPutSrtStop = async (
+  processingJobId?: string
+): Promise<FileUploadResponse> => {
   try {
-    const response = await instance.get(`/osrt/stop`);
+    const response = await instance.get(`/osrt/stop/${processingJobId}`);
     return response.data;
   } catch (error) {
     console.error(error);
