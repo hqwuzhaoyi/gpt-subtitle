@@ -21,9 +21,15 @@ export class OsrtController {
   }
 
   @Get("list")
-  async findAll() {
+  async list() {
     return await this.osrtService.findAll();
   }
+
+  @Get("models")
+  async findAllModels() {
+    return await this.osrtService.findAllModels();
+  }
+
   @Get("/find/:ln/:file")
   findOne(@Param("ln") ln: string, @Param("file") file: string) {
     return this.osrtService.findOne(ln, file);
@@ -39,9 +45,13 @@ export class OsrtController {
     return this.osrtService.getActiveJobs();
   }
 
-  @Get(":ln/:file")
-  translate(@Param("ln") ln: string, @Param("file") file: string) {
-    return this.osrtService.translate(ln, file);
+  @Get(":ln/:file/:model")
+  translate(
+    @Param("ln") ln: string,
+    @Param("file") file: string,
+    @Param("model") model: string
+  ) {
+    return this.osrtService.translate(ln, file, model);
   }
 
   @Patch(":id")

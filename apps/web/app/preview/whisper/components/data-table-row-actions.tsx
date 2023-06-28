@@ -1,6 +1,6 @@
 "use client";
 
-import { Row } from "@tanstack/react-table";
+import { Row, Table } from "@tanstack/react-table";
 import {
   Copy,
   MoreHorizontal,
@@ -39,15 +39,22 @@ interface DataRow {
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
+  table: Table<TData>;
 }
 
 export function DataTableRowActions<TData extends DataRow>({
   row,
+  table,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
   const { mutate } = useSWRConfig();
+
   const startWhisper = async () => {
-    await outPutSrt(row.getValue("language"), row.getValue("id"));
+    await outPutSrt(
+      row.getValue("language"),
+      row.getValue("id"),
+      table.options.meta?.model
+    );
     mutate("/osrt/list");
   };
   const stopWhisper = async () => {

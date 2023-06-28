@@ -11,46 +11,26 @@ import { taskSchema } from "./data/schema";
 import { vi } from "@faker-js/faker";
 import { Separator } from "@/components/ui/separator";
 import { outPutSrtList } from "../upload/file";
+import { ModelSelect } from "./components/ModelSelect";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Tasks",
   description: "A task and issue tracker build using Tanstack Table.",
 };
 
-async function getFiles(dirType: string) {
-  const taskPath = path.join(process.cwd(), "../../samples", dirType);
-  try {
-    const files = await fs.readdir(taskPath);
-    const visibleFiles = (file: string) => !file.startsWith(".");
-    const filePaths = files.filter(visibleFiles).map((file) => {
-      return {
-        path: path.join(taskPath, file),
-        title: path.basename(file),
-        id: path.basename(file, path.extname(file)),
-        label: path.extname(file),
-        status: "in progress",
-        priority: "medium",
-        language: "auto",
-      };
-    });
-    return z.array(taskSchema).parse(filePaths);
-  } catch (err) {
-    console.log("Error reading directory: ", err);
-  }
-}
-
-async function getVideos() {
-  const videos = (await getFiles("video")) ?? [];
-  return videos;
-}
-
-const VideoTable = () => {
-  return <DataTable columns={columns} />;
+const VideoTable = async () => {
+  const models = await getModels();
+  return <DataTable columns={columns} models={models} />;
 };
 
+async function getModels(): Promise<string[]> {
+  let res = await fetch(`http://localhost:3001/osrt/models`);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return res.json();
+}
+
 export default async function TaskPage() {
-  const videos = (await getVideos()) ?? [];
-  const audios = (await getFiles("audio")) ?? [];
   return (
     <>
       <div className="md:hidden">
@@ -82,7 +62,10 @@ export default async function TaskPage() {
           </div>
         </div>
         <h2 className="text-xl tracking-tight">Video</h2>
-        <VideoTable />
+
+        <Suspense fallback={<>Loading...</>}>
+          <VideoTable></VideoTable>
+        </Suspense>
       </div>
     </>
   );

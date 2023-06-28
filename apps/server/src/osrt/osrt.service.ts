@@ -8,12 +8,40 @@ import * as fs from "fs";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 const staticHost = process.env.STATIC_HOST || "http://localhost:3001/static";
-
+const visibleFiles = (file: string) => !file.startsWith(".");
 @Injectable()
 export class OsrtService {
   constructor(@InjectQueue("audio") private audioQueue: Queue) {}
 
   private logger: Logger = new Logger("OsrtService");
+
+  private readonly samplesDir = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "..",
+    "samples"
+  );
+  private readonly staticDir = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "..",
+    "uploads"
+  );
+  private readonly videoDir = path.join(this.samplesDir, "video");
+  private readonly audioDir = path.join(this.samplesDir, "audio");
+  private readonly whisperDir = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "..",
+    "whisper"
+  );
+  private readonly modelsDir = path.join(this.whisperDir, "models");
 
   async getActiveJobs() {
     return await this.audioQueue.getActive();
@@ -37,7 +65,7 @@ export class OsrtService {
       acc[job.data.file] = job.id;
       return acc;
     }, {});
-    const result = audios
+    const result = videos
       .map((file) => path.parse(file).name)
       .map((videoName) => {
         const audioExists = audios.find((file) =>
@@ -74,8 +102,12 @@ export class OsrtService {
     }
   }
 
+  findAllModels() {
+    const files = fs.readdirSync(this.modelsDir).filter(visibleFiles);
+    return files;
+  }
+
   findFiles(dir: string) {
-    const visibleFiles = (file: string) => !file.startsWith(".");
     const files = fs.readdirSync(dir).filter(visibleFiles);
     return files;
   }
@@ -92,13 +124,17 @@ export class OsrtService {
     return this.findFiles(this.videoDir);
   }
 
-  async translate(ln: string, file: string) {
-    await this.addTranslationJob(ln, file);
+  async translate(ln: string, file: string, model: string) {
+    await this.addTranslationJob(ln, file, model);
     return `This action returns a #${file} osrt`;
   }
 
-  async addTranslationJob(ln: string, file: string): Promise<void> {
-    await this.audioQueue.add("translate", { ln, file });
+  async addTranslationJob(
+    ln: string,
+    file: string,
+    model: string
+  ): Promise<void> {
+    await this.audioQueue.add("translate", { ln, file, model });
   }
 
   async deleteJob(jobId: string) {
@@ -116,18 +152,13 @@ export class OsrtService {
     try {
       await this.deleteJob(processingJobId);
     } catch (error) {
-      console.error('Could not remove job', error);
+      console.error("Could not remove job", error);
       this.logger.error(error);
     }
     stopWhisper();
   }
 
-  private samplesDir = path.join(__dirname, "..", "..", "..", "..", "samples");
-  private staticDir = path.join(__dirname, "..", "..", "..", "..", "uploads");
-  private videoDir = path.join(this.samplesDir, "video");
-  private audioDir = path.join(this.samplesDir, "audio");
-
-  async findFileThenTranslate(ln: string, fileName: string) {
+  async findFileThenTranslate(ln: string, fileName: string, model: string) {
     const videoPath = this.findFile(this.videoDir, fileName);
     const audioPath = this.findFile(this.audioDir, fileName);
     const srtFile = fileName + ".srt";
@@ -139,7 +170,7 @@ export class OsrtService {
       return `${staticHost}/${srtFile}`;
     } else if (audioPath) {
       console.info("audioPath exist", audioPath);
-      await whisper(audioPath, ln, "ggml-large.bin");
+      await whisper(audioPath, ln, model);
       fs.renameSync(audioPath + ".srt", targetSrtPath);
       return `${staticHost}/${srtFile}`;
     } else if (videoPath) {
@@ -149,7 +180,7 @@ export class OsrtService {
         fileName,
         videoPath
       );
-      await whisper(finalAudioPath, ln);
+      await whisper(finalAudioPath, ln, model);
       fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
       return `${staticHost}/${srtFile}`;
     } else {

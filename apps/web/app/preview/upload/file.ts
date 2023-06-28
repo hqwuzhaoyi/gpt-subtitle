@@ -55,10 +55,13 @@ export const translateFile = async (
 };
 export const outPutSrt = async (
   language: string,
-  filename: string
+  filename: string,
+  model: string
 ): Promise<FileUploadResponse> => {
   try {
-    const response = await instance.get(`/osrt/${language}/${filename}`);
+    const response = await instance.get(
+      `/osrt/${language}/${filename}/${model}`
+    );
     return response.data;
   } catch (error) {
     console.error(error);

@@ -133,7 +133,11 @@ export const columns: ColumnDef<Task>[] = [
           )}
           <select
             onChange={(e) =>
-              table.options.meta?.updateData(row.index, "language", e.target.value)
+              table.options.meta?.updateData(
+                row.index,
+                "language",
+                e.target.value
+              )
             }
             value={language.value}
           >
@@ -152,6 +156,6 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row, table }) => <DataTableRowActions row={row} table={table} />,
   },
 ];

@@ -30,6 +30,14 @@ import { DataTableToolbar } from "../components/data-table-toolbar";
 import { outPutSrtList } from "../../upload/file";
 import useSWR from "swr";
 import { io } from "socket.io-client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ModelSelect } from "./ModelSelect";
 
 const socket = io("http://localhost:3002");
 
@@ -40,6 +48,7 @@ socket.on("connection", (message) => {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
+  models?: string[];
 }
 
 const queryList = async () => {
@@ -76,6 +85,7 @@ function useList() {
 export function DataTable<TData, TValue>({
   columns,
   data: initData = [],
+  models,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -85,6 +95,7 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const { list } = useList();
+  const [model, setModel] = React.useState<string | undefined>(models?.[0]);
 
   const [data, setData] = React.useState(initData);
 
@@ -147,6 +158,7 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
+      model,
       updateData: (rowIndex: string | number, columnId: any, value: any) => {
         setData((old) =>
           old.map((row, index) => {
@@ -165,6 +177,12 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
+      <div className="h-8 flex">
+        <div className="text-base tracking-tight h-auto pr-4 items-center flex">Model</div>
+        <div className="flex-auto">
+          <ModelSelect models={models} value={model} onChange={setModel} />
+        </div>
+      </div>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

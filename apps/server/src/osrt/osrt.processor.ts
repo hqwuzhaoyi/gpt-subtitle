@@ -21,13 +21,13 @@ export class QueueProcessor {
 
   @Process("translate")
   async handleTranslationJob(
-    job: Job<{ ln: string; file: string }>
+    job: Job<{ ln: string; file: string; model }>
   ): Promise<void> {
     this.osrtGateway.notifyClient(job.id as string, "start", job.data);
 
-    const { ln, file } = job.data;
+    const { ln, file, model } = job.data;
     try {
-      const url = await this.osrtService.findFileThenTranslate(ln, file);
+      const url = await this.osrtService.findFileThenTranslate(ln, file, model);
 
       this.osrtGateway.notifyClient(job.id as string, "completed", {
         ...job.data,
