@@ -9,10 +9,10 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.16.18",
     "commander": "^10.0.1",
-    "dotenv": "^16.0.3",
-    "prettier": "^2.7.1",
+    "dotenv": "^16.3.1",
+    "prettier": "^2.8.8",
     "turbo": "latest"
   },
   "packageManager": "pnpm@7.15.0"
