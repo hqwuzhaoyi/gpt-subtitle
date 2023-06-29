@@ -7,8 +7,15 @@ import * as path from "path";
 import * as fs from "fs";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
+import { glob } from "glob";
+
 const staticHost = process.env.STATIC_HOST || "http://localhost:3001/static";
 const visibleFiles = (file: string) => !file.startsWith(".");
+const autoTranslateLanguages = "ja";
+const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
+const audioExtensions = ["mp3", "wav", "ogg", "flac"];
+const subtitleExtensions = ["srt", "ass"];
+
 @Injectable()
 export class OsrtService {
   constructor(@InjectQueue("audio") private audioQueue: Queue) {}
@@ -51,12 +58,24 @@ export class OsrtService {
     return "This action adds a new osrt";
   }
 
-  // 帮我写下面这段代码的typescript类型
+  async autoStart(ln, model) {
+    const allVideos = await this.findAll();
+    return allVideos
+      .filter((video) => !video.exist.subtitle)
+      .map((video) => {
+        // this.translate(
+        //   video.name,
+        //   autoTranslateLanguages,
+        //   this.findAllModels()[0]
+        // );
+        return video.name;
+      });
+  }
 
   async findAll(): Promise<FileListResult[]> {
-    const subtitles = this.findAllSrt();
-    const videos = this.findAllVideo();
-    const audios = this.findAllAudio();
+    const subtitles = await this.findAllSrt();
+    const videos = await this.findAllVideo();
+    const audios = await this.findAllAudio();
     const currentJobs = await this.audioQueue.getActive();
     const currentJobsFiles = currentJobs.map((job) => {
       return job.data.file;
@@ -107,21 +126,23 @@ export class OsrtService {
     return files;
   }
 
-  findFiles(dir: string) {
-    const files = fs.readdirSync(dir).filter(visibleFiles);
-    return files;
+  async findAllSrt() {
+    return await this.findFiles(this.staticDir, subtitleExtensions);
   }
-
-  findAllSrt() {
-    return this.findFiles(this.staticDir);
-  }
-  findAllAudio() {
-    return this.findFiles(this.audioDir);
+  async findAllAudio() {
+    return await this.findFiles(this.audioDir, audioExtensions);
   }
 
   // 查找所有video文件
-  findAllVideo() {
-    return this.findFiles(this.videoDir);
+  async findAllVideo() {
+    return await this.findFiles(this.videoDir, videoExtensions);
+  }
+
+  async findFiles(dir: string, exts: string[]): Promise<string[]> {
+    const pattern = path.join(dir, "**", `*.{${exts.join(",")}}`);
+
+    const files = await glob(pattern);
+    return files;
   }
 
   async translate(ln: string, file: string, model: string) {

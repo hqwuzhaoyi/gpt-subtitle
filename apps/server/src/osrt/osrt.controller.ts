@@ -40,6 +40,11 @@ export class OsrtController {
     return this.osrtService.stop(processingJobId);
   }
 
+  @Get("autoStart/:ln/:model")
+  autoStart(@Param("ln") ln: string, @Param("model") model: string) {
+    return this.osrtService.autoStart(ln, model);
+  }
+
   @Get("currentJobs")
   currentJobs() {
     return this.osrtService.getActiveJobs();
