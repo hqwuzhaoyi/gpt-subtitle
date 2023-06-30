@@ -19,7 +19,10 @@ export class QueueProcessor {
     console.log("Finished processing job...");
   }
 
-  @Process("translate")
+  @Process({
+    name: "translate",
+    concurrency: 1,
+  })
   async handleTranslationJob(
     job: Job<{ ln: string; file: string; model }>
   ): Promise<void> {

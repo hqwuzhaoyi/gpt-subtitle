@@ -58,16 +58,13 @@ export class OsrtService {
     return "This action adds a new osrt";
   }
 
-  async autoStart(ln, model) {
+  async autoStart(ln = autoTranslateLanguages, model) {
     const allVideos = await this.findAll();
     return allVideos
       .filter((video) => !video.exist.subtitle)
+      .filter((video) => !video.isProcessing)
       .map((video) => {
-        // this.translate(
-        //   video.name,
-        //   autoTranslateLanguages,
-        //   this.findAllModels()[0]
-        // );
+        this.translate(ln, video.name, model + '.bin');
         return video.name;
       });
   }
