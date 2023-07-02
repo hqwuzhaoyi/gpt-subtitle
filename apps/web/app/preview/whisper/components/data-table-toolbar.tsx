@@ -1,25 +1,32 @@
-"use client"
+"use client";
 
-import { Table } from "@tanstack/react-table"
-import { X } from "lucide-react"
+import { Table } from "@tanstack/react-table";
+import { X } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "./data-table-view-options"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DataTableViewOptions } from "./data-table-view-options";
 
-import { priorities, statuses } from "../data/data"
-import { DataTableFacetedFilter } from "./data-table-faceted-filter"
+import { priorities, statuses } from "../data/data";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { Task } from "../data/schema";
+import { ModelType } from "../data/types";
+import { createJobs, outPutSrt, outPutSrtStop } from "../api/osrt";
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
+  rowSelection: Record<string, boolean>;
+  model?: ModelType;
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends Task>({
   table,
+  rowSelection,
+  model,
 }: DataTableToolbarProps<TData>) {
   const isFiltered =
     table.getPreFilteredRowModel().rows.length >
-    table.getFilteredRowModel().rows.length
+    table.getFilteredRowModel().rows.length;
 
   return (
     <div className="flex items-center justify-between">
@@ -56,8 +63,26 @@ export function DataTableToolbar<TData>({
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}
+        {Object.keys(rowSelection).length ? (
+          <Button
+            onClick={() => {
+              const jobs = table.getSelectedRowModel().flatRows.map((row) => {
+                return {
+                  file: row.original.id,
+                  language: row.original.language,
+                  model: model ?? "",
+                };
+              });
+              console.debug(jobs);
+              createJobs(jobs);
+            }}
+            className="h-8 px-2 lg:px-3"
+          >
+            Translate Selected
+          </Button>
+        ) : null}
       </div>
       <DataTableViewOptions table={table} />
     </div>
-  )
+  );
 }

@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.6",
     "@radix-ui/react-scroll-area": "^1.0.4",
     "@radix-ui/react-select": "^1.2.2",
@@ -39,6 +41,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-wrap-balancer": "^0.5.0",
+    "shared-types": "workspace:*",
     "socket.io-client": "4.6.2",
     "swr": "^2.2.0",
     "tailwind-merge": "^1.13.2",
@@ -46,7 +49,6 @@
     "tailwindcss-animate": "^1.0.6",
     "typescript": "^5.1.5",
     "utils": "workspace:*",
-    "shared-types": "workspace:*",
     "zod": "^3.21.4"
   }
 }

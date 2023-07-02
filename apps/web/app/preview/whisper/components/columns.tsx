@@ -9,6 +9,16 @@ import { labels, languages, priorities, statuses } from "../data/data";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { LanguageSelect } from "./LanguageSelect";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -131,22 +141,12 @@ export const columns: ColumnDef<Task>[] = [
           {language.icon && (
             <language.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
-          <select
-            onChange={(e) =>
-              table.options.meta?.updateData(
-                row.index,
-                "language",
-                e.target.value
-              )
-            }
+          <LanguageSelect
             value={language.value}
-          >
-            {languages?.map((option) => (
-              <option value={option.value} key={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            onChange={(value) =>
+              table.options.meta?.updateData(row.index, "language", value)
+            }
+          />
         </div>
       );
     },

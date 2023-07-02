@@ -8,6 +8,7 @@ import { DataTable } from "./components/data-table";
 import { UserNav } from "./components/user-nav";
 import { Suspense } from "react";
 import { baseURL } from "utils";
+import { ModelType } from "./data/types";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -19,7 +20,7 @@ const VideoTable = async () => {
   return <DataTable columns={columns} models={models} />;
 };
 
-async function getModels(): Promise<string[]> {
+async function getModels(): Promise<ModelType[]> {
   let res = await fetch(`${baseURL}/osrt/models`);
   await new Promise((resolve) => setTimeout(resolve, 2000));
   return res.json();

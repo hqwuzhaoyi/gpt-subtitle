@@ -8,3 +8,9 @@ export type FileListResult = {
   isProcessing: boolean;
   processingJobId?: string;
 };
+
+export type CreateWhisperJobItem = {
+  file: string;
+  language: string;
+  model: string;
+};

@@ -1,4 +1,5 @@
-import { z } from "zod"
+import { z } from "zod";
+import { LanguageEnum } from "./types";
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
@@ -8,7 +9,9 @@ export const taskSchema = z.object({
   status: z.string(),
   label: z.string(),
   priority: z.string(),
-  language: z.string(),
-})
+  language: z.nativeEnum(LanguageEnum),
+  path: z.string().optional(),
+  processingJobId: z.string().optional(),
+});
 
-export type Task = z.infer<typeof taskSchema>
+export type Task = z.infer<typeof taskSchema>;

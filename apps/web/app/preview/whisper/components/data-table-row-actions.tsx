@@ -29,20 +29,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { labels } from "../data/data";
-import { taskSchema } from "../data/schema";
+import { Task, taskSchema } from "../data/schema";
 import { outPutSrt, outPutSrtStop } from "../api/osrt";
 import { useSWRConfig } from "swr";
-interface DataRow {
-  path?: string;
-  processingJobId?: string;
-}
 
-interface DataTableRowActionsProps<TData> {
+interface DataTableRowActionsProps<TData extends Task> {
   row: Row<TData>;
   table: Table<TData>;
 }
 
-export function DataTableRowActions<TData extends DataRow>({
+export function DataTableRowActions<TData extends Task>({
   row,
   table,
 }: DataTableRowActionsProps<TData>) {

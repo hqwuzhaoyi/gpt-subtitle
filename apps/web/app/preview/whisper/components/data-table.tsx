@@ -27,21 +27,14 @@ import {
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
-import { outPutSrtList } from "../api/osrt";
+import { outPutSrtList, autoStart } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ModelSelect } from "./ModelSelect";
-import { Button } from "@/components/ui/button";
 import { baseURL } from "utils";
-
-console.debug(baseURL)
+import { Autostart } from "./Autostart";
+import { LanguageEnum, ModelType } from "../data/types";
+import { Task } from "../data/schema";
 
 const socket = io(baseURL);
 
@@ -52,10 +45,10 @@ socket.on("connection", (message) => {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
-  models?: string[];
+  models: ModelType[];
 }
 
-const queryList = async () => {
+const queryList: () => Promise<Task[]> = async () => {
   const list = await outPutSrtList();
   const result = list.map((task) => {
     const status = task.isProcessing
@@ -70,7 +63,7 @@ const queryList = async () => {
       status,
       path: task.exist.subtitlePath,
       priority: "medium",
-      language: "auto",
+      language: LanguageEnum.Auto,
       processingJobId: task.processingJobId,
     };
   });
@@ -86,7 +79,7 @@ function useList() {
   };
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Task, TValue>({
   columns,
   data: initData = [],
   models,
@@ -99,7 +92,7 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const { list } = useList();
-  const [model, setModel] = React.useState<string | undefined>(models?.[0]);
+  const [model, setModel] = React.useState<ModelType | undefined>(models?.[0]);
 
   const [data, setData] = React.useState(initData);
 
@@ -151,6 +144,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
     enableRowSelection: true,
+    enableMultiRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -189,10 +183,22 @@ export function DataTable<TData, TValue>({
           <ModelSelect models={models} value={model} onChange={setModel} />
         </div>
         <div className="flex-initial">
-          {/* <Button className="h-8" onClick={}>Auto Start</Button> */}
+          {/* <Button
+            className="h-8"
+            onClick={() => {
+              autoStart("ja", model);
+            }}
+          >
+            Auto Start
+          </Button> */}
+          <Autostart models={models} />
         </div>
       </div>
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        rowSelection={rowSelection}
+        model={model}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

@@ -59,6 +59,11 @@ export class OsrtController {
     return this.osrtService.translate(ln, file, model);
   }
 
+  @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {
+    console.log(createOsrtDto);
+    return this.osrtService.createJobs(createOsrtDto);
+  }
+
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateOsrtDto: UpdateOsrtDto) {
     return this.osrtService.update(+id, updateOsrtDto);

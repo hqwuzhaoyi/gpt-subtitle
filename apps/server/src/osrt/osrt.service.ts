@@ -5,7 +5,7 @@ import { whisper, extractAudio, stopWhisper } from "whisper";
 import { FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
-import { Queue } from "bull";
+import Bull, { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
 
@@ -66,7 +66,7 @@ export class OsrtService {
       .filter((video) => !video.exist.subtitle)
       .filter((video) => !video.isProcessing)
       .map((video) => {
-        this.translate(ln, video.name, model + ".bin");
+        this.translate(ln, video.name, model);
         return video.name;
       });
   }
@@ -144,17 +144,27 @@ export class OsrtService {
     return files;
   }
 
-  async translate(ln: string, file: string, model: string) {
-    await this.addTranslationJob(ln, file, model);
+  async translate(language: string, file: string, model: string) {
+    await this.addTranslationJob({ language, file, model });
     return `This action returns a #${file} osrt`;
   }
 
-  async addTranslationJob(
-    ln: string,
-    file: string,
-    model: string
-  ): Promise<void> {
-    await this.audioQueue.add("translate", { ln, file, model });
+  async createJobs(jobs: CreateOsrtDto[]) {
+    try {
+      return await Promise.all(jobs.map((job) => this.addTranslationJob(job)));
+    } catch (error) {
+      console.error(error);
+      this.logger.error(error);
+    }
+  }
+
+  async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
+    const result = await this.audioQueue.add("translate", {
+      ...job,
+      ln: job.language,
+    });
+    console.info("result", result);
+    return result;
   }
 
   async deleteJob(jobId: string) {

@@ -5,11 +5,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ModelType } from "../data/types";
 
 interface ModelSelectProps {
-  models?: string[];
-  value?: string;
-  onChange: (value?: string) => void;
+  models?: ModelType[];
+  value?: ModelType;
+  onChange: (value: ModelType) => void;
 }
 
 export const ModelSelect = ({
@@ -20,7 +21,7 @@ export const ModelSelect = ({
   return (
     <Select onValueChange={onChange} defaultValue={value}>
       <SelectTrigger>
-        <SelectValue placeholder="Select a verified model to use" />
+        <SelectValue placeholder="Select a whisper model to use" />
       </SelectTrigger>
       <SelectContent>
         {models.map((model) => (

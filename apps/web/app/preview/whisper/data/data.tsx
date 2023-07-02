@@ -9,6 +9,7 @@ import {
   XCircle,
   Globe2,
 } from "lucide-react";
+import { LanguageEnum } from "./types";
 
 export const labels = [
   {
@@ -70,25 +71,9 @@ export const priorities = [
     icon: ArrowUpToLine,
   },
 ];
-export const languages = [
-  {
-    label: "English",
-    value: "en",
-    icon: Globe2,
-  },
-  {
-    label: "Japanese",
-    value: "ja",
-    icon: Globe2,
-  },
-  {
-    label: "Chinese",
-    value: "cn",
-    icon: Globe2,
-  },
-  {
-    label: "Auto",
-    value: "auto",
-    icon: Globe2,
-  },
-];
+
+export const languages = Object.keys(LanguageEnum).map((key) => ({
+  value: LanguageEnum[key as keyof typeof LanguageEnum],
+  label: key,
+  icon: Globe2,
+}));
