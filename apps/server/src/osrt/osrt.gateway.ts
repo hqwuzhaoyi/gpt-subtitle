@@ -10,7 +10,9 @@ import {
 import { Server, Socket } from "socket.io";
 import { Logger } from "@nestjs/common";
 
-@WebSocketGateway(3002, {
+console.debug("WS_PORT", process.env.WS_PORT);
+
+@WebSocketGateway({
   cors: true,
 })
 export class OsrtGateway
@@ -22,7 +24,7 @@ export class OsrtGateway
   private logger: Logger = new Logger("MessageGateway");
 
   afterInit(server: Server) {
-    this.logger.log("Initialized");
+    this.logger.log("WebSocketGateway Initialized", server);
   }
 
   handleDisconnect(client: Socket) {

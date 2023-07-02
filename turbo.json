@@ -2,6 +2,7 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "globalEnv": ["PORT"],
+  "globalDotEnv": [".env"],
   "pipeline": {
     "build": {
       "outputs": [
@@ -12,7 +13,13 @@
         "api/**",
         "public/build/**"
       ],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "dotEnv": [
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
     },
     "test": {
       "outputs": ["coverage/**"],
@@ -24,7 +31,13 @@
     "dev": {
       "dependsOn": ["^build"],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dotEnv": [
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
     },
     "clean": {
       "cache": false

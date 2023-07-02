@@ -3,16 +3,11 @@ import path from "path";
 import { Metadata } from "next";
 import Image from "next/image";
 import { z } from "zod";
-
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { UserNav } from "./components/user-nav";
-import { taskSchema } from "./data/schema";
-import { vi } from "@faker-js/faker";
-import { Separator } from "@/components/ui/separator";
-import { outPutSrtList } from "../upload/file";
-import { ModelSelect } from "./components/ModelSelect";
 import { Suspense } from "react";
+import { baseURL } from "utils";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -25,7 +20,7 @@ const VideoTable = async () => {
 };
 
 async function getModels(): Promise<string[]> {
-  let res = await fetch(`http://localhost:3001/osrt/models`);
+  let res = await fetch(`${baseURL}/osrt/models`);
   await new Promise((resolve) => setTimeout(resolve, 2000));
   return res.json();
 }

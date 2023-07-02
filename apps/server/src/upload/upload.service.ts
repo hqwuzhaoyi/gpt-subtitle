@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUploadDto } from "./dto/create-upload.dto";
 import { UpdateUploadDto } from "./dto/update-upload.dto";
+import { staticPath } from "utils";
 
 @Injectable()
 export class UploadService {
@@ -24,7 +25,7 @@ export class UploadService {
     return {
       originalname: file.originalname,
       filename: file.filename,
-      url: `http://localhost:3001/static/${file.filename}`,
+      url: `${staticPath}/${file.filename}`,
     };
 
     // 上传文件的逻辑，这里略去

@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "dotenv -- turbo run build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev --no-cache  --continue --concurrency=12",
+    "dev": "dotenv -- turbo run dev  --no-cache  --concurrency=13",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test"
@@ -12,6 +12,7 @@
     "@types/node": "^18.16.18",
     "commander": "^10.0.1",
     "dotenv": "^16.3.1",
+    "dotenv-cli": "^7.2.1",
     "prettier": "^2.8.8",
     "turbo": "latest"
   },

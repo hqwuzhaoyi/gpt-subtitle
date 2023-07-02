@@ -4,6 +4,7 @@ import { UpdateTranslateDto } from "./dto/update-translate.dto";
 import * as path from "path";
 import * as fs from "fs";
 import { TranslateModel, SubtitleProcessor } from "tranlater";
+import { staticPath } from "utils";
 
 @Injectable()
 export class TranslateService {
@@ -19,10 +20,9 @@ export class TranslateService {
     if (exists) {
       console.log("文件存在");
       console.log(
-        "file not exist, return url" +
-          `http://localhost:3001/static/${fileName}`
+        "file not exist, return url" + `${staticPath}/static/${fileName}`
       );
-      return `http://localhost:3001/static/${fileName}`;
+      return `${staticPath}/static/${fileName}`;
     } else {
       console.log("file not exist, need translate");
       return false;
@@ -37,7 +37,7 @@ export class TranslateService {
       const existUrl = this.existFile(translateName);
       if (existUrl) {
         resolve({
-          url: `http://localhost:3001/static/${translateName}`,
+          url: `${staticPath}/${translateName}`,
           filename: translateName,
         });
         return;
@@ -61,7 +61,7 @@ export class TranslateService {
         .process()
         .then(() => {
           resolve({
-            url: `http://localhost:3001/static/${translateName}`,
+            url: `${staticPath}/${translateName}`,
             filename: translateName,
           });
         })

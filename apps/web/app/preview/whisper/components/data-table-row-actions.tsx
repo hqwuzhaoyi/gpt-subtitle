@@ -30,7 +30,7 @@ import {
 
 import { labels } from "../data/data";
 import { taskSchema } from "../data/schema";
-import { outPutSrt, outPutSrtStop } from "../../upload/file";
+import { outPutSrt, outPutSrtStop } from "../api/osrt";
 import { useSWRConfig } from "swr";
 interface DataRow {
   path?: string;

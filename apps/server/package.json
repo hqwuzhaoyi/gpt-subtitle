@@ -39,10 +39,12 @@
     "openai": "^3.3.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "socket.io": "^4.7.1",
+    "socket.io": "4.6.2",
     "tranlater": "workspace:*",
     "utils": "workspace:*",
-    "whisper": "workspace:*"
+    "whisper": "workspace:*",
+    "shared-types": "workspace:*"
+
   },
   "devDependencies": {
     "@nestjs/cli": "^9.5.0",

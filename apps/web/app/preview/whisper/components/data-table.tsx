@@ -27,7 +27,7 @@ import {
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
-import { outPutSrtList } from "../../upload/file";
+import { outPutSrtList } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
 import {
@@ -38,8 +38,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ModelSelect } from "./ModelSelect";
+import { Button } from "@/components/ui/button";
+import { baseURL } from "utils";
 
-const socket = io("http://localhost:3002");
+console.debug(baseURL)
+
+const socket = io(baseURL);
 
 socket.on("connection", (message) => {
   console.debug("ws connection", message);
@@ -178,9 +182,14 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <div className="h-8 flex">
-        <div className="text-base tracking-tight h-auto pr-4 items-center flex">Model</div>
-        <div className="flex-auto">
+        <div className="text-base tracking-tight h-auto pr-4 items-center flex">
+          Model
+        </div>
+        <div className="flex-auto pr-4">
           <ModelSelect models={models} value={model} onChange={setModel} />
+        </div>
+        <div className="flex-initial">
+          {/* <Button className="h-8" onClick={}>Auto Start</Button> */}
         </div>
       </div>
       <DataTableToolbar table={table} />

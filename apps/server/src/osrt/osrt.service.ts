@@ -2,14 +2,16 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { whisper, extractAudio, stopWhisper } from "whisper";
-import { FileListResult } from "utils";
+import { FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
 
-const staticHost = process.env.STATIC_HOST || "http://localhost:3001/static";
+const staticHost =
+  process.env.STATIC_HOST ||
+  `http://localhost:${process.env.SERVER_PORT}/static`;
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
@@ -64,7 +66,7 @@ export class OsrtService {
       .filter((video) => !video.exist.subtitle)
       .filter((video) => !video.isProcessing)
       .map((video) => {
-        this.translate(ln, video.name, model + '.bin');
+        this.translate(ln, video.name, model + ".bin");
         return video.name;
       });
   }

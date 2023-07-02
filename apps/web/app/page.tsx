@@ -13,7 +13,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import UploadPage from "./preview/upload/page";
 import { HomeNav } from "@/components/home-nav";
-
+console.debug('server port ',process.env.SERVER_PORT)
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
