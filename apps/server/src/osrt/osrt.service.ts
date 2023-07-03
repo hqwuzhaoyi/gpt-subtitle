@@ -144,8 +144,8 @@ export class OsrtService {
     return files;
   }
 
-  async translate(language: string, file: string, model: string) {
-    await this.addTranslationJob({ language, file, model });
+  async translate(language: string, file: string, model: string, priority = 1) {
+    await this.addTranslationJob({ language, file, model, priority });
     return `This action returns a #${file} osrt`;
   }
 
@@ -159,10 +159,14 @@ export class OsrtService {
   }
 
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
-    const result = await this.audioQueue.add("translate", {
-      ...job,
-      ln: job.language,
-    });
+    const result = await this.audioQueue.add(
+      "translate",
+      {
+        ...job,
+        ln: job.language,
+      },
+      { priority: job.priority }
+    );
     console.info("result", result);
     return result;
   }

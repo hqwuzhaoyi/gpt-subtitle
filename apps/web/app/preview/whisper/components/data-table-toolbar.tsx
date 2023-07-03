@@ -71,6 +71,7 @@ export function DataTableToolbar<TData extends Task>({
                   file: row.original.id,
                   language: row.original.language,
                   model: model ?? "",
+                  priority: row.original.priority,
                 };
               });
               console.debug(jobs);

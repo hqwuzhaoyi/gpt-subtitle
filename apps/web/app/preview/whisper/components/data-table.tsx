@@ -62,7 +62,7 @@ const queryList: () => Promise<Task[]> = async () => {
       label: task.name,
       status,
       path: task.exist.subtitlePath,
-      priority: "medium",
+      priority: 1,
       language: LanguageEnum.Auto,
       processingJobId: task.processingJobId,
     };

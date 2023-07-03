@@ -49,7 +49,8 @@ export function DataTableRowActions<TData extends Task>({
     await outPutSrt(
       row.getValue("language"),
       row.getValue("id"),
-      table.options.meta?.model
+      table.options.meta?.model,
+      row.getValue("priority"),
     );
     mutate("/osrt/list");
   };

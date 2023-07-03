@@ -4,11 +4,12 @@ import { LanguageEnum, ModelType } from "../data/types";
 export const outPutSrt = async (
   language: string,
   filename: string,
-  model?: string
+  model?: string,
+  priority?: number
 ): Promise<void> => {
   try {
     const response = await request.get(
-      `/osrt/${language}/${filename}/${model}`
+      `/osrt/${language}/${filename}/${model}/${priority}`
     );
     return response.data;
   } catch (error) {

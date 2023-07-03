@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LanguageSelect } from "./LanguageSelect";
+import { Slider } from "@/components/ui/slider";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -101,7 +102,7 @@ export const columns: ColumnDef<Task>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Priority" />
     ),
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const priority = priorities.find(
         (priority) => priority.value === row.getValue("priority")
       );
@@ -115,7 +116,16 @@ export const columns: ColumnDef<Task>[] = [
           {priority.icon && (
             <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
-          <span>{priority.label}</span>
+          {/* <span>{priority.label}</span> */}
+          <Slider
+            defaultValue={[priority.value]}
+            max={3}
+            min={1}
+            step={1}
+            onValueChange={(value) =>
+              table.options.meta?.updateData(row.index, "priority", value[0])
+            }
+          />
         </div>
       );
     },

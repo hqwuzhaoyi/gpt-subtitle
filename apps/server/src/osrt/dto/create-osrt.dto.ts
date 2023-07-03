@@ -4,4 +4,5 @@ export class CreateOsrtDto implements CreateWhisperJobItem {
   file: string;
   language: string;
   model: string;
+  priority?: number;
 }

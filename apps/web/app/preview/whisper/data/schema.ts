@@ -8,7 +8,7 @@ export const taskSchema = z.object({
   title: z.string(),
   status: z.string(),
   label: z.string(),
-  priority: z.string(),
+  priority: z.number(),
   language: z.nativeEnum(LanguageEnum),
   path: z.string().optional(),
   processingJobId: z.string().optional(),
