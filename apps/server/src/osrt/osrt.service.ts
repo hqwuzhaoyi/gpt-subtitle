@@ -214,7 +214,10 @@ export class OsrtService {
       fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
       return `${staticHost}/${srtFile}`;
     } else {
-      console.warn("videoPath not exist");
+      this.logger.warn("srtPath not exist", srtPath);
+      this.logger.warn("audioPath not exist", audioPath);
+      this.logger.warn("videoPath not exist", videoPath);
+      this.logger.warn(ln, fileName, model);
     }
   }
 
@@ -239,12 +242,12 @@ export class OsrtService {
   findFile(dirPath, targetName) {
     console.info("dirPath", dirPath);
     const files = fs.readdirSync(dirPath);
-    console.info("files", files);
     for (let i = 0; i < files.length; i++) {
       const filename = files[i];
       if (
         path.basename(filename, path.extname(filename)) ===
-        path.basename(targetName, path.extname(targetName))
+          path.basename(targetName, path.extname(targetName)) ||
+        path.basename(filename, path.extname(filename)) === targetName
       ) {
         return path.join(dirPath, filename);
       }

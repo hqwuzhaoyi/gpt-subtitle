@@ -60,7 +60,6 @@ export class OsrtController {
   }
 
   @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {
-    console.log(createOsrtDto);
     return this.osrtService.createJobs(createOsrtDto);
   }
 

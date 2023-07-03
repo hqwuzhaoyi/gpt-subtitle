@@ -3,6 +3,7 @@ import { Processor, Process } from "@nestjs/bull";
 import { Job } from "bull";
 import { OsrtService } from "./osrt.service";
 import { OsrtGateway } from "./osrt.gateway";
+import { Logger } from "@nestjs/common";
 
 @Processor("audio")
 export class QueueProcessor {
@@ -11,12 +12,13 @@ export class QueueProcessor {
     private readonly osrtGateway: OsrtGateway
   ) {}
 
+  private logger: Logger = new Logger("MessageGateway");
+
   @Process("transcode")
   async transcode(job: Job<unknown>) {
-    console.log("Start processing job...");
+    this.logger.log("Start processing job...");
     // your job processing logic
-    console.log(job.data);
-    console.log("Finished processing job...");
+    this.logger.log("Finished processing job...");
   }
 
   @Process({
@@ -30,6 +32,9 @@ export class QueueProcessor {
 
     const { ln, file, model } = job.data;
     try {
+      this.logger.log(
+        `Start processing job... ${job.id} ${ln} ${file} ${model}`
+      );
       const url = await this.osrtService.findFileThenTranslate(ln, file, model);
 
       this.osrtGateway.notifyClient(job.id as string, "completed", {

@@ -102,9 +102,9 @@ export function DataTable<TData extends Task, TValue>({
 
   socket.on("jobUpdate", ({ jobId, status, data }) => {
     // 处理任务更新
-    console.log(jobId, status, data);
+    // console.log(jobId, status, data);
     if (status === "start") {
-      console.debug("start", jobId, data.file);
+      // console.debug("start", jobId, data.file);
       setData((old) =>
         old.map((row, index) => {
           if ((row as any).title === data.file) {
@@ -117,7 +117,7 @@ export function DataTable<TData extends Task, TValue>({
         })
       );
     } else if (status === "completed") {
-      console.debug("completed", jobId, data.url);
+      // console.debug("completed", jobId, data.url);
       setData((old) =>
         old.map((row, index) => {
           if ((row as any).title === data.file) {
@@ -127,7 +127,7 @@ export function DataTable<TData extends Task, TValue>({
               path: data.url,
             };
           }
-          console.debug("row", row, index);
+          // console.debug("row", row, index);
           return row;
         })
       );
