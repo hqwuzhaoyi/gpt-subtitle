@@ -3,7 +3,7 @@ import { CreateTranslateDto } from "./dto/create-translate.dto";
 import { UpdateTranslateDto } from "./dto/update-translate.dto";
 import * as path from "path";
 import * as fs from "fs";
-import { TranslateModel, SubtitleProcessor } from "tranlater";
+import { TranslateModel, SubtitleProcessor } from "translator";
 import { staticPath } from "utils";
 
 @Injectable()
