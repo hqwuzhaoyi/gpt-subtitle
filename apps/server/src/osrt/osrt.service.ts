@@ -8,10 +8,10 @@ import * as fs from "fs";
 import Bull, { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
+import { staticPath } from "utils";
 
-const staticHost =
-  process.env.STATIC_HOST ||
-  `http://localhost:${process.env.SERVER_PORT}/static`;
+
+
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
@@ -100,7 +100,7 @@ export class OsrtService {
             audio: !!audioExists,
             subtitle: !!subtitleExists,
             subtitlePath: subtitleExists
-              ? `${staticHost}/${subtitleExists}`
+              ? `${staticPath}/${subtitleExists}`
               : undefined,
           },
           isProcessing: currentJobsFiles.includes(videoName),
@@ -201,12 +201,12 @@ export class OsrtService {
     const targetSrtPath = path.join(this.staticDir, srtFile);
     if (srtPath) {
       console.info("srtPath exist", srtPath + ".srt");
-      return `${staticHost}/${srtFile}`;
+      return `${staticPath}/${srtFile}`;
     } else if (audioPath) {
       console.info("audioPath exist", audioPath);
       await whisper(audioPath, ln, model);
       fs.renameSync(audioPath + ".srt", targetSrtPath);
-      return `${staticHost}/${srtFile}`;
+      return `${staticPath}/${srtFile}`;
     } else if (videoPath) {
       console.info("videoPath exist", videoPath);
       const finalAudioPath = await this.handleAudio(
@@ -216,7 +216,7 @@ export class OsrtService {
       );
       await whisper(finalAudioPath, ln, model);
       fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
-      return `${staticHost}/${srtFile}`;
+      return `${staticPath}/${srtFile}`;
     } else {
       this.logger.warn("srtPath not exist", srtPath);
       this.logger.warn("audioPath not exist", audioPath);

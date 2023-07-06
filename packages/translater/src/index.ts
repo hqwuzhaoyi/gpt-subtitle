@@ -1,159 +1,192 @@
-import TranslateModel from "./gpt3";
+import { GPTTranslator } from "./gpt3";
 import SubtitleProcessor from "./fileStream";
 
 import fs from "fs";
-import { parse, map, stringify, stringifySync } from "subtitle";
+import { parse, map, stringifySync } from "subtitle";
 
 import { resolve } from "path";
 
-import { v2 } from "@google-cloud/translate";
 import PQueue from "p-queue";
+import { GoogleTranslator } from "./google";
+import { Translator } from "./types";
 
-const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY;
-const translate = new v2.Translate({ key: apiKey });
+export enum TranslateType {
+  GOOGLE = "google",
+  GPT3 = "gpt3",
+}
 
-async function translateSrtStream(
-  filePath: string,
-  outputPath,
-  targetLanguage: string
-) {
-  const queue = new PQueue({ concurrency: 20 });
+export type TranslateOptions = {
+  apiKey?: string;
+  baseUrl?: string;
+  concurrency?: number;
+};
 
-  const nodes = [];
-  const inputStream = fs.createReadStream(filePath, { encoding: "utf8" });
-  const writeStream = fs.createWriteStream(outputPath);
-  inputStream
-    .pipe(parse())
-    .on("data", (node) => {
-      // 把每个翻译操作的 Promise 添加到数组中
-      nodes.push(node);
+class TranslateModel {
+  translate: Translator;
+  options: TranslateOptions;
+  concurrency: number = 5;
+  constructor(type = TranslateType.GOOGLE, options = {}) {
+    if (type === TranslateType.GOOGLE) {
+      this.translate = new GoogleTranslator(options);
+    } else if (type === TranslateType.GPT3) {
+      this.translate = new GPTTranslator(options);
+    }
+    this.options = options;
+  }
 
-      queue.add(async () => {
-        console.debug("Translating: ", node.data.text);
-        const [translatedText] = await translate.translate(
-          node.data.text,
-          targetLanguage
-        );
-        console.debug("Translated: ", translatedText);
-        node.data.text = translatedText;
+  async translateSrtStream(
+    filePath: string,
+    outputPath,
+    targetLanguage: string
+  ) {
+    const queue = new PQueue({ concurrency: this.concurrency });
+
+    const nodes = [];
+    const inputStream = fs.createReadStream(filePath, { encoding: "utf8" });
+    const writeStream = fs.createWriteStream(outputPath);
+    inputStream
+      .pipe(parse())
+      .on("data", (node) => {
+        // 把每个翻译操作的 Promise 添加到数组中
+        nodes.push(node);
+
+        queue.add(async () => {
+          const translatedText = await this.translate.translate(
+            node.data.text,
+            targetLanguage
+          );
+          console.info("Translating: ", node.data.text);
+          console.info("Translated: ", translatedText);
+
+          node.data.text = translatedText;
+        });
+      })
+      .on("error", console.error)
+      .on("finish", async () => {
+        await queue.onIdle();
+
+        console.info("Translation has finished");
+        writeStream.write(stringifySync(nodes, { format: "SRT" }) + "\n\n");
+        writeStream.end();
+
+        console.info("Writing to file has finished");
       });
-    })
-    .on("error", console.error)
-    .on("finish", async () => {
-      await queue.onIdle();
+  }
 
-      console.log("Translation has finished");
-      writeStream.write(stringifySync(nodes, { format: "SRT" }) + "\n\n");
-      writeStream.end();
-
-      console.log("Writing to file has finished");
+  async translateSrtStreamGroup(
+    inputFilePath: string,
+    outputFilePath: string,
+    targetLanguage: string,
+    groupSize: number = 4
+  ) {
+    const nodes = [];
+    const queue = new PQueue({ concurrency: this.concurrency });
+    const inputStream = fs.createReadStream(inputFilePath, {
+      encoding: "utf8",
     });
+    const writeStream = fs.createWriteStream(outputFilePath, {
+      encoding: "utf8",
+    });
+
+    let group = [];
+    let textToTranslate = "";
+
+    inputStream
+      .pipe(parse())
+      .on("data", (node) => {
+        nodes.push(node);
+        group.push(node);
+        textToTranslate += node.data.text + " \n";
+
+        if (group.length >= groupSize) {
+          const textForThisGroup = textToTranslate;
+          const nodesForThisGroup = group;
+
+          queue.add(async () => {
+            const translatedText = await this.translate.translate(
+              textForThisGroup,
+              targetLanguage
+            );
+
+            console.info("Translating: ", textForThisGroup);
+            console.info("Translated: ", translatedText);
+
+            const translatedSegments = translatedText.split("\n");
+
+            if (
+              nodesForThisGroup.length !==
+              translatedSegments.slice(0, translatedSegments.length - 1).length
+            ) {
+              console.error("Translation segment mismatch!");
+              return;
+            }
+
+            for (let i = 0; i < nodesForThisGroup.length; i++) {
+              nodesForThisGroup[i].data.text = translatedSegments[i];
+            }
+          });
+
+          // Reset the group and text
+          group = [];
+          textToTranslate = "";
+        }
+      })
+      .on("error", console.error)
+      .on("finish", async () => {
+        // Process any remaining nodes
+        if (group.length > 0) {
+          const textForThisGroup = textToTranslate;
+          const nodesForThisGroup = group;
+
+          queue.add(async () => {
+            const translatedText = await this.translate.translate(
+              textForThisGroup,
+              targetLanguage
+            );
+
+            console.info("Translating: ", textForThisGroup);
+            console.info("Translated: ", translatedText);
+
+            const translatedSegments = translatedText.split("\n");
+
+            if (
+              nodesForThisGroup.length !==
+              translatedSegments.slice(0, translatedSegments.length - 1).length
+            ) {
+              console.error("Translation segment mismatch!");
+              return;
+            }
+
+            for (let i = 0; i < nodesForThisGroup.length; i++) {
+              nodesForThisGroup[i].data.text = translatedSegments[i];
+            }
+          });
+        }
+
+        // Wait for all translations to finish
+        await queue.onIdle();
+
+        console.info("Translation has finished");
+
+        // 将翻译后的字幕重新编码并写入新的文件
+
+        writeStream.write(stringifySync(nodes, { format: "SRT" }) + "\n\n");
+
+        writeStream.end();
+
+        console.info("Writing to file has finished");
+      });
+  }
 }
 
-async function translateSrtStreamGroup(
-  inputFilePath: string,
-  outputFilePath: string,
-  targetLanguage: string,
-  groupSize: number = 4
-) {
-  const nodes = [];
-  const queue = new PQueue({ concurrency: 20 });
-  const inputStream = fs.createReadStream(inputFilePath, { encoding: "utf8" });
-  const writeStream = fs.createWriteStream(outputFilePath, {
-    encoding: "utf8",
-  });
-
-  let group = [];
-  let textToTranslate = "";
-
-  inputStream
-    .pipe(parse())
-    .on("data", (node) => {
-      nodes.push(node);
-      group.push(node);
-      textToTranslate += node.data.text + " \n";
-
-      if (group.length >= groupSize) {
-        const textForThisGroup = textToTranslate;
-        const nodesForThisGroup = group;
-
-        queue.add(async () => {
-          const [translatedText] = await translate.translate(
-            textForThisGroup,
-            targetLanguage
-          );
-          const translatedSegments = translatedText.split("\n");
-
-          if (
-            nodesForThisGroup.length !==
-            translatedSegments.slice(0, translatedSegments.length - 1).length
-          ) {
-            console.error("Translation segment mismatch!");
-            return;
-          }
-
-          for (let i = 0; i < nodesForThisGroup.length; i++) {
-            nodesForThisGroup[i].data.text = translatedSegments[i];
-          }
-        });
-
-        // Reset the group and text
-        group = [];
-        textToTranslate = "";
-      }
-    })
-    .on("error", console.error)
-    .on("finish", async () => {
-      // Process any remaining nodes
-      if (group.length > 0) {
-        const textForThisGroup = textToTranslate;
-        const nodesForThisGroup = group;
-
-        queue.add(async () => {
-          const [translatedText] = await translate.translate(
-            textForThisGroup,
-            targetLanguage
-          );
-          const translatedSegments = translatedText.split("\n");
-
-          if (
-            nodesForThisGroup.length !==
-            translatedSegments.slice(0, translatedSegments.length - 1).length
-          ) {
-            console.error("Translation segment mismatch!");
-            return;
-          }
-
-          for (let i = 0; i < nodesForThisGroup.length; i++) {
-            nodesForThisGroup[i].data.text = translatedSegments[i];
-          }
-        });
-      }
-
-      // Wait for all translations to finish
-      await queue.onIdle();
-
-      console.log("Translation has finished");
-
-      // 将翻译后的字幕重新编码并写入新的文件
-
-      writeStream.write(stringifySync(nodes, { format: "SRT" }) + "\n\n");
-
-      writeStream.end();
-
-      console.log("Writing to file has finished");
-    });
-}
-
-translateSrtStreamGroup(
-  resolve(__dirname, "../DLDSS-202.srt"),
-  resolve(__dirname, "..", "output.srt"),
-  "zh-CN"
-).catch(console.error);
-// translateSrtStream(
-//   resolve(__dirname, "../DLDSS-202.srt"),
-//   resolve(__dirname, "..", "output.srt"),
-//   "zh-CN"
-// ).catch(console.error);
+// const test = new TranslateModel(TranslateType.GOOGLE, {
+//   apiKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+// })
+//   .translateSrtStreamGroup(
+//     resolve(__dirname, "../DLDSS-202.srt"),
+//     resolve(__dirname, "..", "output.srt"),
+//     "zh-CN"
+//   )
+//   .catch(console.error);
 
 export { TranslateModel, SubtitleProcessor };

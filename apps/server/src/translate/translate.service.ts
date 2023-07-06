@@ -3,12 +3,23 @@ import { CreateTranslateDto } from "./dto/create-translate.dto";
 import { UpdateTranslateDto } from "./dto/update-translate.dto";
 import * as path from "path";
 import * as fs from "fs";
-import { TranslateModel, SubtitleProcessor } from "translator";
+import { TranslateModel, TranslateType } from "translator";
 import { staticPath } from "utils";
+
+console.debug("staticPath", staticPath);
 
 @Injectable()
 export class TranslateService {
   async create(createTranslateDto: CreateTranslateDto) {}
+
+  private readonly staticDir = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "..",
+    "uploads"
+  );
 
   async findAll() {}
 
@@ -19,10 +30,8 @@ export class TranslateService {
 
     if (exists) {
       console.log("文件存在");
-      console.log(
-        "file not exist, return url" + `${staticPath}/static/${fileName}`
-      );
-      return `${staticPath}/static/${fileName}`;
+      console.log("file not exist, return url" + `${staticPath}/${fileName}`);
+      return `${staticPath}/${fileName}`;
     } else {
       console.log("file not exist, need translate");
       return false;
@@ -32,7 +41,8 @@ export class TranslateService {
   translateFile(filename) {
     return new Promise((resolve, reject) => {
       const fileObj = path.parse(filename);
-      const translateName = fileObj.name + ".Chinese" + fileObj.ext;
+      const translateName =
+        fileObj.name + "." + process.env.LANGUAGE ?? "Chinese" + fileObj.ext;
 
       const existUrl = this.existFile(translateName);
       if (existUrl) {
@@ -43,22 +53,15 @@ export class TranslateService {
         return;
       }
 
-      const fileStream = new SubtitleProcessor(
-        path.resolve(__dirname, "..", "..", "uploads", filename),
-        path.resolve(__dirname, "..", "..", "uploads", translateName),
-        "",
-        (text) => {
-          const model = new TranslateModel({
-            baseUrl: process.env.BASE_URL,
-            apiKey: process.env.OPENAI_API_KEY,
-          });
-          return model.translate(text, process.env.LANGUAGE ?? "Chinese");
-          // return text;
-        }
-      );
-
-      fileStream
-        .process()
+      const model = new TranslateModel(TranslateType.GPT3, {
+        baseUrl: process.env.BASE_URL,
+        apiKey: process.env.OPENAI_API_KEY,
+      })
+        .translateSrtStreamGroup(
+          path.join(this.staticDir, filename),
+          path.join(this.staticDir, translateName),
+          process.env.LANGUAGE ?? "Chinese"
+        )
         .then(() => {
           resolve({
             url: `${staticPath}/${translateName}`,
@@ -73,13 +76,6 @@ export class TranslateService {
   }
 
   async findOne(id: string) {
-    const model = new TranslateModel();
-
-    try {
-      return model.translate(id);
-    } catch (error) {
-      console.log(error);
-    }
     return `This action returns a #${id} translate`;
   }
 

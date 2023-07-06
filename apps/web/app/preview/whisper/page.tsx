@@ -21,6 +21,7 @@ const VideoTable = async () => {
 };
 
 async function getModels(): Promise<ModelType[]> {
+  console.debug("models", `${baseURL}/osrt/models`);
   let res = await fetch(`${baseURL}/osrt/models`);
   await new Promise((resolve) => setTimeout(resolve, 2000));
   return res.json();
