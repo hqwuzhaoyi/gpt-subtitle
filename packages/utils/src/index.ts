@@ -9,6 +9,6 @@ export const staticPath = `${baseURL}${process.env.STATIC_PATH}`;
 console.debug("baseURL", baseURL);
 
 export const request = axios.create({
-  // .. congigure axios baseURL
+  // .. configure axios baseURL
   baseURL: `${baseURL}`,
 });

@@ -5,8 +5,11 @@ import { OsrtController } from "./osrt.controller";
 import { BullModule } from "@nestjs/bull";
 import { QueueProcessor } from "./osrt.processor";
 import { OsrtGateway } from "./osrt.gateway";
+import { FileEntity } from "./entities/file.entity";
+import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
+    TypeOrmModule.forFeature([FileEntity]),
     BullModule.registerQueue({
       name: "audio",
     }),

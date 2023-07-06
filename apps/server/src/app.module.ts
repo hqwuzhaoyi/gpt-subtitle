@@ -10,9 +10,20 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { OsrtModule } from "./osrt/osrt.module";
 import { BullModule } from "@nestjs/bull";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot({
+      type: "mysql",
+      host: "localhost",
+      port: 3306,
+      username: "root",
+      password: "1241",
+      database: "gpt_subtitle",
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
     BullModule.forRoot({
       redis: {
         host: "localhost",
