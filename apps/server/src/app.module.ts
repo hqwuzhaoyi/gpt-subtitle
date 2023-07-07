@@ -3,7 +3,6 @@ import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { TranslateModule } from "./translate/translate.module";
-import { FileLoaderModule } from "./file-loader/file-loader.module";
 import { UploadModule } from "./upload/upload.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { ServeStaticModule } from "@nestjs/serve-static";
@@ -11,6 +10,8 @@ import { join } from "path";
 import { OsrtModule } from "./osrt/osrt.module";
 import { BullModule } from "@nestjs/bull";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { FilesModule } from './files/files.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       username: "root",
       password: "1241",
       database: "gpt_subtitle",
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
     }),
     BullModule.forRoot({
@@ -47,9 +48,11 @@ import { TypeOrmModule } from "@nestjs/typeorm";
     }),
 
     TranslateModule,
-    FileLoaderModule,
+
     UploadModule,
     OsrtModule,
+    FilesModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

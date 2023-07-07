@@ -1,3 +1,5 @@
+import { CreateWatchDto } from "./dto/create-watch.dto";
+import { UpdateWatchDto } from "./dto/update-watch.dto";
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
@@ -7,10 +9,10 @@ import * as fs from "fs";
 import * as chokidar from "chokidar";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { FileEntity } from "./entities/file.entity";
+import { FileEntity } from "../entities/file.entity";
 
 @Injectable()
-export class FileWatcherService implements OnModuleInit {
+export class WatchService {
   constructor(
     @InjectRepository(FileEntity)
     private filesRepository: Repository<FileEntity>,
@@ -23,10 +25,12 @@ export class FileWatcherService implements OnModuleInit {
     "..",
     "..",
     "..",
+    "..",
     "samples"
   );
   private readonly staticDir = path.join(
     __dirname,
+    "..",
     "..",
     "..",
     "..",
@@ -79,5 +83,25 @@ export class FileWatcherService implements OnModuleInit {
         translateOption: "option",
       });
     });
+  }
+
+  create(createWatchDto: CreateWatchDto) {
+    return "This action adds a new watch";
+  }
+
+  findAll() {
+    return `This action returns all watch`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} watch`;
+  }
+
+  update(id: number, updateWatchDto: UpdateWatchDto) {
+    return `This action updates a #${id} watch`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} watch`;
   }
 }

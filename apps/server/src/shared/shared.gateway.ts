@@ -15,7 +15,7 @@ console.debug("WS_PORT", process.env.WS_PORT);
 @WebSocketGateway({
   cors: true,
 })
-export class OsrtGateway
+export class SharedGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()

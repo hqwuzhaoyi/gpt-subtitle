@@ -2,14 +2,14 @@
 import { Processor, Process } from "@nestjs/bull";
 import { Job } from "bull";
 import { OsrtService } from "./osrt.service";
-import { OsrtGateway } from "./osrt.gateway";
+import { SharedGateway } from "../shared/shared.gateway";
 import { Logger } from "@nestjs/common";
 
 @Processor("audio")
 export class QueueProcessor {
   constructor(
     private readonly osrtService: OsrtService,
-    private readonly osrtGateway: OsrtGateway
+    private readonly osrtGateway: SharedGateway
   ) {}
 
   private logger: Logger = new Logger("MessageGateway");

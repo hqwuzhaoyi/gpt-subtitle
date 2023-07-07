@@ -1,21 +1,14 @@
 import { Module } from "@nestjs/common";
 import { OsrtService } from "./osrt.service";
-import { FileWatcherService } from "./osrtFileWatch.service";
 import { OsrtController } from "./osrt.controller";
-import { BullModule } from "@nestjs/bull";
+import { SharedGateway } from "../shared/shared.gateway";
+import { SharedModule } from "@/shared/shared.module";
 import { QueueProcessor } from "./osrt.processor";
-import { OsrtGateway } from "./osrt.gateway";
-import { FileEntity } from "./entities/file.entity";
-import { TypeOrmModule } from '@nestjs/typeorm';
+
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([FileEntity]),
-    BullModule.registerQueue({
-      name: "audio",
-    }),
-  ],
+  imports: [SharedModule],
   controllers: [OsrtController],
 
-  providers: [QueueProcessor, OsrtService, FileWatcherService, OsrtGateway],
+  providers: [OsrtService, QueueProcessor],
 })
 export class OsrtModule {}
