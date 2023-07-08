@@ -6,6 +6,7 @@
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/server",
+      "envFile": "${workspaceFolder}/.env",
       "command": "npm run dev"
     },
     {
@@ -13,6 +14,7 @@
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/web",
+      "envFile": "${workspaceFolder}/.env",
       "command": "npm run dev"
     },
     {
@@ -27,6 +29,7 @@
       "request": "launch",
       "command": "npm run dev",
       "cwd": "${workspaceFolder}/apps/web",
+      "envFile": "${workspaceFolder}/.env",
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
@@ -39,6 +42,7 @@
       "name": "web/app",
       "configurations": ["Next.js: debug full stack", "Nest.js"],
       // "preLaunchTask": "${defaultBuildTask}",
+      "envFile": "${workspaceFolder}/.env",
       "stopAll": true
     }
   ]

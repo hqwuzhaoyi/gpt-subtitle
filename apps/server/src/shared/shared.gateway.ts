@@ -10,8 +10,6 @@ import {
 import { Server, Socket } from "socket.io";
 import { Logger } from "@nestjs/common";
 
-console.debug("WS_PORT", process.env.WS_PORT);
-
 @WebSocketGateway({
   cors: true,
 })

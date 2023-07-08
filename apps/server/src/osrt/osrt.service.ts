@@ -10,7 +10,7 @@ import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
 import { staticPath } from "utils";
 
-
+import { FilesService } from "@/files/files.service";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
@@ -20,18 +20,13 @@ const subtitleExtensions = ["srt", "ass"];
 
 @Injectable()
 export class OsrtService {
-  constructor(@InjectQueue("audio") private audioQueue: Queue) {}
+  constructor(
+    @InjectQueue("audio") private audioQueue: Queue,
+    private readonly filesService: FilesService
+  ) {}
 
   private logger: Logger = new Logger("OsrtService");
 
-  private readonly samplesDir = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "samples"
-  );
   private readonly staticDir = path.join(
     __dirname,
     "..",
@@ -40,8 +35,9 @@ export class OsrtService {
     "..",
     "uploads"
   );
-  private readonly videoDir = path.join(this.samplesDir, "video");
-  private readonly audioDir = path.join(this.samplesDir, "audio");
+
+  private readonly videoDir = path.join(this.staticDir, "video");
+  private readonly audioDir = path.join(this.staticDir, "audio");
   private readonly whisperDir = path.join(
     __dirname,
     "..",
@@ -73,7 +69,7 @@ export class OsrtService {
 
   async findAll(): Promise<FileListResult[]> {
     const subtitles = await this.findAllSrt();
-    const videos = await this.findAllVideo();
+    const videos = await this.filesService.findVideoFiles();
     const audios = await this.findAllAudio();
     const currentJobs = await this.audioQueue.getActive();
     const currentJobsFiles = currentJobs.map((job) => {
@@ -84,7 +80,7 @@ export class OsrtService {
       return acc;
     }, {});
     const result = videos
-      .map((file) => path.parse(file).name)
+      .map((file) => path.parse(file.fileName).name)
       .map((videoName) => {
         const audioExists = audios.find((file) =>
           path.parse(file).name.includes(videoName)
@@ -232,7 +228,7 @@ export class OsrtService {
   ) {
     if (!audioPath && videoPath) {
       try {
-        audioPath = path.join(this.samplesDir, "audio", fileName + ".wav");
+        audioPath = path.join(this.staticDir, "audio", fileName + ".wav");
         await extractAudio(videoPath, audioPath);
         console.info("extractAudio done");
         console.info("audioPath:", audioPath);

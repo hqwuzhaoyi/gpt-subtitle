@@ -68,6 +68,9 @@ importers:
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
+      fast-glob:
+        specifier: ^3.3.0
+        version: 3.3.0
       fs-extra:
         specifier: ^11.1.1
         version: 11.1.1

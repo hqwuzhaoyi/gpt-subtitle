@@ -1,4 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+  TableInheritance,
+  ChildEntity,
+  OneToOne,
+} from "typeorm";
 
 @Entity()
 export class FileEntity {
@@ -18,4 +28,24 @@ export class FileEntity {
 
   @Column()
   status: string;
+}
+
+
+@Entity()
+export class VideoFileEntity extends FileEntity {}
+
+@Entity()
+export class AudioFileEntity extends FileEntity {
+  @OneToOne(() => VideoFileEntity)
+  @JoinColumn()
+  videoFile: VideoFileEntity;
+
+  @OneToMany(() => SubtitleFileEntity, (subtitleFile) => subtitleFile.audioFile)
+  subtitleFiles: SubtitleFileEntity[];
+}
+
+@Entity()
+export class SubtitleFileEntity extends FileEntity {
+  @ManyToOne(() => AudioFileEntity, (audioFile) => audioFile.subtitleFiles)
+  audioFile: AudioFileEntity;
 }
