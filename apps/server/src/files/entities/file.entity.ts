@@ -30,9 +30,14 @@ export class FileEntity {
   status: string;
 }
 
-
 @Entity()
-export class VideoFileEntity extends FileEntity {}
+export class VideoFileEntity extends FileEntity {
+  @OneToOne(
+    "AudioFileEntity",
+    (audioFile: AudioFileEntity) => audioFile.videoFile
+  )
+  audioFile: Promise<AudioFileEntity>;
+}
 
 @Entity()
 export class AudioFileEntity extends FileEntity {

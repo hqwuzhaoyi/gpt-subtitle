@@ -53,15 +53,15 @@ const queryList: () => Promise<Task[]> = async () => {
   const result = list.map((task) => {
     const status = task.isProcessing
       ? "in progress"
-      : task.exist.subtitle
+      : task.subtitle
       ? "done"
       : "todo";
     return {
-      title: task.name,
-      id: task.name,
-      label: task.name,
+      title: task.fileName,
+      id: task.fileName,
+      label: task.fileName,
       status,
-      path: task.exist.subtitlePath,
+      path: task.subtitle?.[0]?.path,
       priority: 1,
       language: LanguageEnum.Auto,
       processingJobId: task.processingJobId,

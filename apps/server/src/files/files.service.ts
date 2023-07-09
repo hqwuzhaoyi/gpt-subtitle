@@ -1,9 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { CreateFileDto } from "./dto/create-file.dto";
 import { UpdateFileDto } from "./dto/update-file.dto";
-import { FileEntity, VideoFileEntity } from "./entities/file.entity";
+import {
+  AudioFileEntity,
+  FileEntity,
+  SubtitleFileEntity,
+  VideoFileEntity,
+} from "./entities/file.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
+import * as path from "path";
 
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
 const audioExtensions = ["mp3", "wav", "ogg", "flac"];
@@ -13,7 +19,11 @@ const subtitleExtensions = ["srt", "ass"];
 export class FilesService {
   constructor(
     @InjectRepository(VideoFileEntity)
-    private filesRepository: Repository<VideoFileEntity>
+    private videoFilesRepository: Repository<VideoFileEntity>,
+    @InjectRepository(AudioFileEntity)
+    private audioFilesRepository: Repository<AudioFileEntity>,
+    @InjectRepository(SubtitleFileEntity)
+    private subtitleFilesRepository: Repository<SubtitleFileEntity>
   ) {}
 
   create(createFileDto: CreateFileDto) {
@@ -37,24 +47,34 @@ export class FilesService {
   }
 
   async findVideoFiles(): Promise<FileEntity[]> {
-    return this.filesRepository.find({
+    return this.videoFilesRepository.find({
       where: {
         extName: In(videoExtensions.map((ext) => "." + ext)),
       },
     });
   }
   async findAudioFiles(): Promise<FileEntity[]> {
-    return this.filesRepository.find({
+    return this.audioFilesRepository.find({
       where: {
         extName: In(audioExtensions.map((ext) => "." + ext)),
       },
     });
   }
   async findSubtitleFiles(): Promise<FileEntity[]> {
-    return this.filesRepository.find({
+    return this.subtitleFilesRepository.find({
       where: {
         extName: In(subtitleExtensions.map((ext) => "." + ext)),
       },
     });
   }
+
+  async findRelatedFilesForVideo(): Promise<VideoFileEntity[]> {
+    // 查找所有的视频文件并加载关联的音频和字幕文件
+    const videoFiles = await this.videoFilesRepository.find({
+      relations: ["audioFile", "audioFile.subtitleFiles"],
+    });
+
+    return videoFiles;
+  }
+
 }

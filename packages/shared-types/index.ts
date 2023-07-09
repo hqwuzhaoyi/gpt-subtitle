@@ -1,13 +1,22 @@
-export type FileListResult = {
-  name: string;
-  exist: {
-    audio: boolean;
-    subtitle: boolean;
-    subtitlePath?: string;
-  };
+type FileItem = {
+  id: number;
+  fileName: string;
+  path: string;
+  status: string;
+};
+
+type AudioFileItem = FileItem & {
+  subtitleFiles: FileItem[];
+};
+
+type VideoFileItem = FileItem & {
+  audio: FileItem;
+  subtitle: FileItem[];
   isProcessing: boolean;
   processingJobId?: string;
 };
+
+export type FileListResult = VideoFileItem[];
 
 export type CreateWhisperJobItem = {
   file: string;

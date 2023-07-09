@@ -30,8 +30,8 @@ export class TranslateService {
 
     if (exists) {
       console.log("文件存在");
-      console.log("file not exist, return url" + `${staticPath}/${fileName}`);
-      return `${staticPath}/${fileName}`;
+      console.log("file not exist, return url" + `${staticPath}${fileName}`);
+      return `${staticPath}${fileName}`;
     } else {
       console.log("file not exist, need translate");
       return false;
@@ -47,7 +47,7 @@ export class TranslateService {
       const existUrl = this.existFile(translateName);
       if (existUrl) {
         resolve({
-          url: `${staticPath}/${translateName}`,
+          url: `${staticPath}${translateName}`,
           filename: translateName,
         });
         return;
@@ -64,7 +64,7 @@ export class TranslateService {
         )
         .then(() => {
           resolve({
-            url: `${staticPath}/${translateName}`,
+            url: `${staticPath}${translateName}`,
             filename: translateName,
           });
         })

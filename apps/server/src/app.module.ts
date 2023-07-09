@@ -10,8 +10,9 @@ import { join } from "path";
 import { OsrtModule } from "./osrt/osrt.module";
 import { BullModule } from "@nestjs/bull";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { FilesModule } from './files/files.module';
-import { SharedModule } from './shared/shared.module';
+import { FilesModule } from "./files/files.module";
+import { SharedModule } from "./shared/shared.module";
+import { StaticDirModule, StaticDirProvider } from "./static-dir.provider";
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { SharedModule } from './shared/shared.module';
     OsrtModule,
     FilesModule,
     SharedModule,
+    StaticDirModule,
   ],
   controllers: [AppController],
   providers: [AppService],

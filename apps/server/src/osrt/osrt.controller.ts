@@ -22,7 +22,7 @@ export class OsrtController {
 
   @Get("list")
   async list() {
-    return await this.osrtService.findAll();
+    return await this.osrtService.list();
   }
 
   @Get("models")

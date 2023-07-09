@@ -28,7 +28,7 @@ export const outPutSrtStop = async (
     throw new Error("Error uploading file");
   }
 };
-export const outPutSrtList = async (): Promise<FileListResult[]> => {
+export const outPutSrtList = async (): Promise<FileListResult> => {
   try {
     const response = await request.get(`/osrt/list`);
     return response.data;

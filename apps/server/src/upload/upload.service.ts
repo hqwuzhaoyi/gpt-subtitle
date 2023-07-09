@@ -25,7 +25,7 @@ export class UploadService {
     return {
       originalname: file.originalname,
       filename: file.filename,
-      url: `${staticPath}/${file.filename}`,
+      url: `${staticPath}${file.filename}`,
     };
 
     // 上传文件的逻辑，这里略去
