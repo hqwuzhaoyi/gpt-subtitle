@@ -3,13 +3,13 @@ import { CreateWhisperJobItem, FileListResult } from "shared-types";
 import { LanguageEnum, ModelType } from "../data/types";
 export const outPutSrt = async (
   language: string,
-  filename: string,
+  id?: string,
   model?: string,
   priority?: number
 ): Promise<void> => {
   try {
     const response = await request.get(
-      `/osrt/${language}/${filename}/${model}/${priority}`
+      `/osrt/${language}/${id}/${model}/${priority}`
     );
     return response.data;
   } catch (error) {

@@ -4,12 +4,14 @@ import { Job } from "bull";
 import { OsrtService } from "./osrt.service";
 import { SharedGateway } from "../shared/shared.gateway";
 import { Logger } from "@nestjs/common";
+import { FilesService } from "@/files/files.service";
 
 @Processor("audio")
 export class QueueProcessor {
   constructor(
     private readonly osrtService: OsrtService,
-    private readonly osrtGateway: SharedGateway
+    private readonly osrtGateway: SharedGateway,
+    private readonly filesService: FilesService
   ) {}
 
   private logger: Logger = new Logger("MessageGateway");
@@ -26,16 +28,32 @@ export class QueueProcessor {
     concurrency: 1,
   })
   async handleTranslationJob(
-    job: Job<{ ln: string; file: string; model }>
+    job: Job<{ ln: string; file: string; model; id: string }>
   ): Promise<void> {
     this.osrtGateway.notifyClient(job.id as string, "start", job.data);
+    const { ln, id, model } = job.data;
 
-    const { ln, file, model } = job.data;
+    const videoFileEntity = await this.filesService.findVideoFile(id);
+
+    const videoPath = videoFileEntity.filePath;
+    const audioPath = (await videoFileEntity.audioFile)?.filePath;
+    const srtPath = (await videoFileEntity.audioFile)?.subtitleFiles?.[0]
+      ?.filePath;
+    const fileName = videoFileEntity.baseName;
+    const srtFile = fileName + ".srt";
+
     try {
-      this.logger.log(
-        `Start processing job... ${job.id} ${ln} ${file} ${model}`
-      );
-      const url = await this.osrtService.findFileThenTranslate(ln, file, model);
+      this.logger.log(`Start processing job... ${job.id} ${ln} ${id} ${model}`);
+
+      const url = await this.osrtService.findFileThenTranslate({
+        ln,
+        model,
+        videoPath,
+        audioPath,
+        srtPath,
+        srtFile,
+        fileName,
+      });
 
       this.osrtGateway.notifyClient(job.id as string, "completed", {
         ...job.data,

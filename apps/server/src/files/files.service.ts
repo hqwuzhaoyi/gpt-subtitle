@@ -53,6 +53,13 @@ export class FilesService {
       },
     });
   }
+  async findVideoFile(id): Promise<VideoFileEntity> {
+    return this.videoFilesRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
   async findAudioFiles(): Promise<FileEntity[]> {
     return this.audioFilesRepository.find({
       where: {
@@ -76,5 +83,4 @@ export class FilesService {
 
     return videoFiles;
   }
-
 }

@@ -19,7 +19,8 @@ type VideoFileItem = FileItem & {
 export type FileListResult = VideoFileItem[];
 
 export type CreateWhisperJobItem = {
-  file: string;
+  id: string
+  file?: string;
   language: string;
   model: string;
 };

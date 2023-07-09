@@ -58,7 +58,7 @@ const queryList: () => Promise<Task[]> = async () => {
       : "todo";
     return {
       title: task.fileName,
-      id: task.fileName,
+      id: task.id + '',
       label: task.fileName,
       status,
       path: task.subtitle?.[0]?.path,

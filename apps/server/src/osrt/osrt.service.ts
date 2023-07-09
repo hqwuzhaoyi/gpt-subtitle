@@ -134,9 +134,9 @@ export class OsrtService {
     return files;
   }
 
-  async translate(language: string, file: string, model: string, priority = 1) {
-    await this.addTranslationJob({ language, file, model, priority });
-    return `This action returns a #${file} osrt`;
+  async translate(language: string, id: string, model: string, priority = 1) {
+    await this.addTranslationJob({ language, id, model, priority });
+    return `This action returns a #${id} osrt`;
   }
 
   async createJobs(jobs: CreateOsrtDto[]) {
@@ -182,12 +182,15 @@ export class OsrtService {
     stopWhisper();
   }
 
-  async findFileThenTranslate(ln: string, fileName: string, model: string) {
-    const videoPath = this.findFile(this.videoDir, fileName);
-    const audioPath = this.findFile(this.audioDir, fileName);
-    const srtFile = fileName + ".srt";
-    const srtPath = this.findFile(this.staticDir, srtFile);
-
+  async findFileThenTranslate({
+    ln,
+    model,
+    videoPath,
+    audioPath,
+    srtPath,
+    srtFile,
+    fileName,
+  }) {
     const targetSrtPath = path.join(this.staticDir, srtFile);
     if (srtPath) {
       console.info("srtPath exist", srtPath + ".srt");
@@ -195,7 +198,7 @@ export class OsrtService {
     } else if (audioPath) {
       console.info("audioPath exist", audioPath);
       await whisper(audioPath, ln, model);
-      fs.renameSync(audioPath + ".srt", targetSrtPath);
+      // fs.renameSync(audioPath + ".srt", targetSrtPath);
       return `${staticPath}${srtFile}`;
     } else if (videoPath) {
       console.info("videoPath exist", videoPath);
@@ -205,7 +208,7 @@ export class OsrtService {
         videoPath
       );
       await whisper(finalAudioPath, ln, model);
-      fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
+      // fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
       return `${staticPath}${srtFile}`;
     } else {
       this.logger.warn("srtPath not exist", srtPath);
@@ -214,7 +217,6 @@ export class OsrtService {
       this.logger.warn(ln, fileName, model);
     }
   }
-
   private async handleAudio(
     audioPath: string,
     fileName: string,
@@ -222,7 +224,7 @@ export class OsrtService {
   ) {
     if (!audioPath && videoPath) {
       try {
-        audioPath = path.join(this.staticDir, "audio", fileName + ".wav");
+        audioPath = path.join(path.dirname(videoPath), fileName + ".wav");
         await extractAudio(videoPath, audioPath);
         console.info("extractAudio done");
         console.info("audioPath:", audioPath);

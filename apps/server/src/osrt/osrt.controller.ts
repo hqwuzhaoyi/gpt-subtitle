@@ -50,14 +50,14 @@ export class OsrtController {
     return this.osrtService.getActiveJobs();
   }
 
-  @Get(":ln/:file/:model/:priority")
+  @Get(":ln/:id/:model/:priority")
   translate(
     @Param("ln") ln: string,
-    @Param("file") file: string,
+    @Param("id") id: string,
     @Param("model") model: string,
     @Param("priority") priority: number
   ) {
-    return this.osrtService.translate(ln, file, model, priority);
+    return this.osrtService.translate(ln, id, model, priority);
   }
 
   @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {

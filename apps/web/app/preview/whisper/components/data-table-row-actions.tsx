@@ -44,13 +44,13 @@ export function DataTableRowActions<TData extends Task>({
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
   const { mutate } = useSWRConfig();
-
+  console.debug(row);
   const startWhisper = async () => {
     await outPutSrt(
       row.getValue("language"),
       row.getValue("id"),
       table.options.meta?.model,
-      row.getValue("priority"),
+      row.getValue("priority")
     );
     mutate("/osrt/list");
   };

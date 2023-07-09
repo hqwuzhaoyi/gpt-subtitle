@@ -10,8 +10,12 @@ import * as child_process from "child_process";
 
 let mainProcess = null;
 
-export const whisper = async (targetPath, videoLanguage, model = 'ggml-medium.bin') => {
-  const whisperRoot = path.join(__dirname, "..", "..", "..", 'whisper');
+export const whisper = async (
+  targetPath,
+  videoLanguage,
+  model = "ggml-medium.bin"
+) => {
+  const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
   const mainPath = path.join(whisperRoot, "main");
   const modelPath = path.join(whisperRoot, "models", model);
@@ -29,7 +33,7 @@ export const whisper = async (targetPath, videoLanguage, model = 'ggml-medium.bi
   return new Promise((resolve, reject) => {
     mainProcess = child_process.spawn(
       mainPath,
-      ["-f", targetPath, "-osrt", "-l", videoLanguage, "-m", modelPath],
+      ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
     );
     mainProcess.stdout.pipe(process.stdout);
@@ -56,7 +60,7 @@ export const extractAudio = async (targetPath, aduioPath) => {
       "ffmpeg",
       [
         "-i",
-        targetPath,
+        `"${targetPath}"`,
         "-vn",
         "-acodec",
         "pcm_s16le",
@@ -64,7 +68,7 @@ export const extractAudio = async (targetPath, aduioPath) => {
         "16000",
         "-ac",
         "2",
-        aduioPath,
+        `"${aduioPath}"`,
       ],
       { shell: true }
     );
