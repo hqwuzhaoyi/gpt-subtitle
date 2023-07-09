@@ -27,14 +27,15 @@ import {
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
-import { outPutSrtList, autoStart } from "../api/osrt";
+import { outPutSrtList, autoStart, outPutSrtAudios } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
 import { ModelSelect } from "./ModelSelect";
 import { baseURL } from "utils";
 import { Autostart } from "./Autostart";
-import { LanguageEnum, ModelType } from "../data/types";
+import { LanguageEnum, ModelType, TableType } from "../data/types";
 import { Task } from "../data/schema";
+import { th } from "@faker-js/faker";
 
 const socket = io(baseURL);
 
@@ -46,32 +47,60 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
   models: ModelType[];
+  type: TableType;
 }
 
-const queryList: () => Promise<Task[]> = async () => {
-  const list = await outPutSrtList();
-  const result = list.map((task) => {
-    const status = task.isProcessing
-      ? "in progress"
-      : task.subtitle
-      ? "done"
-      : "todo";
-    return {
-      title: task.fileName,
-      id: task.id + '',
-      label: task.fileName,
-      status,
-      path: task.subtitle?.[0]?.path,
-      priority: 1,
-      language: LanguageEnum.Auto,
-      processingJobId: task.processingJobId,
-    };
-  });
+const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
+  let result;
+  if (type === "video") {
+    const list = await outPutSrtList();
+    result = list.map((task) => {
+      const status = task.isProcessing
+        ? "in progress"
+        : task.subtitle
+        ? "done"
+        : "todo";
+      return {
+        title: task.fileName,
+        id: task.id + "",
+        label: task.fileName,
+        status,
+        path: task.subtitle?.[0]?.path,
+        priority: 1,
+        language: LanguageEnum.Auto,
+        processingJobId: task.processingJobId,
+      };
+    });
+  } else if (type === "audio") {
+    const list = await outPutSrtAudios();
+    result = list.map((task) => {
+      const status = task.isProcessing
+        ? "in progress"
+        : task.subtitle
+        ? "done"
+        : "todo";
+      return {
+        title: task.fileName,
+        id: task.id + "",
+        label: task.fileName,
+        status,
+        path: task.subtitle?.[0]?.path,
+        priority: 1,
+        language: LanguageEnum.Auto,
+        processingJobId: task.processingJobId,
+      };
+    });
+  } else {
+    throw new Error("unknown type" + type);
+  }
+
   return result;
 };
 
-function useList() {
-  const { data, error, isLoading } = useSWR("/osrt/list", queryList);
+function useList(type: TableType) {
+  const { data, error, isLoading } = useSWR(`/osrt/list/${type}`, () =>
+    queryList(type)
+  );
   return {
     list: data,
     isLoading,
@@ -83,6 +112,7 @@ export function DataTable<TData extends Task, TValue>({
   columns,
   data: initData = [],
   models,
+  type,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -91,7 +121,7 @@ export function DataTable<TData extends Task, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const { list } = useList();
+  const { list } = useList(type);
   const [model, setModel] = React.useState<ModelType | undefined>(models?.[0]);
 
   const [data, setData] = React.useState(initData);
@@ -156,6 +186,7 @@ export function DataTable<TData extends Task, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
+      type,
       model,
       updateData: (rowIndex: string | number, columnId: any, value: any) => {
         setData((old) =>
@@ -183,14 +214,6 @@ export function DataTable<TData extends Task, TValue>({
           <ModelSelect models={models} value={model} onChange={setModel} />
         </div>
         <div className="flex-initial">
-          {/* <Button
-            className="h-8"
-            onClick={() => {
-              autoStart("ja", model);
-            }}
-          >
-            Auto Start
-          </Button> */}
           <Autostart models={models} />
         </div>
       </div>

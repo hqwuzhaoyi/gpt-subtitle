@@ -9,6 +9,7 @@ import { UserNav } from "./components/user-nav";
 import { Suspense } from "react";
 import { baseURL } from "utils";
 import { ModelType } from "./data/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -17,7 +18,11 @@ export const metadata: Metadata = {
 
 const VideoTable = async () => {
   const models = await getModels();
-  return <DataTable columns={columns} models={models} />;
+  return <DataTable columns={columns} models={models} type="video" />;
+};
+const AudioTable = async () => {
+  const models = await getModels();
+  return <DataTable columns={columns} models={models} type="audio" />;
 };
 
 async function getModels(): Promise<ModelType[]> {
@@ -42,11 +47,21 @@ export default async function TaskPage() {
             <UserNav />
           </div>
         </div>
-        <h2 className="text-xl tracking-tight">Video</h2>
 
-        <Suspense fallback={<>Loading...</>}>
-          <VideoTable></VideoTable>
-        </Suspense>
+        <Tabs defaultValue="account" className="w-full">
+          <TabsList>
+            <TabsTrigger value="video">Video</TabsTrigger>
+            <TabsTrigger value="audio">Audio</TabsTrigger>
+          </TabsList>
+          <TabsContent value="video">
+            <Suspense fallback={<>Loading...</>}>
+              <VideoTable></VideoTable>
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="audio">
+            <AudioTable></AudioTable>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );

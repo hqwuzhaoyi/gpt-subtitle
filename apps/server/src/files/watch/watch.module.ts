@@ -8,5 +8,6 @@ import { SharedModule } from "@/shared/shared.module";
 
   controllers: [WatchController],
   providers: [WatchService],
+  exports: [WatchService],
 })
 export class WatchModule {}

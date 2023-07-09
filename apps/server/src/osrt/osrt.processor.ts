@@ -5,13 +5,16 @@ import { OsrtService } from "./osrt.service";
 import { SharedGateway } from "../shared/shared.gateway";
 import { Logger } from "@nestjs/common";
 import { FilesService } from "@/files/files.service";
+import { CreateOsrtDto } from "./dto/create-osrt.dto";
+import { WatchService } from "@/files/watch/watch.service";
 
 @Processor("audio")
 export class QueueProcessor {
   constructor(
     private readonly osrtService: OsrtService,
     private readonly osrtGateway: SharedGateway,
-    private readonly filesService: FilesService
+    private readonly filesService: FilesService,
+    private readonly watchService: WatchService
   ) {}
 
   private logger: Logger = new Logger("MessageGateway");
@@ -27,26 +30,37 @@ export class QueueProcessor {
     name: "translate",
     concurrency: 1,
   })
-  async handleTranslationJob(
-    job: Job<{ ln: string; file: string; model; id: string }>
-  ): Promise<void> {
+  async handleTranslationJob(job: Job<CreateOsrtDto>): Promise<void> {
     this.osrtGateway.notifyClient(job.id as string, "start", job.data);
-    const { ln, id, model } = job.data;
-
-    const videoFileEntity = await this.filesService.findVideoFile(id);
-
-    const videoPath = videoFileEntity.filePath;
-    const audioPath = (await videoFileEntity.audioFile)?.filePath;
-    const srtPath = (await videoFileEntity.audioFile)?.subtitleFiles?.[0]
-      ?.filePath;
-    const fileName = videoFileEntity.baseName;
-    const srtFile = fileName + ".srt";
-
+    const { language, id, model, fileType } = job.data;
     try {
-      this.logger.log(`Start processing job... ${job.id} ${ln} ${id} ${model}`);
+      let videoPath, audioPath, srtPath, fileName, srtFile;
+      if (fileType === "audio") {
+        const audioFileEntity = await this.filesService.findAudioFile(id);
 
-      const url = await this.osrtService.findFileThenTranslate({
-        ln,
+        audioPath = audioFileEntity.filePath;
+        srtPath = (await audioFileEntity.subtitleFiles?.[0])?.filePath;
+        fileName = audioFileEntity.baseName;
+        srtFile = fileName + ".srt";
+      } else if (fileType === "video") {
+        const videoFileEntity = await this.filesService.findVideoFile(id);
+
+        videoPath = videoFileEntity.filePath;
+        audioPath = (await videoFileEntity.audioFile)?.filePath;
+        srtPath = (await videoFileEntity.audioFile)?.subtitleFiles?.[0]
+          ?.filePath;
+        fileName = videoFileEntity.baseName;
+        srtFile = fileName + ".srt";
+      } else {
+        throw new Error("Unsupported file type " + fileType);
+      }
+
+      this.logger.log(
+        `Start processing job... ${job.id} ${language} ${id} ${model}`
+      );
+
+      const subTitle = await this.osrtService.findFileThenTranslate({
+        language,
         model,
         videoPath,
         audioPath,
@@ -55,9 +69,13 @@ export class QueueProcessor {
         fileName,
       });
 
+      subTitle.forEach(({ url, path }) => {
+        this.watchService.addFileToDB(path);
+      });
+
       this.osrtGateway.notifyClient(job.id as string, "completed", {
         ...job.data,
-        url,
+        subTitle,
       });
 
       // 你可以通过 job.progress 更新任务进度

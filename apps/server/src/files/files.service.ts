@@ -60,6 +60,13 @@ export class FilesService {
       },
     });
   }
+  async findAudioFile(id): Promise<AudioFileEntity> {
+    return this.audioFilesRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
   async findAudioFiles(): Promise<FileEntity[]> {
     return this.audioFilesRepository.find({
       where: {
@@ -82,5 +89,14 @@ export class FilesService {
     });
 
     return videoFiles;
+  }
+
+  async findRelatedFilesForAudio(): Promise<AudioFileEntity[]> {
+    // 查找所有的视频文件并加载关联的音频和字幕文件
+    const audioFiles = await this.audioFilesRepository.find({
+      relations: ["subtitleFiles"],
+    });
+
+    return audioFiles;
   }
 }

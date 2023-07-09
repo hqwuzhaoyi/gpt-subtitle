@@ -132,6 +132,17 @@ export class WatchService {
           path.basename(subtitleFile, path.extname(subtitleFile))
       );
 
+      const baseName = path.basename(subtitleFile, path.extname(subtitleFile));
+
+
+      // todo: 优化查询, 通过 baseName 查询audioFile的参数
+      const audioFileInDb = await this.audioFilesRepository
+        .createQueryBuilder("audioFile")
+        .where("audioFile.baseName LIKE :baseName", {
+          baseName: `%${baseName}%`,
+        })
+        .getOne();
+
       await this.saveOrUpdateFile(
         subtitleFile,
         this.subtitleFilesRepository,
@@ -238,6 +249,32 @@ export class WatchService {
     }
   }
 
+  async addFileToDB(filePath: string) {
+    const fileName = basename(filePath);
+    console.log(`File ${filePath} has been added, ${fileName}`);
+
+    const ext = path.extname(filePath).slice(1);
+
+    let videoFiles = [],
+      audioFiles = [],
+      subtitleFiles = [];
+    // 当发现新文件，执行保存到数据库的操作
+    // 检查文件扩展名并分类
+    if (this.videoExtensions.includes(ext)) {
+      videoFiles.push(filePath);
+    } else if (this.audioExtensions.includes(ext)) {
+      audioFiles.push(filePath);
+    } else if (this.subtitleExtensions.includes(ext)) {
+      subtitleFiles.push(filePath);
+    }
+
+    await this.saveFilesToDB({
+      videoFiles,
+      audioFiles,
+      subtitleFiles,
+    });
+  }
+
   private watchFiles(): void {
     const watcher = chokidar.watch(this.videoDir, {
       ignored: /^\./, // ignore dotfiles
@@ -245,29 +282,7 @@ export class WatchService {
     });
 
     watcher.on("add", async (filePath, stats) => {
-      const fileName = basename(filePath);
-      console.log(`File ${filePath} has been added, ${fileName}`);
-
-      const ext = path.extname(filePath).slice(1);
-
-      let videoFiles = [],
-        audioFiles = [],
-        subtitleFiles = [];
-      // 当发现新文件，执行保存到数据库的操作
-      // 检查文件扩展名并分类
-      if (this.videoExtensions.includes(ext)) {
-        videoFiles.push(filePath);
-      } else if (this.audioExtensions.includes(ext)) {
-        audioFiles.push(filePath);
-      } else if (this.subtitleExtensions.includes(ext)) {
-        subtitleFiles.push(filePath);
-      }
-
-      await this.saveFilesToDB({
-        videoFiles,
-        audioFiles,
-        subtitleFiles,
-      });
+      await this.addFileToDB(filePath);
     });
   }
 

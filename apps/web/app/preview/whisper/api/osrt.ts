@@ -1,15 +1,20 @@
 import { request } from "utils";
-import { CreateWhisperJobItem, FileListResult } from "shared-types";
+import {
+  AudioListResult,
+  CreateWhisperJobItem,
+  FileListResult,
+} from "shared-types";
 import { LanguageEnum, ModelType } from "../data/types";
 export const outPutSrt = async (
   language: string,
   id?: string,
   model?: string,
-  priority?: number
+  priority?: number,
+  fileType?: string
 ): Promise<void> => {
   try {
     const response = await request.get(
-      `/osrt/${language}/${id}/${model}/${priority}`
+      `/osrt/${language}/${id}/${model}/${priority}/${fileType}`
     );
     return response.data;
   } catch (error) {
@@ -31,6 +36,15 @@ export const outPutSrtStop = async (
 export const outPutSrtList = async (): Promise<FileListResult> => {
   try {
     const response = await request.get(`/osrt/list`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const outPutSrtAudios = async (): Promise<AudioListResult> => {
+  try {
+    const response = await request.get(`/osrt/audios`);
     return response.data;
   } catch (error) {
     console.error(error);

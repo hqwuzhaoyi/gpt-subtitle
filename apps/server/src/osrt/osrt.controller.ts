@@ -8,7 +8,7 @@ import {
   Delete,
 } from "@nestjs/common";
 import { OsrtService } from "./osrt.service";
-import { CreateOsrtDto } from "./dto/create-osrt.dto";
+import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 
 @Controller("osrt")
@@ -23,6 +23,10 @@ export class OsrtController {
   @Get("list")
   async list() {
     return await this.osrtService.list();
+  }
+  @Get("audios")
+  async findAudios() {
+    return await this.osrtService.findAudios();
   }
 
   @Get("models")
@@ -50,14 +54,15 @@ export class OsrtController {
     return this.osrtService.getActiveJobs();
   }
 
-  @Get(":ln/:id/:model/:priority")
+  @Get(":ln/:id/:model/:priority/:fileType")
   translate(
     @Param("ln") ln: string,
     @Param("id") id: string,
     @Param("model") model: string,
-    @Param("priority") priority: number
+    @Param("priority") priority: number,
+    @Param("fileType") fileType?: FileType
   ) {
-    return this.osrtService.translate(ln, id, model, priority);
+    return this.osrtService.translate(ln, id, model, priority, fileType);
   }
 
   @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {

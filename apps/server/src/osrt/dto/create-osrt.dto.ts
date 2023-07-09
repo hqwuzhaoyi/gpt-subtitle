@@ -6,4 +6,7 @@ export class CreateOsrtDto implements CreateWhisperJobItem {
   language: string;
   model: string;
   priority?: number;
+  fileType?: FileType;
 }
+
+export type FileType = "video" | "audio" | "subtitle";
