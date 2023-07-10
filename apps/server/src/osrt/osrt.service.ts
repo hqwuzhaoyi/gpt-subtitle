@@ -5,7 +5,7 @@ import { whisper, extractAudio, stopWhisper } from "whisper";
 import { AudioListResult, FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
-import Bull, { Queue } from "bull";
+import Bull, { JobStatusClean, Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
 import { staticPath, videoDirPath } from "utils";
@@ -45,6 +45,22 @@ export class OsrtService {
   async getActiveJobs() {
     return await this.audioQueue.getActive();
   }
+  async clearAllJobs() {
+    const jobStatuses: JobStatusClean[] = [
+      "completed",
+      "wait",
+      "active",
+      "delayed",
+      "paused",
+      "failed",
+    ];
+
+    await Promise.all(
+      jobStatuses.map((status) => this.audioQueue.clean(0, status))
+    );
+
+    return await this.getActiveJobs();
+  }
 
   create(createOsrtDto: CreateOsrtDto) {
     return "This action adds a new osrt";
@@ -71,10 +87,10 @@ export class OsrtService {
   async list(): Promise<FileListResult> {
     const currentJobs = await this.audioQueue.getActive();
     const currentJobsFiles = currentJobs.map((job) => {
-      return job.data.file;
+      return job.data.id;
     });
     const currentJobsIdMap = currentJobs.reduce((acc, job) => {
-      acc[job.data.file] = job.id;
+      acc[job.data.id] = job.id;
       return acc;
     }, {});
 
@@ -92,8 +108,8 @@ export class OsrtService {
           subtitle: audioFile?.subtitleFiles?.map((file) => {
             return { ...file, path: this.filePathToUrl(file.filePath) };
           }),
-          isProcessing: currentJobsFiles.includes(videoFileEntity.baseName),
-          processingJobId: currentJobsIdMap[videoFileEntity.baseName],
+          isProcessing: currentJobsFiles.includes(videoFileEntity.id),
+          processingJobId: currentJobsIdMap[videoFileEntity.id],
           status: videoFileEntity.status,
         };
       })
@@ -104,10 +120,10 @@ export class OsrtService {
   async findAudios(): Promise<AudioListResult> {
     const currentJobs = await this.audioQueue.getActive();
     const currentJobsFiles = currentJobs.map((job) => {
-      return job.data.file;
+      return job.data.id;
     });
     const currentJobsIdMap = currentJobs.reduce((acc, job) => {
-      acc[job.data.file] = job.id;
+      acc[job.data.id] = job.id;
       return acc;
     }, {});
 
@@ -121,8 +137,8 @@ export class OsrtService {
           subtitle: audioFileEntity?.subtitleFiles?.map((file) => {
             return { ...file, path: this.filePathToUrl(file.filePath) };
           }),
-          isProcessing: currentJobsFiles.includes(audioFileEntity.baseName),
-          processingJobId: currentJobsIdMap[audioFileEntity.baseName],
+          isProcessing: currentJobsFiles.includes(audioFileEntity.id),
+          processingJobId: currentJobsIdMap[audioFileEntity.id],
           status: audioFileEntity.status,
         };
       })
@@ -187,8 +203,13 @@ export class OsrtService {
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
     const result = await this.audioQueue.add("translate", job, {
       priority: job.priority,
+      jobId: job.id,
     });
-    console.info("result", result);
+    // const repeatOpts = {
+    //   cron: "*/5 * * * *", // Run every 5 minutes
+    //   jobId: job.id, // A unique identifier for this job
+    // };
+    // this.audioQueue.removeRepeatable("translate", repeatOpts);
     return result;
   }
 
@@ -252,9 +273,17 @@ export class OsrtService {
         return await this.srtTranslate(videoDirPath, srtFile, targetSrtPath);
       } else if (audioPath) {
         console.info("audioPath exist", audioPath);
-        await whisper(audioPath, language, model);
+        const status = await whisper(audioPath, language, model);
+        if (status === "SIGTERM") {
+          return [];
+        }
         fs.renameSync(audioPath + ".srt", targetSrtPath);
-        return await this.srtTranslate(videoDirPath, srtFile, targetSrtPath);
+        const subtitleFiles = await this.srtTranslate(
+          videoDirPath,
+          srtFile,
+          targetSrtPath
+        );
+        return [...subtitleFiles, { path: audioPath }];
       } else if (videoPath) {
         console.info("videoPath exist", videoPath);
         const finalAudioPath = await this.handleAudio(
@@ -262,9 +291,21 @@ export class OsrtService {
           fileName,
           videoPath
         );
-        await whisper(finalAudioPath, language, model);
+        const status = await whisper(finalAudioPath, language, model);
+        if (status === "SIGTERM") {
+          return [];
+        }
         fs.renameSync(audioPath + ".srt", targetSrtPath);
-        return await this.srtTranslate(videoDirPath, srtFile, targetSrtPath);
+        const subtitleFiles = await this.srtTranslate(
+          videoDirPath,
+          srtFile,
+          targetSrtPath
+        );
+        return [
+          ...subtitleFiles,
+          { path: finalAudioPath },
+          { path: videoPath },
+        ];
       } else {
         this.logger.warn("srtPath not exist", srtPath);
         this.logger.warn("audioPath not exist", audioPath);

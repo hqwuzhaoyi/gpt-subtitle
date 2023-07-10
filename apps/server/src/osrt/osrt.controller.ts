@@ -53,6 +53,10 @@ export class OsrtController {
   currentJobs() {
     return this.osrtService.getActiveJobs();
   }
+  @Get("clearAllJobs")
+  async clearAllJobs() {
+    return await this.osrtService.clearAllJobs();
+  }
 
   @Get(":ln/:id/:model/:priority/:fileType")
   translate(

@@ -121,11 +121,11 @@ class TranslateModel {
 
               const translatedSegments = translatedText.split("\n");
 
-              if (
-                nodesForThisGroup.length !==
-                translatedSegments.slice(0, translatedSegments.length - 1)
-                  .length
-              ) {
+              if (translatedSegments[translatedSegments.length - 1] === "") {
+                translatedSegments.pop();
+              }
+
+              if (nodesForThisGroup.length !== translatedSegments.length) {
                 console.error("Translation segment mismatch!");
                 return;
               }

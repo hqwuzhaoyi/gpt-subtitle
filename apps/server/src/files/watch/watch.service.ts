@@ -126,22 +126,21 @@ export class WatchService {
     // 遍历字幕文件
     for (const subtitleFile of subtitleFiles) {
       // 如果字幕文件存在，那么对应的音频文件状态应该是 'done'
-      const audioFileIndex = audioFiles.findIndex(
-        (filePath) =>
-          path.basename(filePath, path.extname(filePath)) ===
-          path.basename(subtitleFile, path.extname(subtitleFile))
+      const audioFileIndex = audioFiles.findIndex((filePath) =>
+        path
+          .basename(subtitleFile, path.extname(subtitleFile))
+          .includes(path.basename(filePath, path.extname(filePath)))
       );
 
       const baseName = path.basename(subtitleFile, path.extname(subtitleFile));
 
-
       // todo: 优化查询, 通过 baseName 查询audioFile的参数
-      const audioFileInDb = await this.audioFilesRepository
-        .createQueryBuilder("audioFile")
-        .where("audioFile.baseName LIKE :baseName", {
-          baseName: `%${baseName}%`,
-        })
-        .getOne();
+      // const audioFileInDb = await this.audioFilesRepository
+      //   .createQueryBuilder("audioFile")
+      //   .where("audioFile.baseName LIKE :baseName", {
+      //     baseName: `%${baseName}%`,
+      //   })
+      //   .getOne();
 
       await this.saveOrUpdateFile(
         subtitleFile,
@@ -203,6 +202,8 @@ export class WatchService {
     // 遍历音频文件,要查找对应的 subtitleFilesRepository 实体关系，并且找到把它们关联起来，status改为done
     for (const audioFile of audioFiles) {
       // 查找对应的字幕文件
+
+      // todo: 改成where函数
       const subtitleEntity = await this.subtitleFilesRepository.findOne({
         where: {
           baseName: path.basename(audioFile, path.extname(audioFile)),
@@ -249,25 +250,27 @@ export class WatchService {
     }
   }
 
-  async addFileToDB(filePath: string) {
-    const fileName = basename(filePath);
-    console.log(`File ${filePath} has been added, ${fileName}`);
-
-    const ext = path.extname(filePath).slice(1);
-
+  async addFileToDB(filePaths: string[]) {
     let videoFiles = [],
       audioFiles = [],
       subtitleFiles = [];
-    // 当发现新文件，执行保存到数据库的操作
-    // 检查文件扩展名并分类
-    if (this.videoExtensions.includes(ext)) {
-      videoFiles.push(filePath);
-    } else if (this.audioExtensions.includes(ext)) {
-      audioFiles.push(filePath);
-    } else if (this.subtitleExtensions.includes(ext)) {
-      subtitleFiles.push(filePath);
-    }
 
+    filePaths.forEach((filePath) => {
+      const fileName = basename(filePath);
+      console.log(`File ${filePath} has been added, ${fileName}`);
+
+      const ext = path.extname(filePath).slice(1);
+
+      // 当发现新文件，执行保存到数据库的操作
+      // 检查文件扩展名并分类
+      if (this.videoExtensions.includes(ext)) {
+        videoFiles.push(filePath);
+      } else if (this.audioExtensions.includes(ext)) {
+        audioFiles.push(filePath);
+      } else if (this.subtitleExtensions.includes(ext)) {
+        subtitleFiles.push(filePath);
+      }
+    });
     await this.saveFilesToDB({
       videoFiles,
       audioFiles,
@@ -282,7 +285,7 @@ export class WatchService {
     });
 
     watcher.on("add", async (filePath, stats) => {
-      await this.addFileToDB(filePath);
+      await this.addFileToDB([filePath]);
     });
   }
 

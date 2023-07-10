@@ -53,11 +53,11 @@ export function DataTableRowActions<TData extends Task>({
       row.getValue("priority"),
       table.options.meta?.type
     );
-    mutate("/osrt/list" + table.options.meta?.type);
+    mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const stopWhisper = async () => {
     await outPutSrtStop(row.original.processingJobId);
-    mutate("/osrt/list" + table.options.meta?.type);
+    mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const downLoad = async () => {
     console.debug("downLoad", row.original.path);

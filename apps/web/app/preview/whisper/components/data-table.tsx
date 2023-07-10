@@ -137,7 +137,7 @@ export function DataTable<TData extends Task, TValue>({
       // console.debug("start", jobId, data.file);
       setData((old) =>
         old.map((row, index) => {
-          if ((row as any).title === data.file) {
+          if ((row as any).id === data.id) {
             return {
               ...old[index],
               status: "in progress",
@@ -150,10 +150,24 @@ export function DataTable<TData extends Task, TValue>({
       // console.debug("completed", jobId, data.url);
       setData((old) =>
         old.map((row, index) => {
-          if ((row as any).title === data.file) {
+          if ((row as any).id === data.id) {
             return {
               ...old[index],
               status: "done",
+              path: data.url,
+            };
+          }
+          // console.debug("row", row, index);
+          return row;
+        })
+      );
+    } else if (status === "failed") {
+      setData((old) =>
+        old.map((row, index) => {
+          if ((row as any).id === data.id) {
+            return {
+              ...old[index],
+              status: "cancel",
               path: data.url,
             };
           }

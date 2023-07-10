@@ -48,7 +48,7 @@ export default async function TaskPage() {
           </div>
         </div>
 
-        <Tabs defaultValue="account" className="w-full">
+        <Tabs defaultValue="video" className="w-full">
           <TabsList>
             <TabsTrigger value="video">Video</TabsTrigger>
             <TabsTrigger value="audio">Audio</TabsTrigger>

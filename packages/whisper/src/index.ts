@@ -41,7 +41,16 @@ export const whisper = async (
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
       mainProcess = null;
+      console.log("whisper close", code);
       resolve(code);
+    });
+
+    mainProcess.on("exit", (code, signal) => {
+      console.log(`whisper exit with code ${code} and signal ${signal}`);
+      if (signal === "SIGTERM") {
+        console.log("whisper SIGTERM");
+        resolve(signal);
+      }
     });
   });
 };

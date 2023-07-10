@@ -69,9 +69,7 @@ export class QueueProcessor {
         fileName,
       });
 
-      subTitle.forEach(({ url, path }) => {
-        this.watchService.addFileToDB(path);
-      });
+      this.watchService.addFileToDB(subTitle.map(({ path }) => path));
 
       this.osrtGateway.notifyClient(job.id as string, "completed", {
         ...job.data,
