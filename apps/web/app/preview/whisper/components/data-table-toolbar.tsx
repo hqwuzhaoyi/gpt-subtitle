@@ -1,7 +1,7 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { X } from "lucide-react";
+import { Ban, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,8 @@ import { priorities, statuses } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Task } from "../data/schema";
 import { ModelType } from "../data/types";
-import { createJobs, outPutSrt, outPutSrtStop } from "../api/osrt";
+import { createJobs, terminateAllJobs } from "../api/osrt";
+import { toast } from "@/components/ui/use-toast";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -83,7 +84,24 @@ export function DataTableToolbar<TData extends Task>({
           </Button>
         ) : null}
       </div>
-      <DataTableViewOptions table={table} />
+      <div className="flex items-center space-x-2">
+        <Button
+          onClick={async () => {
+            await terminateAllJobs();
+            toast({
+              title: "Stop all jobs success.",
+              description: "All tasks have been cleared.",
+            });
+          }}
+          variant="outline"
+          size="sm"
+          className="h-8 "
+        >
+          <Ban className="mr-2 h-4 w-4"></Ban>
+          Stop
+        </Button>
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   );
 }

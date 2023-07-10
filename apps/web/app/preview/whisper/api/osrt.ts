@@ -33,6 +33,15 @@ export const outPutSrtStop = async (
     throw new Error("Error uploading file");
   }
 };
+export const terminateAllJobs = async (): Promise<void> => {
+  try {
+    const response = await request.get(`/osrt/terminateAllJobs`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
 export const outPutSrtList = async (): Promise<FileListResult> => {
   try {
     const response = await request.get(`/osrt/list`);

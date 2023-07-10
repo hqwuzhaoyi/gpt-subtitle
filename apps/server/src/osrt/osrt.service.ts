@@ -61,6 +61,11 @@ export class OsrtService {
 
     return await this.getActiveJobs();
   }
+  async terminateAllJobs() {
+    await this.clearAllJobs();
+    stopWhisper();
+    return await this.getActiveJobs();
+  }
 
   create(createOsrtDto: CreateOsrtDto) {
     return "This action adds a new osrt";

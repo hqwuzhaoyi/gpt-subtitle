@@ -57,6 +57,10 @@ export class OsrtController {
   async clearAllJobs() {
     return await this.osrtService.clearAllJobs();
   }
+  @Get("terminateAllJobs")
+  async terminateAllJobs() {
+    return await this.osrtService.terminateAllJobs();
+  }
 
   @Get(":ln/:id/:model/:priority/:fileType")
   translate(
