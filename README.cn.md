@@ -1,9 +1,20 @@
-# 使用 OpenAI 翻译字幕
+# 使用 OpenAI 翻译字幕 :speech_balloon: :globe_with_meridians:
 
-本项目使用 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) 实现了字幕的线上翻译功能，支持多种语言翻译，可以方便地将英文字幕翻译成其它语言的字幕。
-
+![whisper_preview](pictures/whisper_preview.png)
 ![preview](pictures/preview.png)
 ![preview-translated](pictures/preview2.png)
+
+[当前开发任务](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
+
+本项目使用 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain: 实现了字幕的线上翻译功能，会把字幕转换成对话进行翻译，支持多种语言翻译，可以方便地将字幕翻译成其它语言的字幕。 :artificial_satellite:
+
+## 新功能 :sparkles:
+
+接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在可以:
+
+- 扫描文件夹中的视频和音频 :mag: :film_strip: :headphones:
+- 自动翻译字幕 :speech_balloon: :globe_with_meridians:
+- 生成新的字幕文件 :page_with_curl:
 
 ## 运行环境
 
@@ -20,8 +31,15 @@ pnpm install
 在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，你可以在根目录下新建一个名为 `.env` 的文件，并在其中添加如下配置：
 
 ```sh
-OPENAI_API_KEY=your_api_key
-BASE_URL=
+OPENAI_API_KEY= // OpenAI API KEY
+GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY
+BASE_URL= // OpenAI API URL
+WEB_PORT=3000 // 前端端口
+SERVER_PORT=3001 // 后端端口
+NEXT_PUBLIC_SERVER_PORT=3001 // 后端端口
+STATIC_PATH=/static // 默认静态资源路径
+LANGUAGE=Chinese // 默认翻译语言
+OUTPUT_SRT_THEN_TRANSLATE=true // 音频转自幕后是否需要翻译
 ```
 
 将 `your_api_key` 替换成你申请到的 API KEY。
@@ -33,17 +51,3 @@ BASE_URL=
 ```sh
 npm run dev
 ```
-
-### 或者使用命令行任务
-
-本项目提供了脚本文件 `translate.ts` 用于执行翻译任务。在命令行中输入以下指令即可开始翻译：
-
-```sh
-npx ts-node src/translate.ts -i The.Super.Mario.Bros.Movie.2023.1080p.Cam.X264.Will1869.srt -o output.srt -l Chinese
-```
-
-翻译文件夹在 `test_subtitles`
-
-其中 `input.srt` 是输入的英文字幕文件名，`Chinese` 是输出的翻译目标语言。用户可自行根据需要修改 `l` 参数。
-
-翻译完成后，你将在 `output.srt` 文件中看到翻译好的字幕。如果运行时出现错误，请检查输入文件路径是否正确，OpenAI API KEY 是否已经正确配置。
