@@ -51,12 +51,13 @@ export function DataTableRowActions<TData extends Task>({
       row.getValue("id"),
       table.options.meta?.model,
       row.getValue("priority"),
+      table.options.meta?.type
     );
-    mutate("/osrt/list");
+    mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const stopWhisper = async () => {
     await outPutSrtStop(row.original.processingJobId);
-    mutate("/osrt/list");
+    mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const downLoad = async () => {
     console.debug("downLoad", row.original.path);

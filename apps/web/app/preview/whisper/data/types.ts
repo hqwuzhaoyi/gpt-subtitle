@@ -7,10 +7,13 @@ export enum LanguageEnum {
   Auto = "auto",
 }
 
+export type TableType = "video" | "audio";
+
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     model?: string;
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+    type: TableType;
   }
 }
 

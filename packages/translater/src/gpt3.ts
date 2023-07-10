@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
+import { Translator } from "./types";
 
-class TranslateModel {
+export class GPTTranslator implements Translator {
   model: OpenAIApi;
   baseUrl: string;
   apiKey: string;
@@ -57,5 +58,3 @@ class TranslateModel {
     }
   }
 }
-
-export default TranslateModel;

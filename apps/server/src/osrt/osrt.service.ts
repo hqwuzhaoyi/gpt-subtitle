@@ -1,17 +1,18 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { CreateOsrtDto } from "./dto/create-osrt.dto";
+import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { whisper, extractAudio, stopWhisper } from "whisper";
-import { FileListResult } from "shared-types";
+import { AudioListResult, FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
-import Bull, { Queue } from "bull";
+import Bull, { JobStatusClean, Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { glob } from "glob";
+import { staticPath, videoDirPath } from "utils";
 
-const staticHost =
-  process.env.STATIC_HOST ||
-  `http://localhost:${process.env.SERVER_PORT}/static`;
+import { FilesService } from "@/files/files.service";
+import { TranslateService } from "@/translate/translate.service";
+
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
@@ -20,28 +21,17 @@ const subtitleExtensions = ["srt", "ass"];
 
 @Injectable()
 export class OsrtService {
-  constructor(@InjectQueue("audio") private audioQueue: Queue) {}
+  constructor(
+    @InjectQueue("audio") private audioQueue: Queue,
+    private readonly filesService: FilesService,
+    private readonly translateService: TranslateService,
+    @Inject("STATIC_DIR") private staticDir: string
+  ) {}
 
   private logger: Logger = new Logger("OsrtService");
 
-  private readonly samplesDir = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "samples"
-  );
-  private readonly staticDir = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "uploads"
-  );
-  private readonly videoDir = path.join(this.samplesDir, "video");
-  private readonly audioDir = path.join(this.samplesDir, "audio");
+  private readonly videoDir = path.join(this.staticDir, "video");
+  private readonly audioDir = path.join(this.staticDir, "audio");
   private readonly whisperDir = path.join(
     __dirname,
     "..",
@@ -55,58 +45,104 @@ export class OsrtService {
   async getActiveJobs() {
     return await this.audioQueue.getActive();
   }
+  async clearAllJobs() {
+    const jobStatuses: JobStatusClean[] = [
+      "completed",
+      "wait",
+      "active",
+      "delayed",
+      "paused",
+      "failed",
+    ];
+
+    await Promise.all(
+      jobStatuses.map((status) => this.audioQueue.clean(0, status))
+    );
+
+    return await this.getActiveJobs();
+  }
 
   create(createOsrtDto: CreateOsrtDto) {
     return "This action adds a new osrt";
   }
 
   async autoStart(ln = autoTranslateLanguages, model) {
-    const allVideos = await this.findAll();
+    const allVideos = await this.list();
     return allVideos
-      .filter((video) => !video.exist.subtitle)
+      .filter((video) => video.status === "todo")
       .filter((video) => !video.isProcessing)
       .map((video) => {
-        this.translate(ln, video.name, model);
-        return video.name;
+        this.translate(ln, video.id + "", model);
+        return video.fileName;
       });
   }
 
-  async findAll(): Promise<FileListResult[]> {
-    const subtitles = await this.findAllSrt();
-    const videos = await this.findAllVideo();
-    const audios = await this.findAllAudio();
+  filePathToUrl(filePath) {
+    const relativePath = path.relative(this.staticDir, filePath);
+    // 这将会创建一个以`staticPath`为前缀的URL
+    // 注意，这假设`filePath`始终在`uploadsRoot`目录或其子目录下
+    return new URL(relativePath, staticPath).toString();
+  }
+
+  async list(): Promise<FileListResult> {
     const currentJobs = await this.audioQueue.getActive();
     const currentJobsFiles = currentJobs.map((job) => {
-      return job.data.file;
+      return job.data.id;
     });
     const currentJobsIdMap = currentJobs.reduce((acc, job) => {
-      acc[job.data.file] = job.id;
+      acc[job.data.id] = job.id;
       return acc;
     }, {});
-    const result = videos
-      .map((file) => path.parse(file).name)
-      .map((videoName) => {
-        const audioExists = audios.find((file) =>
-          path.parse(file).name.includes(videoName)
-        );
 
-        const subtitleExists = subtitles.find((file) =>
-          path.parse(file).name.includes(videoName)
-        );
+    const videos = await this.filesService.findRelatedFilesForVideo();
 
+    const result = await Promise.all(
+      videos.map(async (videoFileEntity) => {
+        const audioFile = await videoFileEntity.audioFile;
         return {
-          name: videoName,
-          exist: {
-            audio: !!audioExists,
-            subtitle: !!subtitleExists,
-            subtitlePath: subtitleExists
-              ? `${staticHost}/${subtitleExists}`
-              : undefined,
-          },
-          isProcessing: currentJobsFiles.includes(videoName),
-          processingJobId: currentJobsIdMap[videoName],
+          ...videoFileEntity,
+          path: this.filePathToUrl(videoFileEntity.filePath),
+          audio: audioFile
+            ? { ...audioFile, path: this.filePathToUrl(audioFile.filePath) }
+            : undefined,
+          subtitle: audioFile?.subtitleFiles?.map((file) => {
+            return { ...file, path: this.filePathToUrl(file.filePath) };
+          }),
+          isProcessing: currentJobsFiles.includes(videoFileEntity.id),
+          processingJobId: currentJobsIdMap[videoFileEntity.id],
+          status: videoFileEntity.status,
         };
-      });
+      })
+    );
+
+    return result;
+  }
+  async findAudios(): Promise<AudioListResult> {
+    const currentJobs = await this.audioQueue.getActive();
+    const currentJobsFiles = currentJobs.map((job) => {
+      return job.data.id;
+    });
+    const currentJobsIdMap = currentJobs.reduce((acc, job) => {
+      acc[job.data.id] = job.id;
+      return acc;
+    }, {});
+
+    const audios = await this.filesService.findRelatedFilesForAudio();
+
+    const result = await Promise.all(
+      audios.map(async (audioFileEntity) => {
+        return {
+          ...audioFileEntity,
+          path: this.filePathToUrl(audioFileEntity.filePath),
+          subtitle: audioFileEntity?.subtitleFiles?.map((file) => {
+            return { ...file, path: this.filePathToUrl(file.filePath) };
+          }),
+          isProcessing: currentJobsFiles.includes(audioFileEntity.id),
+          processingJobId: currentJobsIdMap[audioFileEntity.id],
+          status: audioFileEntity.status,
+        };
+      })
+    );
 
     return result;
   }
@@ -144,9 +180,15 @@ export class OsrtService {
     return files;
   }
 
-  async translate(language: string, file: string, model: string, priority = 1) {
-    await this.addTranslationJob({ language, file, model, priority });
-    return `This action returns a #${file} osrt`;
+  async translate(
+    language: string,
+    id: string,
+    model: string,
+    priority = 1,
+    fileType: FileType = "video"
+  ) {
+    await this.addTranslationJob({ language, id, model, priority, fileType });
+    return `This action returns a #${id} osrt`;
   }
 
   async createJobs(jobs: CreateOsrtDto[]) {
@@ -159,15 +201,15 @@ export class OsrtService {
   }
 
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
-    const result = await this.audioQueue.add(
-      "translate",
-      {
-        ...job,
-        ln: job.language,
-      },
-      { priority: job.priority }
-    );
-    console.info("result", result);
+    const result = await this.audioQueue.add("translate", job, {
+      priority: job.priority,
+      jobId: job.id,
+    });
+    // const repeatOpts = {
+    //   cron: "*/5 * * * *", // Run every 5 minutes
+    //   jobId: job.id, // A unique identifier for this job
+    // };
+    // this.audioQueue.removeRepeatable("translate", repeatOpts);
     return result;
   }
 
@@ -192,39 +234,88 @@ export class OsrtService {
     stopWhisper();
   }
 
-  async findFileThenTranslate(ln: string, fileName: string, model: string) {
-    const videoPath = this.findFile(this.videoDir, fileName);
-    const audioPath = this.findFile(this.audioDir, fileName);
-    const srtFile = fileName + ".srt";
-    const srtPath = this.findFile(this.staticDir, srtFile);
-
-    const targetSrtPath = path.join(this.staticDir, srtFile);
-    if (srtPath) {
-      console.info("srtPath exist", srtPath + ".srt");
-      return `${staticHost}/${srtFile}`;
-    } else if (audioPath) {
-      console.info("audioPath exist", audioPath);
-      await whisper(audioPath, ln, model);
-      fs.renameSync(audioPath + ".srt", targetSrtPath);
-      return `${staticHost}/${srtFile}`;
-    } else if (videoPath) {
-      console.info("videoPath exist", videoPath);
-      const finalAudioPath = await this.handleAudio(
-        audioPath,
-        fileName,
-        videoPath
+  async srtTranslate(videoDirPath, srtFile, targetSrtPath) {
+    if (process.env.OUTPUT_SRT_THEN_TRANSLATE === "true") {
+      const translateSubtitle = await this.translateService.translateFile(
+        srtFile,
+        "/video"
       );
-      await whisper(finalAudioPath, ln, model);
-      fs.renameSync(finalAudioPath + ".srt", targetSrtPath);
-      return `${staticHost}/${srtFile}`;
+      return [
+        translateSubtitle,
+        {
+          path: targetSrtPath,
+          url: `${videoDirPath}${srtFile}`,
+        },
+      ];
     } else {
-      this.logger.warn("srtPath not exist", srtPath);
-      this.logger.warn("audioPath not exist", audioPath);
-      this.logger.warn("videoPath not exist", videoPath);
-      this.logger.warn(ln, fileName, model);
+      return [
+        {
+          path: targetSrtPath,
+          url: `${videoDirPath}${srtFile}`,
+        },
+      ];
     }
   }
 
+  async findFileThenTranslate({
+    language,
+    model,
+    videoPath,
+    audioPath,
+    srtPath,
+    srtFile,
+    fileName,
+  }) {
+    try {
+      const targetSrtPath = path.join(this.staticDir, "/video", srtFile);
+      if (srtPath) {
+        console.info("srtPath exist", srtPath + ".srt");
+        return await this.srtTranslate(videoDirPath, srtFile, targetSrtPath);
+      } else if (audioPath) {
+        console.info("audioPath exist", audioPath);
+        const status = await whisper(audioPath, language, model);
+        if (status === "SIGTERM") {
+          return [];
+        }
+        fs.renameSync(audioPath + ".srt", targetSrtPath);
+        const subtitleFiles = await this.srtTranslate(
+          videoDirPath,
+          srtFile,
+          targetSrtPath
+        );
+        return [...subtitleFiles, { path: audioPath }];
+      } else if (videoPath) {
+        console.info("videoPath exist", videoPath);
+        const finalAudioPath = await this.handleAudio(
+          audioPath,
+          fileName,
+          videoPath
+        );
+        const status = await whisper(finalAudioPath, language, model);
+        if (status === "SIGTERM") {
+          return [];
+        }
+        fs.renameSync(audioPath + ".srt", targetSrtPath);
+        const subtitleFiles = await this.srtTranslate(
+          videoDirPath,
+          srtFile,
+          targetSrtPath
+        );
+        return [
+          ...subtitleFiles,
+          { path: finalAudioPath },
+          { path: videoPath },
+        ];
+      } else {
+        this.logger.warn("srtPath not exist", srtPath);
+        this.logger.warn("audioPath not exist", audioPath);
+        this.logger.warn("videoPath not exist", videoPath);
+        this.logger.warn(language, fileName, model);
+      }
+    } catch (error) {
+      this.logger.error("findFileThenTranslate error", error);
+    }
+  }
   private async handleAudio(
     audioPath: string,
     fileName: string,
@@ -232,7 +323,7 @@ export class OsrtService {
   ) {
     if (!audioPath && videoPath) {
       try {
-        audioPath = path.join(this.samplesDir, "audio", fileName + ".wav");
+        audioPath = path.join(path.dirname(videoPath), fileName + ".wav");
         await extractAudio(videoPath, audioPath);
         console.info("extractAudio done");
         console.info("audioPath:", audioPath);

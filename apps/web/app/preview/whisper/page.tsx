@@ -9,6 +9,7 @@ import { UserNav } from "./components/user-nav";
 import { Suspense } from "react";
 import { baseURL } from "utils";
 import { ModelType } from "./data/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -17,10 +18,15 @@ export const metadata: Metadata = {
 
 const VideoTable = async () => {
   const models = await getModels();
-  return <DataTable columns={columns} models={models} />;
+  return <DataTable columns={columns} models={models} type="video" />;
+};
+const AudioTable = async () => {
+  const models = await getModels();
+  return <DataTable columns={columns} models={models} type="audio" />;
 };
 
 async function getModels(): Promise<ModelType[]> {
+  console.debug("models", `${baseURL}/osrt/models`);
   let res = await fetch(`${baseURL}/osrt/models`);
   await new Promise((resolve) => setTimeout(resolve, 2000));
   return res.json();
@@ -29,23 +35,7 @@ async function getModels(): Promise<ModelType[]> {
 export default async function TaskPage() {
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/tasks-light.png"
-          width={1280}
-          height={998}
-          alt="Playground"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/tasks-dark.png"
-          width={1280}
-          height={998}
-          alt="Playground"
-          className="hidden dark:block"
-        />
-      </div>
-      <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+      <div className=" h-full flex-1 flex-col space-y-8 p-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Whisper</h2>
@@ -57,11 +47,21 @@ export default async function TaskPage() {
             <UserNav />
           </div>
         </div>
-        <h2 className="text-xl tracking-tight">Video</h2>
 
-        <Suspense fallback={<>Loading...</>}>
-          <VideoTable></VideoTable>
-        </Suspense>
+        <Tabs defaultValue="video" className="w-full">
+          <TabsList>
+            <TabsTrigger value="video">Video</TabsTrigger>
+            <TabsTrigger value="audio">Audio</TabsTrigger>
+          </TabsList>
+          <TabsContent value="video">
+            <Suspense fallback={<>Loading...</>}>
+              <VideoTable></VideoTable>
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="audio">
+            <AudioTable></AudioTable>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );
