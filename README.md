@@ -1,12 +1,20 @@
-# Using OpenAI to Translate Subtitles
+# Subtitle Translation with OpenAI :speech_balloon: :globe_with_meridians:
 
-[Current development tasks](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4)
-
-This project uses OpenAI's GPT-3 language model to provide online translation of subtitles, supporting multiple languages. It makes it easy to translate English subtitles into subtitles in other languages.
-
+![whisper_preview](pictures/whisper_preview.png)
 ![preview](pictures/preview.png)
 ![preview-translated](pictures/preview2.png)
-![whisper_preview](pictures/whisper_preview.png)
+
+[Current Development Tasks](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
+
+This project utilizes the [GPT-3 language model](https://openai.com/gpt-3/) :brain: by [OpenAI](https://openai.com/) for online subtitle translation, and it is built with [Next.js](https://nextjs.org/) and [Nest.js](https://nestjs.com/). The subtitles are converted into dialogues for translation, supporting a variety of languages, which can conveniently translate subtitles into other languages. :artificial_satellite:
+
+## New Features :sparkles:
+
+Integration of [whisper.cpp](https://github.com/ggerganov/whisper.cpp) model, now allows you to:
+
+- Scan videos and audios in a folder :mag: :film_strip: :headphones:
+- Automatically translate subtitles :speech_balloon: :globe_with_meridians:
+- Generate new subtitle files :page_with_curl:
 
 ## System Requirements
 
