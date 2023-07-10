@@ -72,7 +72,7 @@ export class OsrtService {
       .filter((video) => video.status === "todo")
       .filter((video) => !video.isProcessing)
       .map((video) => {
-        this.translate(ln, video.fileName, model);
+        this.translate(ln, video.id + "", model);
         return video.fileName;
       });
   }
