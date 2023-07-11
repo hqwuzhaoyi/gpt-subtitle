@@ -51,7 +51,7 @@ export function DataTableToolbar<TData extends Task>({
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
             title="Priority"
-            options={priorities}
+            options={priorities as any}
           />
         )}
         {isFiltered && (
@@ -73,6 +73,7 @@ export function DataTableToolbar<TData extends Task>({
                   language: row.original.language,
                   model: model ?? "",
                   priority: row.original.priority,
+                  id: row.original.id,
                 };
               });
               console.debug(jobs);
