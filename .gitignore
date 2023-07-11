@@ -13,3 +13,10 @@ server/dist
 public/dist
 .turbo
 **/tsconfig.tsbuildinfo
+whisper/main
+whisper/models/*
+!/whisper/models/.gitkeep
+uploads/*
+!/uploads/video
+uploads/video/*
+!/uploads/video/.gitkeep
