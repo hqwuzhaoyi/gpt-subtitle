@@ -6,9 +6,12 @@
     "dev": "dotenv -- turbo run dev  --no-cache  --concurrency=13",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "deploy:local": "npm run build && pm2 startOrRestart ecosystem.config.js --env local",
+    "deploy:dev": "npm run build && pm2 startOrRestart ecosystem.config.js --env development",
+    "deploy:prod": "npm run build && pm2 startOrRestart ecosystem.config.js --env production"
   },
-  "devDependencies": {
+  "dependencies": {
     "@types/node": "^18.16.18",
     "commander": "^10.0.1",
     "dotenv": "^16.3.1",
