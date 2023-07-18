@@ -18,7 +18,9 @@ import { ModelSelect } from "./ModelSelect";
 import { LanguageEnum, ModelType } from "../data/types";
 
 export const Autostart = ({ models }: { models: ModelType[] }) => {
-  const [language, setLanguage] = React.useState<LanguageEnum>(LanguageEnum.Auto);
+  const [language, setLanguage] = React.useState<LanguageEnum>(
+    LanguageEnum.Auto
+  );
   const [model, setModel] = React.useState<ModelType>(models[0]);
   return (
     <AlertDialog>
@@ -41,11 +43,7 @@ export const Autostart = ({ models }: { models: ModelType[] }) => {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Model</Label>
-                <ModelSelect
-                  value={model}
-                  onChange={setModel}
-                  models={models}
-                />
+                <ModelSelect value={model} onChange={setModel} />
               </div>
             </div>
           </AlertDialogDescription>

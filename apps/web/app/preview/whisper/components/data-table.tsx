@@ -57,7 +57,7 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
     result = list.map((task) => {
       const status = task.isProcessing
         ? "in progress"
-        : task.subtitle
+        : task.subtitle?.length
         ? "done"
         : "todo";
       return {
@@ -107,7 +107,6 @@ function useList(type: TableType) {
     error,
   };
 }
-
 
 export function DataTable<TData extends Task, TValue>({
   columns,
@@ -226,7 +225,7 @@ export function DataTable<TData extends Task, TValue>({
           Model
         </div>
         <div className="flex-auto pr-4">
-          <ModelSelect models={models} value={model} onChange={setModel} />
+          <ModelSelect value={model} onChange={setModel} />
         </div>
         <div className="flex-initial">
           <Autostart models={models} />
