@@ -1,14 +1,36 @@
-version: '3'
-services:
-  mysql:
-    image: mysql:8
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: 1241
-    ports:
-      - "3306:3306"
+version: "3"
 
-  redis:
-    image: redis
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    restart: always
     ports:
-      - "6379:6379"
+      - 3001:3001
+    networks:
+      - app_network
+    env_file:
+      - .env
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+    env_file:
+      - .env
+    depends_on:
+      - api
+
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  app_network:
+    external: true

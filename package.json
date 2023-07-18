@@ -12,10 +12,12 @@
     "deploy:prod": "npm run build && pm2 startOrRestart ecosystem.config.js --env production"
   },
   "dependencies": {
-    "@types/node": "^18.16.18",
     "commander": "^10.0.1",
     "dotenv": "^16.3.1",
-    "dotenv-cli": "^7.2.1",
+    "dotenv-cli": "^7.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.18",
     "prettier": "^2.8.8",
     "turbo": "latest"
   },
