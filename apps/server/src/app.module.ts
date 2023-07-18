@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, OnModuleInit } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -12,6 +12,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { FilesModule } from "./files/files.module";
 import { SharedModule } from "./shared/shared.module";
 import { StaticDirModule } from "./static-dir.provider";
+import * as fs from "fs-extra";
+import * as path from "path";
 
 const {
   REDIS_PORT = 6379,
@@ -22,6 +24,8 @@ const {
   MYSQL_PASSWORD = "123456",
   MYSQL_DATABASE = "gpt_subtitle",
 } = process.env;
+
+const rootPath = path.join(__dirname, "..", "..", "..");
 
 @Module({
   imports: [
@@ -53,7 +57,7 @@ const {
     //   dest: "./uploads",
     // }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "..", "..", "uploads"),
+      rootPath: join(rootPath, "uploads"),
       serveRoot: "/static",
     }),
 
@@ -68,4 +72,22 @@ const {
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  async onModuleInit() {
+    const whisperDir = path.join(rootPath, "whisper");
+    const modelsDir = path.join(whisperDir, "models");
+    try {
+      await fs.ensureDir(modelsDir);
+    } catch (err) {
+      console.error(`Failed to ensure directory ${modelsDir}: `, err);
+    }
+    const uploadsDir = path.join(rootPath, "uploads");
+    const videoDir = path.join(uploadsDir, "video");
+    try {
+      await fs.ensureDir(videoDir);
+    } catch (err) {
+      console.error(`Failed to ensure directory ${videoDir}: `, err);
+    }
+
+  }
+}

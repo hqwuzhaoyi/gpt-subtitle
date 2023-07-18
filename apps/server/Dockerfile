@@ -50,6 +50,9 @@ WORKDIR /app
 # Don't run production as root
 RUN addgroup --system --gid 1001 expressjs
 RUN adduser --system --uid 1001 expressjs
+RUN mkdir -p /app/whisper/models && chown -R expressjs:expressjs /app/whisper
+RUN mkdir -p /app/uploads/video && chown -R expressjs:expressjs /app/uploads
+
 USER expressjs
 COPY --from=installer /app .
 
