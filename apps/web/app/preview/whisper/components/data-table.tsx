@@ -36,6 +36,7 @@ import { Autostart } from "./Autostart";
 import { LanguageEnum, ModelType, TableType } from "../data/types";
 import { Task } from "../data/schema";
 import { th } from "@faker-js/faker";
+import { useModels } from "./hooks/useModels";
 
 const socket = io(baseURL);
 
@@ -46,7 +47,6 @@ socket.on("connection", (message) => {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
-  models: ModelType[];
   type: TableType;
 }
 
@@ -57,7 +57,7 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
     result = list.map((task) => {
       const status = task.isProcessing
         ? "in progress"
-        : task.subtitle
+        : task.subtitle?.length
         ? "done"
         : "todo";
       return {
@@ -111,7 +111,6 @@ function useList(type: TableType) {
 export function DataTable<TData extends Task, TValue>({
   columns,
   data: initData = [],
-  models,
   type,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -122,6 +121,7 @@ export function DataTable<TData extends Task, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const { list } = useList(type);
+  const { data: models = [], isLoading: modelsLoading } = useModels();
   const [model, setModel] = React.useState<ModelType | undefined>(models?.[0]);
 
   const [data, setData] = React.useState(initData);
@@ -225,7 +225,7 @@ export function DataTable<TData extends Task, TValue>({
           Model
         </div>
         <div className="flex-auto pr-4">
-          <ModelSelect models={models} value={model} onChange={setModel} />
+          <ModelSelect value={model} onChange={setModel} />
         </div>
         <div className="flex-initial">
           <Autostart models={models} />

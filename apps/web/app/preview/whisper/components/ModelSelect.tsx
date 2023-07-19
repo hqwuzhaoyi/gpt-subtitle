@@ -6,22 +6,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ModelType } from "../data/types";
+import { useModels } from "./hooks/useModels";
+import { Loader2 } from "lucide-react";
 
 interface ModelSelectProps {
-  models?: ModelType[];
   value?: ModelType;
   onChange: (value: ModelType) => void;
 }
 
-export const ModelSelect = ({
-  models = [],
-  value,
-  onChange,
-}: ModelSelectProps) => {
+export const ModelSelect = ({ value, onChange }: ModelSelectProps) => {
+  const { data: models = [], isLoading: modelsLoading } = useModels();
   return (
     <Select onValueChange={onChange} defaultValue={value}>
       <SelectTrigger>
-        <SelectValue placeholder="Select a whisper model to use" />
+        {modelsLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <SelectValue placeholder="Select a whisper model to use" />
+        )}
       </SelectTrigger>
       <SelectContent>
         {models.map((model) => (

@@ -17,20 +17,11 @@ export const metadata: Metadata = {
 };
 
 const VideoTable = async () => {
-  const models = await getModels();
-  return <DataTable columns={columns} models={models} type="video" />;
+  return <DataTable columns={columns} type="video" />;
 };
 const AudioTable = async () => {
-  const models = await getModels();
-  return <DataTable columns={columns} models={models} type="audio" />;
+  return <DataTable columns={columns} type="audio" />;
 };
-
-async function getModels(): Promise<ModelType[]> {
-  console.debug("models", `${baseURL}/osrt/models`);
-  let res = await fetch(`${baseURL}/osrt/models`);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return res.json();
-}
 
 export default async function TaskPage() {
   return (

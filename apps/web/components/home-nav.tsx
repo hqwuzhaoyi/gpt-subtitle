@@ -41,11 +41,11 @@ export function HomeNav({ className, ...props }: ExamplesNavProps) {
               )}
             >
               {example.name}{" "}
-              {example.label && (
+              {/* {example.label && (
                 <span className="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs font-medium leading-none text-[#000000] no-underline group-hover:no-underline">
                   {example.label}
                 </span>
-              )}
+              )} */}
             </Link>
           ))}
         </div>

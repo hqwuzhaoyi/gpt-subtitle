@@ -208,7 +208,7 @@ export class OsrtService {
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
     const result = await this.audioQueue.add("translate", job, {
       priority: job.priority,
-      jobId: job.id,
+      // jobId: job.id, // TODO: 重复的jobId会导致不执行
     });
     // const repeatOpts = {
     //   cron: "*/5 * * * *", // Run every 5 minutes

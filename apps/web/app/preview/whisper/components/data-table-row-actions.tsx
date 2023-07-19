@@ -32,6 +32,7 @@ import { labels } from "../data/data";
 import { Task, taskSchema } from "../data/schema";
 import { outPutSrt, outPutSrtStop } from "../api/osrt";
 import { useSWRConfig } from "swr";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DataTableRowActionsProps<TData extends Task> {
   row: Row<TData>;
@@ -44,16 +45,27 @@ export function DataTableRowActions<TData extends Task>({
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original);
   const { mutate } = useSWRConfig();
-
+  const { toast } = useToast();
   const startWhisper = async () => {
-    await outPutSrt(
-      row.getValue("language"),
-      row.getValue("id"),
-      table.options.meta?.model,
-      row.getValue("priority"),
-      table.options.meta?.type
-    );
-    mutate(`/osrt/list/${table.options.meta?.type}`);
+    if (
+      row.getValue("language") &&
+      row.getValue("id") &&
+      table.options.meta?.model &&
+      row.getValue("priority")
+    ) {
+      await outPutSrt(
+        row.getValue("language"),
+        row.getValue("id"),
+        table.options.meta?.model,
+        row.getValue("priority"),
+        table.options.meta?.type
+      );
+      mutate(`/osrt/list/${table.options.meta?.type}`);
+    } else {
+      toast({
+        title: "Please select language, model and priority",
+      });
+    }
   };
   const stopWhisper = async () => {
     await outPutSrtStop(row.original.processingJobId);
