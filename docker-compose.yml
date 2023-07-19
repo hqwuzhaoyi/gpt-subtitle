@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: ./apps/server/Dockerfile
     restart: always
+    volumes:
+      - /your_whisper_dir/whisper:/app/whisper
+      - /your_uploads_dir/uploads:/app/uploads
     ports:
       - 3001:3001
     networks:
@@ -27,7 +30,6 @@ services:
       - .env
     depends_on:
       - api
-
 
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname

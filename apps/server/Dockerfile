@@ -28,6 +28,8 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN ls /app
+COPY --from=builder /app/entrypoint.sh /entrypoint.sh
 RUN npm install -g pnpm
 RUN pnpm install --shamefully-hoist
 
@@ -53,7 +55,13 @@ RUN adduser --system --uid 1001 expressjs
 RUN mkdir -p /app/whisper/models && chown -R expressjs:expressjs /app/whisper
 RUN mkdir -p /app/uploads/video && chown -R expressjs:expressjs /app/uploads
 
+COPY --from=installer /entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 USER expressjs
 COPY --from=installer /app .
+
+# Set entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD node apps/server/dist/main.js
