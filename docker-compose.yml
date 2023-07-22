@@ -3,9 +3,7 @@ version: "3"
 services:
   api:
     container_name: api
-    build:
-      context: .
-      dockerfile: ./apps/server/Dockerfile
+    image: hqwuzhaoyi/gpt-subtitle-api:latest
     restart: always
     volumes:
       - /your_whisper_dir/whisper:/app/whisper
@@ -18,9 +16,7 @@ services:
       - .env
   web:
     container_name: web
-    build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
+    image: hqwuzhaoyi/gpt-subtitle-web:latest
     restart: always
     ports:
       - 3000:3000
