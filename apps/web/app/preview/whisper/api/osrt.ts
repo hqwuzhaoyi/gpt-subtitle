@@ -1,4 +1,4 @@
-import { request } from "utils";
+import { request } from "@/lib/request";
 import {
   AudioListResult,
   CreateWhisperJobItem,

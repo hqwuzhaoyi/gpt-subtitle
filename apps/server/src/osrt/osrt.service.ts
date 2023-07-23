@@ -84,43 +84,55 @@ export class OsrtService {
 
   filePathToUrl(filePath) {
     const relativePath = path.relative(this.staticDir, filePath);
-    // 这将会创建一个以`staticPath`为前缀的URL
-    // 注意，这假设`filePath`始终在`uploadsRoot`目录或其子目录下
-    return new URL(relativePath, staticPath).toString();
+    try {
+      // 这将会创建一个以`staticPath`为前缀的URL
+      // 注意，这假设`filePath`始终在`uploadsRoot`目录或其子目录下
+      return path.join(staticPath, relativePath);
+    } catch (error) {
+      this.logger.error("filePathToUrl error");
+      this.logger.error(error);
+      this.logger.error("filePath " + filePath);
+      this.logger.error("relativePath " + relativePath);
+      this.logger.error("staticPath " + staticPath);
+    }
   }
 
   async list(): Promise<FileListResult> {
-    const currentJobs = await this.audioQueue.getActive();
-    const currentJobsFiles = currentJobs.map((job) => {
-      return job.data.id;
-    });
-    const currentJobsIdMap = currentJobs.reduce((acc, job) => {
-      acc[job.data.id] = job.id;
-      return acc;
-    }, {});
+    try {
+      const currentJobs = await this.audioQueue.getActive();
+      const currentJobsFiles = currentJobs.map((job) => {
+        return job.data.id;
+      });
+      const currentJobsIdMap = currentJobs.reduce((acc, job) => {
+        acc[job.data.id] = job.id;
+        return acc;
+      }, {});
 
-    const videos = await this.filesService.findRelatedFilesForVideo();
+      const videos = await this.filesService.findRelatedFilesForVideo();
 
-    const result = await Promise.all(
-      videos.map(async (videoFileEntity) => {
-        const audioFile = await videoFileEntity.audioFile;
-        return {
-          ...videoFileEntity,
-          path: this.filePathToUrl(videoFileEntity.filePath),
-          audio: audioFile
-            ? { ...audioFile, path: this.filePathToUrl(audioFile.filePath) }
-            : undefined,
-          subtitle: audioFile?.subtitleFiles?.map((file) => {
-            return { ...file, path: this.filePathToUrl(file.filePath) };
-          }),
-          isProcessing: currentJobsFiles.includes(videoFileEntity.id),
-          processingJobId: currentJobsIdMap[videoFileEntity.id],
-          status: videoFileEntity.status,
-        };
-      })
-    );
+      const result = await Promise.all(
+        videos.map(async (videoFileEntity) => {
+          const audioFile = await videoFileEntity.audioFile;
+          return {
+            ...videoFileEntity,
+            path: this.filePathToUrl(videoFileEntity.filePath),
+            audio: audioFile
+              ? { ...audioFile, path: this.filePathToUrl(audioFile.filePath) }
+              : undefined,
+            subtitle: audioFile?.subtitleFiles?.map((file) => {
+              return { ...file, path: this.filePathToUrl(file.filePath) };
+            }),
+            isProcessing: currentJobsFiles.includes(videoFileEntity.id),
+            processingJobId: currentJobsIdMap[videoFileEntity.id],
+            status: videoFileEntity.status,
+          };
+        })
+      );
 
-    return result;
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
   async findAudios(): Promise<AudioListResult> {
     const currentJobs = await this.audioQueue.getActive();

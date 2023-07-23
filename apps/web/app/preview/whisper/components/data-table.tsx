@@ -31,14 +31,12 @@ import { outPutSrtList, autoStart, outPutSrtAudios } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
 import { ModelSelect } from "./ModelSelect";
-import { baseURL } from "utils";
 import { Autostart } from "./Autostart";
 import { LanguageEnum, ModelType, TableType } from "../data/types";
 import { Task } from "../data/schema";
-import { th } from "@faker-js/faker";
 import { useModels } from "./hooks/useModels";
 
-const socket = io(baseURL);
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000");
 
 socket.on("connection", (message) => {
   console.debug("ws connection", message);

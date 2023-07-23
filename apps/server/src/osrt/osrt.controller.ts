@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from "@nestjs/common";
 import { OsrtService } from "./osrt.service";
 import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
+import { Request } from "express";
 
 @Controller("osrt")
 export class OsrtController {
@@ -21,7 +23,8 @@ export class OsrtController {
   }
 
   @Get("list")
-  async list() {
+  async list(@Req() req: Request) {
+    console.debug("req", req.headers.host);
     return await this.osrtService.list();
   }
   @Get("audios")

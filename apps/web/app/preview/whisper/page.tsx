@@ -7,8 +7,6 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { UserNav } from "./components/user-nav";
 import { Suspense } from "react";
-import { baseURL } from "utils";
-import { ModelType } from "./data/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {

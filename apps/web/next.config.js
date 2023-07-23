@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../../.env" });
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: "standalone",
   experimental: {
     appDir: true,
   },
@@ -12,6 +12,15 @@ const nextConfig = {
     });
 
     return config;
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: "/api/proxy/:path*",
+        destination: process.env.API_URL + "/:path*",
+      },
+    ];
   },
 };
 
