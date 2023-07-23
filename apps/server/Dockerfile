@@ -49,9 +49,14 @@ RUN yarn turbo run build --filter=api
 FROM base AS runner
 WORKDIR /app
 
+# Setting up default values for PGID and PUID
+ENV PGID=1001
+ENV PUID=1001
+
 # Don't run production as root
-RUN addgroup --system --gid 1001 expressjs
-RUN adduser --system --uid 1001 expressjs
+RUN addgroup --system --gid $PGID expressjs
+RUN adduser --system --uid $PUID --ingroup expressjs expressjs
+
 RUN mkdir -p /app/whisper/models && chown -R expressjs:expressjs /app/whisper
 RUN mkdir -p /app/uploads/video && chown -R expressjs:expressjs /app/uploads
 
