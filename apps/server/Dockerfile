@@ -1,12 +1,17 @@
-FROM node:18-alpine AS base
+FROM node:18 AS base
 
 # The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-RUN apk update
+# Update the package list
+RUN apt-get update && apt-get install -y \
+    libc6-dev \
+    ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /app
 RUN npm install -g pnpm
@@ -19,8 +24,6 @@ RUN rm -rf /app/out/full/*/*/node_modules
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-RUN apk add --no-cache libc6-compat
-RUN apk update
 WORKDIR /app
 
 # First install dependencies (as they change less often)
@@ -49,21 +52,12 @@ RUN yarn turbo run build --filter=api
 FROM base AS runner
 WORKDIR /app
 
-# Setting up default values for PGID and PUID
-ENV PGID=1001
-ENV PUID=1001
-
-# Don't run production as root
-RUN addgroup --system --gid $PGID expressjs
-RUN adduser --system --uid $PUID --ingroup expressjs expressjs
-
-RUN mkdir -p /app/whisper/models && chown -R expressjs:expressjs /app/whisper
-RUN mkdir -p /app/uploads/video && chown -R expressjs:expressjs /app/uploads
+RUN mkdir -p /app/whisper/models
+RUN mkdir -p /app/uploads/video
 
 COPY --from=installer /entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-USER expressjs
 COPY --from=installer /app .
 
 # Set entrypoint script
