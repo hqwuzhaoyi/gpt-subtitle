@@ -174,7 +174,12 @@ export class OsrtService {
   }
 
   findAllModels() {
-    const files = fs.readdirSync(this.modelsDir).filter(visibleFiles);
+    const files = fs
+      .readdirSync(this.modelsDir)
+      .filter(visibleFiles)
+      .filter(
+        (file) => file.startsWith("ggml") && path.extname(file) === ".bin"
+      );
     return files;
   }
 
