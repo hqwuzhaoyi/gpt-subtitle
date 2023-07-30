@@ -67,7 +67,9 @@ export class TranslateService {
         .translateSrtStreamGroup(
           path.join(this.staticDir, dir, filename),
           path.join(this.staticDir, dir, translateName),
-          process.env.LANGUAGE ?? "Chinese"
+          process.env.LANGUAGE ?? "Chinese",
+          4,
+          300
         )
         .then(() => {
           resolve({

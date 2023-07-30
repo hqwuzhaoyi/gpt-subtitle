@@ -279,23 +279,42 @@ export class OsrtService {
     }
   }
 
-  async findFileThenTranslate({
-    language,
-    model,
-    videoPath,
-    audioPath,
-    srtPath,
-    srtFile,
-    fileName,
-  }) {
+  async findFileThenTranslate(
+    {
+      language,
+      model,
+      videoPath,
+      audioPath,
+      srtPath,
+      srtFile,
+      fileName,
+    }: {
+      language: string;
+      model: string;
+      videoPath: any;
+      audioPath: any;
+      srtPath: any;
+      srtFile: any;
+      fileName: any;
+    },
+    job: Bull.Job<CreateOsrtDto>
+  ) {
     try {
       const targetSrtPath = path.join(this.staticDir, "/video", srtFile);
+      job.progress(10);
       if (srtPath) {
         console.info("srtPath exist", srtPath + ".srt");
-        return await this.srtTranslate(videoDirPath, srtFile, targetSrtPath);
+        const result = await this.srtTranslate(
+          videoDirPath,
+          srtFile,
+          targetSrtPath
+        );
+        job.progress(100);
+        return result;
       } else if (audioPath) {
         console.info("audioPath exist", audioPath);
         const status = await whisper(audioPath, language, model);
+        job.progress(50);
         if (status === "SIGTERM") {
           return [];
         }
@@ -305,6 +324,7 @@ export class OsrtService {
           srtFile,
           targetSrtPath
         );
+        job.progress(100);
         return [...subtitleFiles, { path: audioPath }];
       } else if (videoPath) {
         console.info("videoPath exist", videoPath);
@@ -313,16 +333,19 @@ export class OsrtService {
           fileName,
           videoPath
         );
+        job.progress(30)
         const status = await whisper(finalAudioPath, language, model);
         if (status === "SIGTERM") {
           return [];
         }
+        job.progress(80)
         fs.renameSync(audioPath + ".srt", targetSrtPath);
         const subtitleFiles = await this.srtTranslate(
           videoDirPath,
           srtFile,
           targetSrtPath
         );
+        job.progress(100)
         return [
           ...subtitleFiles,
           { path: finalAudioPath },

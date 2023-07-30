@@ -59,15 +59,18 @@ export class QueueProcessor {
         `Start processing job... ${job.id} ${language} ${id} ${model}`
       );
 
-      const subTitle = await this.osrtService.findFileThenTranslate({
-        language,
-        model,
-        videoPath,
-        audioPath,
-        srtPath,
-        srtFile,
-        fileName,
-      });
+      const subTitle = await this.osrtService.findFileThenTranslate(
+        {
+          language,
+          model,
+          videoPath,
+          audioPath,
+          srtPath,
+          srtFile,
+          fileName,
+        },
+        job
+      );
 
       this.watchService.addFileToDB(subTitle.map(({ path }) => path));
 
