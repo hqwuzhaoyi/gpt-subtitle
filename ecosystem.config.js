@@ -50,14 +50,17 @@ module.exports = {
       env_local: {
         APP_ENV: "local", // APP_ENV=local
         PORT: WEB_PORT,
+        ...serverEnv,
       },
       env_development: {
         APP_ENV: "dev", // APP_ENV=dev
         PORT: WEB_PORT,
+        ...serverEnv,
       },
       env_production: {
         APP_ENV: "prod", // APP_ENV=prod
         PORT: WEB_PORT,
+        ...serverEnv,
       },
       cwd: "apps/web", // 设置当前工作目录
     },
