@@ -12,6 +12,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { FilesModule } from "./files/files.module";
 import { SharedModule } from "./shared/shared.module";
 import { StaticDirModule } from "./static-dir.provider";
+
+import { BullBoardModule } from "@bull-board/nestjs";
+import { ExpressAdapter } from "@bull-board/express";
+
 import * as fs from "fs-extra";
 import * as path from "path";
 
@@ -44,6 +48,10 @@ const rootPath = path.join(__dirname, "..", "..", "..");
         host: REDIS_HOST,
         port: +REDIS_PORT,
       },
+    }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter // Or FastifyAdapter from `@bull-board/fastify`
     }),
     ConfigModule.forRoot({
       envFilePath: [

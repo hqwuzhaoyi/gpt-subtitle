@@ -248,12 +248,12 @@ export class OsrtService {
 
   async stop(processingJobId) {
     try {
+      stopWhisper();
       await this.deleteJob(processingJobId);
     } catch (error) {
       console.error("Could not remove job", error);
       this.logger.error(error);
     }
-    stopWhisper();
   }
 
   async srtTranslate(videoDirPath, srtFile, targetSrtPath) {

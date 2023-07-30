@@ -9,11 +9,17 @@ import {
 } from "@/files/entities/file.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SharedGateway } from "./shared.gateway";
+import { BullBoardModule } from "@bull-board/nestjs";
+import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
 
 @Module({
   imports: [
     BullModule.registerQueue({
       name: "audio",
+    }),
+    BullBoardModule.forFeature({
+      name: "audio",
+      adapter: BullMQAdapter, //or use BullAdapter if you're using bull instead of bullMQ
     }),
     TypeOrmModule.forFeature([
       VideoFileEntity,
