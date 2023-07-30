@@ -43,7 +43,7 @@ export class GPTTranslator implements Translator {
           { role: "system", content: "" },
           {
             role: "user",
-            content: `Please help me to translate,\`{${text}}\` to ${language}, please return only translated content not include the origin text`,
+            content: `Please help me to translate,\`${text}\` to ${language}, please return only translated content not include the origin text, and do not change the symbols,and keep line breaks `,
           },
         ],
       });

@@ -21,6 +21,14 @@ export type TranslateOptions = {
   concurrency?: number;
 };
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function removeHeaderNumberAndDot(segment) {
+  return segment.replace(/^\d+\. /, '').trim();
+}
+
 class TranslateModel {
   translate: Translator;
   options: TranslateOptions;
@@ -37,7 +45,8 @@ class TranslateModel {
   async translateSrtStream(
     filePath: string,
     outputPath,
-    targetLanguage: string
+    targetLanguage: string,
+    delayed = 0
   ) {
     return new Promise((resolve, reject) => {
       const queue = new PQueue({ concurrency: this.concurrency });
@@ -60,6 +69,7 @@ class TranslateModel {
             console.info("Translated: ", translatedText);
 
             node.data.text = translatedText;
+            await delay(delayed);
           });
         })
         .on("error", (error) => {
@@ -84,7 +94,8 @@ class TranslateModel {
     inputFilePath: string,
     outputFilePath: string,
     targetLanguage: string,
-    groupSize: number = 4
+    groupSize: number = 4,
+    delayed = 100
   ) {
     return new Promise((resolve, reject) => {
       const nodes = [];
@@ -104,7 +115,7 @@ class TranslateModel {
         .on("data", (node) => {
           nodes.push(node);
           group.push(node);
-          textToTranslate += node.data.text + " \n";
+          textToTranslate += group.length + "." + node.data.text + " \n";
 
           if (group.length >= groupSize) {
             const textForThisGroup = textToTranslate;
@@ -131,8 +142,10 @@ class TranslateModel {
               }
 
               for (let i = 0; i < nodesForThisGroup.length; i++) {
-                nodesForThisGroup[i].data.text = translatedSegments[i];
+                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(translatedSegments[i]);
               }
+
+              await delay(delayed);
             });
 
             // Reset the group and text
@@ -171,7 +184,7 @@ class TranslateModel {
               }
 
               for (let i = 0; i < nodesForThisGroup.length; i++) {
-                nodesForThisGroup[i].data.text = translatedSegments[i];
+                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(translatedSegments[i]);
               }
             });
           }
