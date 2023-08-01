@@ -8,18 +8,24 @@ import * as child_process from "child_process";
 // const __dirname = path.dirname(__filename);
 // const child = child_process.spawn("node", ["./path/to/other/script.js"]);
 
-let mainProcess = null;
+let mainProcessMap = new Map<string, child_process.ChildProcess>();
 
 export const whisper = async (
   targetPath,
   videoLanguage,
-  model = "ggml-medium.bin"
+  model = "ggml-medium.bin",
+  id = "main",
 ) => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
   const mainPath = path.join(whisperRoot, "main");
   const modelPath = path.join(whisperRoot, "models", model);
   console.log("modelPath", modelPath);
+
+  if (mainProcessMap.has(targetPath)) {
+    console.log("mainProcessMap.has(targetPath)", targetPath);
+    return;
+  }
 
   // const targetPath = path.join(
   //   __dirname,
@@ -31,7 +37,7 @@ export const whisper = async (
   // );
 
   return new Promise((resolve, reject) => {
-    mainProcess = child_process.spawn(
+    let mainProcess = child_process.spawn(
       mainPath,
       ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
@@ -41,6 +47,7 @@ export const whisper = async (
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
       mainProcess = null;
+      mainProcessMap.delete(id);
       console.log("whisper close", code);
       resolve(code);
     });
@@ -50,16 +57,30 @@ export const whisper = async (
       if (signal === "SIGTERM") {
         console.log("whisper SIGTERM");
         resolve(signal);
+        mainProcessMap.delete(id);
       }
     });
+    mainProcessMap.set(id, mainProcess);
   });
 };
 
-export const stopWhisper = () => {
-  if (mainProcess) {
-    console.log("stopWhisper");
-    mainProcess.kill();
-    mainProcess = null;
+export const stopAllWhisper = () => {
+  for (let [key, value] of mainProcessMap) {
+    console.log(key, value);
+    value.kill("SIGTERM");
+  }
+  mainProcessMap.clear();
+};
+
+export const stopWhisper = (id) => {
+  if (!id) {
+    throw new Error("stopWhisper id is required");
+  } else {
+    const whisperProcess = mainProcessMap.get(id);
+    if (whisperProcess) {
+      whisperProcess.kill("SIGTERM");
+      mainProcessMap.delete(id);
+    }
   }
 };
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
-import { whisper, extractAudio, stopWhisper } from "whisper";
+import { whisper, extractAudio, stopWhisper, stopAllWhisper } from "whisper";
 import { AudioListResult, FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
@@ -63,7 +63,7 @@ export class OsrtService {
   }
   async terminateAllJobs() {
     await this.clearAllJobs();
-    stopWhisper();
+    stopAllWhisper();
     return await this.getActiveJobs();
   }
 
@@ -225,6 +225,7 @@ export class OsrtService {
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
     const result = await this.audioQueue.add("translate", job, {
       priority: job.priority,
+      attempts: 1
       // jobId: job.id, // TODO: 重复的jobId会导致不执行
     });
     // const repeatOpts = {
@@ -248,7 +249,7 @@ export class OsrtService {
 
   async stop(processingJobId) {
     try {
-      stopWhisper();
+      stopWhisper(processingJobId);
       await this.deleteJob(processingJobId);
     } catch (error) {
       console.error("Could not remove job", error);
@@ -257,25 +258,31 @@ export class OsrtService {
   }
 
   async srtTranslate(videoDirPath, srtFile, targetSrtPath) {
-    if (process.env.OUTPUT_SRT_THEN_TRANSLATE === "true") {
-      const translateSubtitle = await this.translateService.translateFile(
-        srtFile,
-        "/video"
-      );
-      return [
-        translateSubtitle,
-        {
-          path: targetSrtPath,
-          url: `${videoDirPath}${srtFile}`,
-        },
-      ];
-    } else {
-      return [
-        {
-          path: targetSrtPath,
-          url: `${videoDirPath}${srtFile}`,
-        },
-      ];
+    try {
+      if (process.env.OUTPUT_SRT_THEN_TRANSLATE === "true") {
+        const relativePath = path.relative(this.staticDir, targetSrtPath);
+        const translateSubtitle = await this.translateService.translateFile(
+          srtFile,
+          path.dirname(relativePath)
+        );
+        return [
+          translateSubtitle,
+          {
+            path: targetSrtPath,
+            url: `${videoDirPath}${srtFile}`,
+          },
+        ];
+      } else {
+        return [
+          {
+            path: targetSrtPath,
+            url: `${videoDirPath}${srtFile}`,
+          },
+        ];
+      }
+    } catch (error) {
+      console.error(error);
+      this.logger.error(error);
     }
   }
 
@@ -300,6 +307,21 @@ export class OsrtService {
     job: Bull.Job<CreateOsrtDto>
   ) {
     try {
+      const getSrtFileName = (originalPath) => {
+        // 获取文件所在的目录
+        const dir = path.dirname(originalPath);
+
+        // 获取文件名，但不包括扩展名
+        const filenameWithoutExt = path.basename(
+          originalPath,
+          path.extname(originalPath)
+        );
+
+        // 创建新路径
+        const newPath = path.join(dir, filenameWithoutExt + ".srt");
+        return newPath;
+      };
+
       const targetSrtPath = path.join(this.staticDir, "/video", srtFile);
       job.progress(10);
       if (srtPath) {
@@ -313,39 +335,52 @@ export class OsrtService {
         return result;
       } else if (audioPath) {
         console.info("audioPath exist", audioPath);
-        const status = await whisper(audioPath, language, model);
+        const status = await whisper(
+          audioPath,
+          language,
+          model,
+          job.id.toString()
+        );
         job.progress(50);
         if (status === "SIGTERM") {
           return [];
         }
-        fs.renameSync(audioPath + ".srt", targetSrtPath);
+        const srtPath = getSrtFileName(audioPath);
+        fs.renameSync(audioPath + ".srt", srtPath);
         const subtitleFiles = await this.srtTranslate(
           videoDirPath,
           srtFile,
-          targetSrtPath
+          srtPath
         );
         job.progress(100);
         return [...subtitleFiles, { path: audioPath }];
       } else if (videoPath) {
         console.info("videoPath exist", videoPath);
+
         const finalAudioPath = await this.handleAudio(
           audioPath,
           fileName,
           videoPath
         );
-        job.progress(30)
-        const status = await whisper(finalAudioPath, language, model);
+        job.progress(30);
+        const status = await whisper(
+          finalAudioPath,
+          language,
+          model,
+          job.id.toString()
+        );
         if (status === "SIGTERM") {
           return [];
         }
-        job.progress(80)
-        fs.renameSync(audioPath + ".srt", targetSrtPath);
+        job.progress(80);
+        const srtPath = getSrtFileName(audioPath);
+        fs.renameSync(audioPath + ".srt", srtPath);
         const subtitleFiles = await this.srtTranslate(
           videoDirPath,
           srtFile,
-          targetSrtPath
+          srtPath
         );
-        job.progress(100)
+        job.progress(100);
         return [
           ...subtitleFiles,
           { path: finalAudioPath },
