@@ -1,6 +1,7 @@
 import { GPTTranslator } from "./gpt3";
 import SubtitleProcessor from "./fileStream";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 import fs from "fs";
 import { parse, map, stringifySync } from "subtitle";
 
@@ -26,7 +27,7 @@ function delay(ms: number): Promise<void> {
 }
 
 function removeHeaderNumberAndDot(segment) {
-  return segment.replace(/^\d+\. /, '').trim();
+  return segment.replace(/^\d+\. /, "").trim();
 }
 
 class TranslateModel {
@@ -52,23 +53,40 @@ class TranslateModel {
       const queue = new PQueue({ concurrency: this.concurrency });
 
       const nodes = [];
+      const translationCache = {}; // 缓存对象
+      let translationCount = 0; // 翻译次数计数器
+      let translationCacheCount = 0; // 翻译次数计数器
+
       const inputStream = fs.createReadStream(filePath, { encoding: "utf8" });
       const writeStream = fs.createWriteStream(outputPath);
+      console.info("translateSrtStream: Reading from file has started");
       inputStream
         .pipe(parse())
         .on("data", (node) => {
-          // 把每个翻译操作的 Promise 添加到数组中
           nodes.push(node);
 
           queue.add(async () => {
-            const translatedText = await this.translate.translate(
-              node.data.text,
-              targetLanguage
-            );
-            console.info("Translating: ", node.data.text);
-            console.info("Translated: ", translatedText);
+            // 检查缓存是否已经包含这个段落的翻译
+            if (translationCache[node.data.text]) {
+              node.data.text = translationCache[node.data.text];
+              translationCacheCount++;
+              console.info("Cached translation: ", node.data.text);
+            } else {
+              const translatedText = await this.translate.translate(
+                node.data.text,
+                targetLanguage
+              );
+              console.info("Translating: ", node.data.text);
+              console.info("Translated: ", translatedText);
 
-            node.data.text = translatedText;
+              // 将新的翻译添加到缓存中
+              translationCache[node.data.text] = translatedText;
+              node.data.text = translatedText;
+
+              // 增加翻译计数器
+              translationCount++;
+            }
+
             await delay(delayed);
           });
         })
@@ -85,6 +103,13 @@ class TranslateModel {
           writeStream.end();
 
           console.info("Writing to file has finished");
+
+          // 输出总的翻译次数
+          console.info(
+            `${filePath} Total translations performed: ${translationCount};`,
+            `Translation cache count: ${translationCacheCount} `
+          );
+
           resolve(outputPath);
         });
     });
@@ -142,7 +167,9 @@ class TranslateModel {
               }
 
               for (let i = 0; i < nodesForThisGroup.length; i++) {
-                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(translatedSegments[i]);
+                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(
+                  translatedSegments[i]
+                );
               }
 
               await delay(delayed);
@@ -184,7 +211,9 @@ class TranslateModel {
               }
 
               for (let i = 0; i < nodesForThisGroup.length; i++) {
-                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(translatedSegments[i]);
+                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(
+                  translatedSegments[i]
+                );
               }
             });
           }
@@ -210,8 +239,8 @@ class TranslateModel {
 // const test = new TranslateModel(TranslateType.GOOGLE, {
 //   apiKey: process.env.GOOGLE_TRANSLATE_API_KEY,
 // })
-//   .translateSrtStreamGroup(
-//     resolve(__dirname, "../DLDSS-202.srt"),
+//   .translateSrtStream(
+//     resolve(__dirname, "../cjob-132-copy.srt"),
 //     resolve(__dirname, "..", "output.srt"),
 //     "zh-CN"
 //   )
