@@ -74,7 +74,7 @@ export class FilesService {
       },
     });
   }
-  async findSubtitleFiles(): Promise<FileEntity[]> {
+  async findSubtitleFiles(): Promise<SubtitleFileEntity[]> {
     return this.subtitleFilesRepository.find({
       where: {
         extName: In(subtitleExtensions.map((ext) => "." + ext)),

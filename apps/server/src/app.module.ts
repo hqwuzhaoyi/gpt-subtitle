@@ -15,6 +15,7 @@ import { StaticDirModule } from "./static-dir.provider";
 
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
+import { SubtitleModule } from './subtitle/subtitle.module';
 
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -76,6 +77,7 @@ const rootPath = path.join(__dirname, "..", "..", "..");
     FilesModule,
     SharedModule,
     StaticDirModule,
+    SubtitleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
