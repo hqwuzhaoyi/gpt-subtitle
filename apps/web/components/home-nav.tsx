@@ -9,14 +9,14 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const examples = [
   {
-    name: "Upload",
-    href: "/preview/upload",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/dashboard",
-  },
-  {
-    name: "Whisper",
+    name: "Whisper Table",
     href: "/preview/whisper",
     code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/cards",
+  },
+  {
+    name: "Translation Table",
+    href: "/preview/upload",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/dashboard",
   },
 ];
 
