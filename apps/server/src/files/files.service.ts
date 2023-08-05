@@ -10,6 +10,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
 import * as path from "path";
+import * as fs from "fs";
 
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
 const audioExtensions = ["mp3", "wav", "ogg", "flac"];
@@ -46,6 +47,32 @@ export class FilesService {
     return `This action removes a #${id} file`;
   }
 
+  // 使用路径删除文件
+  removeWithPath(filePath) {
+    return new Promise(async (resolve, reject) => {
+      fs.unlink(filePath, async (err) => {
+        if (err) {
+          console.error("Error:", err);
+          reject(filePath);
+        } else {
+          console.log("File removed:", filePath);
+          this.subtitleFilesRepository
+            .delete({
+              filePath: filePath,
+            })
+            .then((res) => {
+              console.log("remove subtitle success");
+              resolve(res);
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+              reject(filePath);
+            });
+        }
+      });
+    });
+  }
+
   async findVideoFiles(): Promise<FileEntity[]> {
     return this.videoFilesRepository.find({
       where: {
@@ -55,6 +82,13 @@ export class FilesService {
   }
   async findVideoFile(id): Promise<VideoFileEntity> {
     return this.videoFilesRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
+  async findSubtitleFile(id): Promise<SubtitleFileEntity> {
+    return this.subtitleFilesRepository.findOne({
       where: {
         id: id,
       },

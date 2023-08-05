@@ -1,5 +1,6 @@
 import { request } from "@/lib/request";
 import { FileListResult } from "shared-types";
+import { SubtitleItem } from "./types";
 
 export interface FileUploadResponse {
   url: string;
@@ -32,6 +33,23 @@ export const uploadFile = async ({
     throw new Error("Error uploading file");
   }
 };
+export const uploadSubtitle = async ({
+  file,
+}: FileUploadRequest): Promise<FileUploadResponse> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  try {
+    const response = await request.post("/subtitle/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
 
 export const translateFile = async (
   filename: string
@@ -41,6 +59,40 @@ export const translateFile = async (
   };
   try {
     const response = await request.post("/translate", postData);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const translateFileWithId = async (
+  id: number
+): Promise<FileListResult> => {
+  const postData = {
+    id,
+    forceTranslate: true,
+  };
+  try {
+    const response = await request.post("/translate/useId", postData);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const querySubtitles = async (): Promise<SubtitleItem[]> => {
+  try {
+    const response = await request.get("/subtitle");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error uploading file");
+  }
+};
+export const deleteSubtitle = async (id: number): Promise<FileListResult> => {
+  console.debug("deleteSubtitle", id);
+  try {
+    const response = await request.delete(`/subtitle/${id}`);
     return response.data;
   } catch (error) {
     console.error(error);

@@ -5,12 +5,17 @@ import * as path from "path";
 import * as fs from "fs";
 import { TranslateModel, TranslateType } from "translator";
 import { staticPath } from "utils";
+import { TranslateResult } from "shared-types";
+import { FilesService } from "@/files/files.service";
 
 console.debug("staticPath", staticPath);
 
 @Injectable()
 export class TranslateService {
-  constructor(@Inject("STATIC_DIR") private staticDir: string) {}
+  constructor(
+    @Inject("STATIC_DIR") private staticDir: string,
+    private readonly filesService: FilesService
+  ) {}
 
   async create(createTranslateDto: CreateTranslateDto) {}
 
@@ -37,6 +42,13 @@ export class TranslateService {
     }
   }
 
+  translateFileName(fileName) {
+    const fileObj = path.parse(fileName);
+    const translateName =
+      fileObj.name + "." + (process.env.LANGUAGE ?? "Chinese") + fileObj.ext;
+    return translateName;
+  }
+
   translateFile(
     filename,
     dir = ""
@@ -46,9 +58,7 @@ export class TranslateService {
     path: string;
   }> {
     return new Promise((resolve, reject) => {
-      const fileObj = path.parse(filename);
-      const translateName =
-        fileObj.name + "." + (process.env.LANGUAGE ?? "Chinese") + fileObj.ext;
+      const translateName = this.translateFileName(filename);
 
       const existUrl = this.existFile(translateName, dir);
       if (existUrl) {
@@ -76,6 +86,65 @@ export class TranslateService {
             url: `${this.fileStaticPath(translateName, dir)}`,
             path: path.join(this.staticDir, dir, translateName),
             filename: translateName,
+          });
+        })
+        .catch((err) => {
+          console.error("translate failed");
+          reject("translate failed" + err.message);
+        });
+    });
+  }
+
+  translateFilePath(filePath, translateName) {
+    const fileDir = path.dirname(filePath);
+    const translatePath = path.join(fileDir, translateName);
+    return translatePath;
+  }
+
+  translateOneWithId(
+    id: number,
+    { forceTranslate = false } = {}
+  ): Promise<TranslateResult> {
+    return new Promise(async (resolve, reject) => {
+      const subtitle = await this.filesService.findSubtitleFile(id);
+      const translateName = this.translateFileName(subtitle.fileName);
+      const translatePath = this.translateFilePath(
+        subtitle.filePath,
+        translateName
+      );
+      const relativePath = path.dirname(
+        path.relative(this.staticDir, translatePath)
+      );
+      console.debug("translatePath", translatePath);
+      console.debug("translateLanguage", process.env.LANGUAGE ?? "Chinese");
+      // console.debug("relativePath", path.dirname(relativePath));
+      const existUrl = fs.existsSync(translatePath);
+      if (existUrl && !forceTranslate) {
+        console.debug("file exist, return url", translatePath);
+        resolve({
+          url: `${this.fileStaticPath(translateName, "/" + relativePath)}`,
+          filename: translateName,
+          path: translatePath,
+        });
+        return;
+      }
+
+      const model = new TranslateModel(TranslateType.GPT3, {
+        baseUrl: process.env.BASE_URL,
+        apiKey: process.env.OPENAI_API_KEY,
+      })
+        .translateSrtStreamGroup(
+          subtitle.filePath,
+          translatePath,
+          process.env.LANGUAGE ?? "Chinese",
+          4,
+          300
+        )
+        .then(() => {
+          resolve({
+            url: `${this.fileStaticPath(translateName, "/" + relativePath)}`,
+            filename: translateName,
+            path: translatePath,
           });
         })
         .catch((err) => {

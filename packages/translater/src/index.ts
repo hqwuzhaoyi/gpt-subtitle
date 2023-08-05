@@ -86,7 +86,6 @@ class TranslateModel {
         .on("data", (node) => {
           nodes.push(node);
           group.push(node);
-
           if (translationCache[node.data.text]) {
             textToTranslate +=
               group.length + "." + translationCache[node.data.text] + " \n"; // 使用缓存中的翻译
@@ -146,7 +145,35 @@ class TranslateModel {
         .on("finish", async () => {
           // Process any remaining nodes
           if (group.length > 0) {
-            // ... (This section remains unchanged.)
+            const textForThisGroup = textToTranslate;
+            const nodesForThisGroup = group;
+
+            queue.add(async () => {
+              const translatedText = await this.translate.translate(
+                textForThisGroup,
+                targetLanguage
+              );
+
+              console.info("Translating: ", textForThisGroup);
+              console.info("Translated: ", translatedText);
+
+              const translatedSegments = translatedText.split("\n");
+
+              if (translatedSegments[translatedSegments.length - 1] === "") {
+                translatedSegments.pop();
+              }
+
+              if (nodesForThisGroup.length !== translatedSegments.length) {
+                console.error("Translation segment mismatch!");
+                return;
+              }
+
+              for (let i = 0; i < nodesForThisGroup.length; i++) {
+                nodesForThisGroup[i].data.text = removeHeaderNumberAndDot(
+                  translatedSegments[i]
+                );
+              }
+            });
           }
 
           // Wait for all translations to finish

@@ -26,6 +26,18 @@ export class TranslateController {
     return result;
   }
 
+  @Post("useId")
+  async translateOneWithId(
+    @Body("id") id: number,
+    @Body("forceTranslate") forceTranslate: boolean
+  ) {
+    // return this.translateService.create(createTranslateDto);
+    const result = await this.translateService.translateOneWithId(id, {
+      forceTranslate,
+    });
+    return result;
+  }
+
   @Get()
   findAll() {
     return this.translateService.findAll();

@@ -5,11 +5,13 @@ import { SubtitleFileEntity } from "@/files/entities/file.entity";
 import { FilesService } from "@/files/files.service";
 import * as path from "path";
 import { staticPath, videoDirPath } from "utils";
+import { WatchService } from "@/files/watch/watch.service";
 
 @Injectable()
 export class SubtitleService {
   constructor(
     private readonly filesService: FilesService,
+    private readonly watchService: WatchService,
     @Inject("STATIC_DIR") private staticDir: string
   ) {}
 
@@ -67,7 +69,24 @@ export class SubtitleService {
     return `This action updates a #${id} subtitle`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subtitle`;
+  async remove(id: number) {
+    const file = await this.filesService.findSubtitleFile(id);
+    await this.filesService.removeWithPath(file.filePath);
+    return `This action removes a #${file.filePath} subtitle`;
+  }
+  async uploadFile(file: Express.Multer.File): Promise<{
+    originalname: string;
+    filename: string;
+    url: string;
+  }> {
+    await this.watchService.addFileToDB([file.path]);
+
+    return {
+      originalname: file.originalname,
+      filename: file.filename,
+      url: `${staticPath}${file.filename}`,
+    };
+
+    // 上传文件的逻辑，这里略去
   }
 }

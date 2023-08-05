@@ -31,3 +31,9 @@ export type CreateWhisperJobItem = {
   language: string;
   model: string;
 };
+
+export type TranslateResult = {
+  url: string;
+  filename: string;
+  path: string;
+};
