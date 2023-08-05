@@ -20,9 +20,9 @@ export class TranslateController {
   //   return this.translateService.create(createTranslateDto);
   // }
   @Post()
-  async translateOne(@Body("filename") filename: string) {
+  async translateOne(@Body("filename") filename: string, @Body("dir") dir?: string) {
     // return this.translateService.create(createTranslateDto);
-    const result = await this.translateService.translateFile(filename);
+    const result = await this.translateService.translateFile(filename, dir);
     return result;
   }
 
