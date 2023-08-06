@@ -16,6 +16,7 @@ import {
   FileEntity,
 } from "../entities/file.entity";
 import * as fg from "fast-glob";
+import * as cheerio from "cheerio";
 @Injectable()
 export class WatchService {
   constructor(
@@ -49,6 +50,12 @@ export class WatchService {
     let { videoFiles, audioFiles, subtitleFiles } =
       await this.findAndClassifyFiles();
     this.saveFilesToDB({ videoFiles, audioFiles, subtitleFiles });
+    videoFiles.forEach((videoFile) => {
+      // console.debug("checkNfoFile", this.checkNfoFile(videoFile), videoFile);
+      if (this.checkNfoFile(videoFile)) {
+        this.updateVideoImage(videoFile);
+      }
+    });
   }
 
   private async saveOrUpdateVideoFile(
@@ -257,8 +264,7 @@ export class WatchService {
 
     filePaths.forEach((filePath) => {
       const fileName = basename(filePath);
-      console.log(`File ${filePath} has been added, ${fileName}`);
-
+      // console.log(`File ${filePath} has been added, ${fileName}`);
       const ext = path.extname(filePath).slice(1);
 
       // 当发现新文件，执行保存到数据库的操作
@@ -286,7 +292,51 @@ export class WatchService {
 
     watcher.on("add", async (filePath, stats) => {
       await this.addFileToDB([filePath]);
+      if (this.checkNfoFile(filePath)) {
+        this.updateVideoImage(filePath);
+      }
     });
+  }
+
+  checkNfoFile(filePath: string) {
+    const nfoFile = path.join(
+      path.dirname(filePath),
+      path.basename(filePath, path.extname(filePath)) + ".nfo"
+    );
+    return fs.existsSync(nfoFile);
+  }
+
+  getNfoImage(filePath: string) {
+    const nfoFile = path.join(
+      path.dirname(filePath),
+      path.basename(filePath, path.extname(filePath)) + ".nfo"
+    );
+    const nfo = fs.readFileSync(nfoFile, "utf-8");
+    const $ = cheerio.load(nfo);
+    const poster = $("poster").text();
+    const fanart = $("fanart").text();
+    return {
+      poster: poster ? path.join(path.dirname(nfoFile), poster) : null,
+      fanart: fanart ? path.join(path.dirname(nfoFile), fanart) : null,
+    };
+  }
+
+  async updateVideoImage(filePath: string) {
+    const { poster, fanart } = this.getNfoImage(filePath);
+    // console.debug("poster", poster);
+    // console.debug("fanart", fanart);
+    // console.debug("filePath", filePath);
+    const existsInDb = await this.videoFilesRepository.findOne({
+      where: { filePath },
+    });
+
+    // console.debug("existsInDb", existsInDb);
+    const result = await this.videoFilesRepository.update(
+      { filePath },
+      { poster, fanart }
+    );
+    // console.debug("result", result);
+    return result;
   }
 
   // 查找并分类文件
