@@ -10,7 +10,7 @@ import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {
-  title: "Tasks",
+  title: "Whisper Tasks",
   description: "A task and issue tracker build using Tanstack Table.",
 };
 

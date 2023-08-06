@@ -14,7 +14,7 @@ import { siteConfig } from "@/config/site";
 import { Icons } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Examples",
+  title: "Subtitles",
   description: "Check out some examples app built using the components.",
 };
 
@@ -27,7 +27,7 @@ export default function ExamplesLayout({ children }: ExamplesLayoutProps) {
     <>
       <div className="container relative p-10">
         <section>
-          <HomeNav />
+          {/* <HomeNav /> */}
           <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow-xl">
             {children}
           </div>

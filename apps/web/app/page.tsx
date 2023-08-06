@@ -20,7 +20,7 @@ export default function Example() {
   return (
     <div className="container relative p-10">
       <StyleSwitcher />
-      <HomeNav className="[&>a:first-child]:text-primary" />
+      {/* <HomeNav className="[&>a:first-child]:text-primary" /> */}
       <section className="hidden md:block">
         <div className="overflow-hidden rounded-lg border bg-background shadow-xl">
           <UploadPage />
