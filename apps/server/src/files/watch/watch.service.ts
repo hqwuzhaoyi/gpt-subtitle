@@ -315,9 +315,26 @@ export class WatchService {
     const $ = cheerio.load(nfo);
     const poster = $("poster").text();
     const fanart = $("fanart").text();
+
+    const exist = (filePath) => {
+      return fs.existsSync(filePath);
+    };
+
+    const resultPath = (filePath) => {
+      if (exist(filePath)) {
+        return filePath;
+      } else if (
+        exist(path.join(path.dirname(nfoFile), path.basename(filePath)))
+      ) {
+        return path.join(path.dirname(nfoFile), path.basename(filePath));
+      } else {
+        return null;
+      }
+    };
+
     return {
-      poster: poster ? path.join(path.dirname(nfoFile), poster) : null,
-      fanart: fanart ? path.join(path.dirname(nfoFile), fanart) : null,
+      poster: resultPath(poster),
+      fanart: resultPath(fanart),
     };
   }
 

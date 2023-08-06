@@ -125,6 +125,8 @@ export class OsrtService {
             isProcessing: currentJobsFiles.includes(videoFileEntity.id),
             processingJobId: currentJobsIdMap[videoFileEntity.id],
             status: videoFileEntity.status,
+            poster: this.filePathToUrl(videoFileEntity.poster),
+            fanart: this.filePathToUrl(videoFileEntity.fanart),
           };
         })
       );
@@ -225,7 +227,7 @@ export class OsrtService {
   async addTranslationJob(job: CreateOsrtDto): Promise<Bull.Job<any>> {
     const result = await this.audioQueue.add("translate", job, {
       priority: job.priority,
-      attempts: 1
+      attempts: 1,
       // jobId: job.id, // TODO: 重复的jobId会导致不执行
     });
     // const repeatOpts = {
