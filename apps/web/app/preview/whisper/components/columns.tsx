@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { Image } from "@nextui-org/react";
 import { labels, languages, priorities, statuses } from "../data/data";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
@@ -66,6 +66,16 @@ export const columns: ColumnDef<Task>[] = [
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>
+          {row.original.poster && (
+            <Image
+              width={50}
+              height={50}
+              radius={"md"}
+              src={row.original.poster}
+              loading="lazy"
+              className="opacity-100"
+            />
+          )}
         </div>
       );
     },

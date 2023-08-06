@@ -33,7 +33,7 @@ export const Icons = {
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <circle cx="12" cy="12" r="12" fill="black" />
-      <text x="6" y="18" font-family="Arial" font-size="12" fill="white">
+      <text x="6" y="18" fontFamily="Arial" fontSize="12" fill="white">
         W
       </text>
     </svg>

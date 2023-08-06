@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { Providers } from "./providers";
 
 export const metadata = {
   title: "Create Next App",
@@ -26,12 +27,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
+        <Providers>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
@@ -42,7 +38,7 @@ export default function RootLayout({
           </ThemeProvider>
           {/* <StyleSwitcher /> */}
           <Toaster />
-        </body>
+        </Providers>
       </body>
     </html>
   );

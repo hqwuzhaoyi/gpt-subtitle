@@ -59,6 +59,7 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
         ? "done"
         : "todo";
       return {
+        ...task,
         title: task.fileName,
         id: task.id + "",
         label: task.fileName,

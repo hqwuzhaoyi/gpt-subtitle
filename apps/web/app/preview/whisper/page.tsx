@@ -44,12 +44,10 @@ export default async function TaskPage() {
           </TabsList>
           <TabsContent value="video">
             <Suspense fallback={<>Loading...</>}>
-              {/* @ts-expect-error Async Server Component */}
               <VideoTable></VideoTable>
             </Suspense>
           </TabsContent>
           <TabsContent value="audio">
-            {/* @ts-expect-error Async Server Component */}
             <AudioTable></AudioTable>
           </TabsContent>
         </Tabs>

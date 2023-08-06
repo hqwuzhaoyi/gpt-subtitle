@@ -125,8 +125,12 @@ export class OsrtService {
             isProcessing: currentJobsFiles.includes(videoFileEntity.id),
             processingJobId: currentJobsIdMap[videoFileEntity.id],
             status: videoFileEntity.status,
-            poster: this.filePathToUrl(videoFileEntity.poster),
-            fanart: this.filePathToUrl(videoFileEntity.fanart),
+            poster:
+              videoFileEntity.poster &&
+              this.filePathToUrl(videoFileEntity.poster),
+            fanart:
+              videoFileEntity.fanart &&
+              this.filePathToUrl(videoFileEntity.fanart),
           };
         })
       );
