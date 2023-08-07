@@ -35,6 +35,8 @@ import { Autostart } from "./Autostart";
 import { LanguageEnum, ModelType, TableType } from "../data/types";
 import { Task } from "../data/schema";
 import { useModels } from "./hooks/useModels";
+import { useImagePreview } from "@/atoms/imagePreview";
+import { ImagePreviewModal } from "./ImagePreviewModal";
 
 const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000");
 
@@ -286,6 +288,7 @@ export function DataTable<TData extends Task, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
+      <ImagePreviewModal />
     </div>
   );
 }

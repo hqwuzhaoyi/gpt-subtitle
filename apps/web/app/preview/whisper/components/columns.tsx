@@ -4,7 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Image } from "@nextui-org/react";
 import { labels, languages, priorities, statuses } from "../data/data";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
@@ -20,6 +19,12 @@ import {
 } from "@/components/ui/select";
 import { LanguageSelect } from "./LanguageSelect";
 import { Slider } from "@/components/ui/slider";
+import {
+  setImagePreview,
+  setImagePreviewImage,
+  setImagePreviewVisible,
+} from "@/atoms/imagePreview";
+import Image from "next/image";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -67,14 +72,29 @@ export const columns: ColumnDef<Task>[] = [
             {row.getValue("title")}
           </span>
           {row.original.poster && (
-            <Image
-              width={50}
-              height={50}
-              radius={"md"}
-              src={row.original.poster}
-              loading="lazy"
-              className="opacity-100"
-            />
+            <div
+              className="w-6 h-6 flex overflow-hidden rounded-md"
+              onClick={() => {
+                if (row.original.poster) {
+                  setImagePreview({
+                    visible: true,
+                    image: {
+                      src: row.original.poster,
+                      title: row.original.title,
+                    },
+                  });
+                }
+              }}
+            >
+              <Image
+                width={50}
+                height={50}
+                src={row.original.poster}
+                alt={row.original.poster}
+                loading="lazy"
+                className="opacity-100 flex-1"
+              />
+            </div>
           )}
         </div>
       );
