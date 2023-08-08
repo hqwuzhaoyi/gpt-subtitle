@@ -21,13 +21,13 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
         <Link
-          href="/preview/whisper"
+          href="/preview/tasks"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname === "/preview/whisper" ? "text-foreground" : "text-foreground/60"
+            pathname === "/preview/tasks" ? "text-foreground" : "text-foreground/60"
           )}
         >
-          Whisper
+          Tasks
         </Link>
         <Link
           href="/preview/upload"
