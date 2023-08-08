@@ -15,7 +15,7 @@ const examples = [
   },
   {
     name: "Translation Table",
-    href: "/preview/upload",
+    href: "/preview/translate",
     code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/dashboard",
   },
 ];

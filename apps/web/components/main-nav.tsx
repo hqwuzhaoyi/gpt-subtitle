@@ -30,10 +30,10 @@ export function MainNav() {
           Tasks
         </Link>
         <Link
-          href="/preview/upload"
+          href="/preview/translate"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/preview/upload")
+            pathname?.startsWith("/preview/translate")
               ? "text-foreground"
               : "text-foreground/60"
           )}
