@@ -162,7 +162,7 @@ importers:
       eslint: 8.38.0
       eslint-config-next: 13.3.0
       jotai: ^2.3.0
-      lucide-react: ^0.221.0
+      lucide-react: ^0.265.0
       next: 13.4.8
       next-themes: ^0.2.1
       postcss: 8.4.22
@@ -207,7 +207,7 @@ importers:
       eslint: 8.38.0
       eslint-config-next: 13.3.0_mcioginrgbuoxxpmyisevjswdq
       jotai: 2.3.1_6kgymidexis2l23kiss4by6rqm
-      lucide-react: 0.221.0_react@18.2.0
+      lucide-react: 0.265.0_react@18.2.0
       next: 13.4.8_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_huavqdni4pobvfczobpbvo6vhq
       postcss: 8.4.22
@@ -9118,8 +9118,8 @@ packages:
     engines: {node: '>=16.14'}
     dev: false
 
-  /lucide-react/0.221.0_react@18.2.0:
-    resolution: {integrity: sha512-g99pn2/lBaCEAA0cbi4eaCO+3rY4mSfjCaDlo8Z30F0wk8MXoBXhCR1TaUS9cmNdOP9VGxgUpoB4qMg7/vyC8A==}
+  /lucide-react/0.265.0_react@18.2.0:
+    resolution: {integrity: sha512-znyvziBEUQ7CKR31GiU4viomQbJrpDLG5ac+FajwiZIavC3YbPFLkzQx3dCXT4JWJx/pB34EwmtiZ0ElGZX0PA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
