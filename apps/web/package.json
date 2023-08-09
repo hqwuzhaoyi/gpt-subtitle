@@ -37,7 +37,7 @@
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "jotai": "^2.3.0",
-    "lucide-react": "^0.221.0",
+    "lucide-react": "^0.265.0",
     "next": "13.4.8",
     "next-themes": "^0.2.1",
     "postcss": "8.4.22",
