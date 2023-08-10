@@ -22,7 +22,7 @@
   "dependencies": {
     "@bull-board/api": "^5.7.1",
     "@bull-board/express": "^5.7.1",
-    "@bull-board/nestjs": "^5.7.1",
+    "@bull-board/nestjs": "^5.8.0",
     "@nestjs/bull": "^10.0.0",
     "@nestjs/common": "^9.4.3",
     "@nestjs/config": "^2.3.4",
