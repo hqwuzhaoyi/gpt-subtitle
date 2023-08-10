@@ -19,7 +19,7 @@
   "devDependencies": {
     "@types/node": "^20.4.9",
     "prettier": "^2.8.8",
-    "turbo": "latest"
+    "turbo": "^1.10.12"
   },
   "packageManager": "pnpm@7.15.0"
 }
