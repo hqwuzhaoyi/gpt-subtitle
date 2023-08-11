@@ -23,7 +23,7 @@
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.9",
     "commander": "^10.0.1",
-    "eslint": "^7.32.0",
+    "eslint": "^8.46.0",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.6.2",
     "jest-presets": "workspace:*",
