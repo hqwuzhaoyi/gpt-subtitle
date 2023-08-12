@@ -7,9 +7,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "deploy:local": "npm run build && pm2 startOrRestart ecosystem.config.js --env local",
-    "deploy:dev": "npm run build && pm2 startOrRestart ecosystem.config.js --env development",
-    "deploy:prod": "npm run build && pm2 startOrRestart ecosystem.config.js --env production"
+    "deploy:local": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env local",
+    "deploy:dev": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env development",
+    "deploy:prod": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env production"
   },
   "dependencies": {
     "commander": "^10.0.1",
