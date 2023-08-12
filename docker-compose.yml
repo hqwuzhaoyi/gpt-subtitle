@@ -3,10 +3,11 @@ version: "3"
 services:
   api:
     container_name: api
-    image: hqwuzhaoyi/gpt-subtitle-api:latest
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
     restart: always
     volumes:
-      - /your_whisper_dir/whisper:/app/whisper
       - /your_uploads_dir/uploads:/app/uploads
     ports:
       - 3001:3001
@@ -16,7 +17,14 @@ services:
       - .env
   web:
     container_name: web
-    image: hqwuzhaoyi/gpt-subtitle-web:latest
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      args:
+        - WEB_PORT=3000
+        - SERVER_PORT=3001
+        - API_URL=http://localhost:3001
+        - STATIC_PATH=/static
     restart: always
     ports:
       - 3000:3000

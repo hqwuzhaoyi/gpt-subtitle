@@ -52,15 +52,18 @@ RUN yarn turbo run build --filter=api
 FROM base AS runner
 WORKDIR /app
 
-RUN mkdir -p /app/whisper/models
 RUN mkdir -p /app/uploads/video
 
 COPY --from=installer /entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
+COPY --from=installer /setup-whisper.sh /setup-whisper.sh
 COPY --from=installer /app .
+
+RUN chmod +x /entrypoint.sh
+RUN chmod +x /setup-whisper.sh
+
+RUN /setup-whisper.sh
 
 # Set entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD node apps/server/dist/main.js
+CMD  node apps/server/dist/main.js
