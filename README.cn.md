@@ -1,53 +1,86 @@
-# 使用 OpenAI 翻译字幕 :speech_balloon: :globe_with_meridians:
+# GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
 ![whisper_preview](pictures/whisper_preview.png)
-![preview](pictures/preview.png)
-![preview-translated](pictures/preview2.png)
 
-[当前开发任务](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
+[查看当前开发任务](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
 
-本项目使用 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain: 实现了字幕的线上翻译功能，会把字幕转换成对话进行翻译，支持多种语言翻译，可以方便地将字幕翻译成其它语言的字幕。 :artificial_satellite:
+GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain:，为你提供音频和视频的本地翻译功能。不仅能够将字幕转换成对话并进行翻译，而且支持多种语言的翻译，并能方便地将字幕翻译成其他语言。 :artificial_satellite:
 
-## 新功能 :sparkles:
+## :sparkles: 主要特性:
 
-接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在可以:
+通过接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在你可以:
 
-- 扫描文件夹中的视频和音频 :mag: :film_strip: :headphones:
-- 自动翻译字幕 :speech_balloon: :globe_with_meridians:
-- 生成新的字幕文件 :page_with_curl:
+- 扫描文件夹内的视频和音频，并转换成srt字幕文件 :mag: :film_strip: :headphones:
+- 利用优化算法进行多语言字幕文件的翻译 :speech_balloon: :globe_with_meridians:
+
+## :wrench: 技术栈
+
+- NextJS 13 (App Router)
+- NestJS
+- Jotai
+- Framer Motion
+- Radix UI
+- Socket.IO
+- TailwindCSS
 
 ## 运行环境
 
-本项目使用 Node.js 平台运行，需要先在本地安装 Node.js 环境。在安装 Node.js 环境后，你需要打开命令行工具，进入项目根目录，且安装 pnpm,然后安装项目所需的依赖：
+本项目基于 Node.js 平台，因此需要在本地首先安装 Node.js。安装完成后，请打开命令行工具，进入项目根目录，然后安装 pnpm 和项目所需的依赖：
 
 ```sh
 pnpm install
+sh setup-whisper.sh
 ```
+
+
 
 ## 使用方法
 
-### 1. 设置 API KEY
+### 设置 API KEY
 
-在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，你可以在根目录下新建一个名为 `.env` 的文件，并在其中添加如下配置：
+在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，可以在根目录下从`.env.template`拷贝一个名为 `.env` 的文件，并在其中添加如下配置：
 
 ```sh
 OPENAI_API_KEY= // OpenAI API KEY
-GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY
+GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY 可以不填
 BASE_URL= // OpenAI API URL
 WEB_PORT=3000 // 前端端口
-SERVER_PORT=3001 // 后端端口
-NEXT_PUBLIC_SERVER_PORT=3001 // 后端端口
-STATIC_PATH=/static // 默认静态资源路径
-LANGUAGE=Chinese // 默认翻译语言
-OUTPUT_SRT_THEN_TRANSLATE=true // 音频转自幕后是否需要翻译
+SERVER_PORT=3001  // 后端端口
+
+STATIC_PATH=/static // 静态文件路径
+OUTPUT_SRT_THEN_TRANSLATE=true // 是否先输出 SRT 文件再翻译
+LANGUAGE=Chinese // 输出 SRT 文件再翻译语言
+
+REDIS_PORT=6379 // Redis 端口
+REDIS_HOST=localhost // Redis 地址
+MYSQL_HOST=localhost // MySQL 地址
+MYSQL_PORT=3306 // MySQL 端口
+MYSQL_USER=root // MySQL 用户名
+MYSQL_PASSWORD=123456 // MySQL 密码
+MYSQL_DATABASE=gpt_subtitle // MySQL 数据库名
+
+API_URL=http://localhost:3001 // 后端 API 地址
+NEXT_PUBLIC_API_URL=http://localhost:3001 // 同上， 后端 API 地址
 ```
 
-将 `your_api_key` 替换成你申请到的 API KEY。
+### 运行程序
 
-### 2. 运行翻译任务
-
-### 启动 web 界面
+本地部署服务
 
 ```sh
-npm run dev
+npm run deploy:prod
+```
+
+
+
+## :whale: Docker 部署
+
+### :books: docker-compose
+
+1. change the args inside `docker-compose.yml`
+
+2. run command
+
+```bash
+docker-compose up -d
 ```
