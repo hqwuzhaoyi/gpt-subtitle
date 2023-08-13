@@ -12,7 +12,7 @@ export const taskSchema = z.object({
   language: z.nativeEnum(LanguageEnum),
   path: z.string().optional(),
   processingJobId: z.string().optional(),
-  poster: z.string().optional(),
+  poster: z.string().nullable().optional(),
 });
 
 export type Task = z.infer<typeof taskSchema>;
