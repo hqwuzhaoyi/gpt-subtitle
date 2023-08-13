@@ -38,9 +38,9 @@ export class VideoFileEntity extends FileEntity {
   )
   audioFile: Promise<AudioFileEntity>;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   fanart: string;
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   poster: string;
 }
 
