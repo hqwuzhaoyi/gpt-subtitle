@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+// import Image from "next/image";
 
 export function ImagePreviewModal() {
   const imagePreview = useImagePreview();
@@ -30,7 +30,7 @@ export function ImagePreviewModal() {
         <div className="grid gap-4 py-4">
           <div className="overflow-hidden rounded-md w-full mx-auto">
             {imagePreview.image && (
-              <Image
+              <img
                 src={imagePreview.image?.src}
                 alt={imagePreview.image?.title}
                 width={500}

@@ -86,12 +86,12 @@ export const columns: ColumnDef<Task>[] = [
                 }
               }}
             >
-              <Image
+              <img
                 width={50}
                 height={50}
                 src={row.original.poster}
                 alt={row.original.poster}
-                loading="lazy"
+
                 className="opacity-100 flex-1"
               />
             </div>
