@@ -49,7 +49,11 @@ SERVER_PORT=3001  // 后端端口
 
 STATIC_PATH=/static // 静态文件路径
 OUTPUT_SRT_THEN_TRANSLATE=true // 是否先输出 SRT 文件再翻译
-LANGUAGE=Chinese // 输出 SRT 文件再翻译语言
+LANGUAGE=zh-CN // 输出 SRT 文件再翻译语言
+TRANSLATE_DELAY=1500 // 调用翻译接口间的延迟
+TRANSLATE_GROUP=4 // 翻译句子进行分组翻译，一次最多翻译多少句
+TranslateModel=google # google or gpt3
+
 
 REDIS_PORT=6379 // Redis 端口
 REDIS_HOST=localhost // Redis 地址

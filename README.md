@@ -42,12 +42,16 @@ Before using the translation feature, you need to register an account on the [Op
 OPENAI_API_KEY= // OpenAI API KEY
 GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY 可以不填
 BASE_URL= // OpenAI API URL
-WEB_PORT=3000 // 前端端口
-SERVER_PORT=3001  // 后端端口
+WEB_PORT=3000 // web service port
+SERVER_PORT=3001  // backend service port
 
-STATIC_PATH=/static // 静态文件路径
-OUTPUT_SRT_THEN_TRANSLATE=true // 是否先输出 SRT 文件再翻译
-LANGUAGE=Chinese // 输出 SRT 文件再翻译语言
+STATIC_PATH=/static //  static file path
+OUTPUT_SRT_THEN_TRANSLATE=true // Whether to output SRT file before translation
+LANGUAGE=zh-CN // Output SRT file translation language
+TRANSLATE_DELAY=1500 // Delay between calls to translation interface
+TRANSLATE_GROUP=4 // Translate sentences into groups, up to how many sentences at a time
+TranslateModel=google # google or gpt3
+
 
 REDIS_PORT=6379 // Redis 端口
 REDIS_HOST=localhost // Redis 地址
@@ -84,6 +88,3 @@ npm run deploy:prod
    ```
    docker-compose up -d
    ```
-
-   
-
