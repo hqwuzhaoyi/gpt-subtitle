@@ -33,6 +33,7 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN ls /app
 COPY --from=builder /app/entrypoint.sh /entrypoint.sh
+COPY --from=builder /app/setup-whisper.sh /setup-whisper.sh
 RUN npm install -g pnpm
 RUN pnpm install --shamefully-hoist
 
@@ -61,7 +62,7 @@ COPY --from=installer /app .
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /setup-whisper.sh
 
-RUN /setup-whisper.sh
+RUN sh /setup-whisper.sh
 
 # Set entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
