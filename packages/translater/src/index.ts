@@ -17,7 +17,8 @@ export enum TranslateType {
 }
 
 export type TranslateOptions = {
-  apiKey?: string;
+  gpt3Key?: string;
+  googleKey?: string;
   baseUrl?: string;
   concurrency?: number;
 };
@@ -34,13 +35,90 @@ class TranslateModel {
   translate: Translator;
   options: TranslateOptions;
   concurrency: number = 5;
-  constructor(type = TranslateType.GOOGLE, options = {}) {
+  constructor(type = TranslateType.GOOGLE, options: TranslateOptions = {}) {
     if (type === TranslateType.GOOGLE) {
-      this.translate = new GoogleTranslator(options);
+      this.translate = new GoogleTranslator({
+        apiKey: options.googleKey,
+      });
+      console.log("google translate", options.googleKey);
     } else if (type === TranslateType.GPT3) {
-      this.translate = new GPTTranslator(options);
+      this.translate = new GPTTranslator({
+        apiKey: options.gpt3Key,
+      });
     }
     this.options = options;
+  }
+
+  async translateSrtStream(
+    filePath: string,
+    outputPath,
+    targetLanguage: string,
+    delayed = 0
+  ) {
+    return new Promise((resolve, reject) => {
+      const queue = new PQueue({ concurrency: this.concurrency });
+
+      const nodes = [];
+      const translationCache = {}; // 缓存对象
+      let translationCount = 0; // 翻译次数计数器
+      let translationCacheCount = 0; // 翻译次数计数器
+
+      const inputStream = fs.createReadStream(filePath, { encoding: "utf8" });
+      const writeStream = fs.createWriteStream(outputPath);
+      console.info("translateSrtStream: Reading from file has started");
+      inputStream
+        .pipe(parse())
+        .on("data", (node) => {
+          nodes.push(node);
+
+          queue.add(async () => {
+            // 检查缓存是否已经包含这个段落的翻译
+            if (translationCache[node.data.text]) {
+              node.data.text = translationCache[node.data.text];
+              translationCacheCount++;
+              console.info("Cached translation: ", node.data.text);
+            } else {
+              const translatedText = await this.translate.translate(
+                node.data.text,
+                targetLanguage
+              );
+              console.info("Translating: ", node.data.text);
+              console.info("Translated: ", translatedText);
+
+              // 将新的翻译添加到缓存中
+              translationCache[node.data.text] = translatedText;
+              node.data.text = translatedText;
+
+              // 增加翻译计数器
+              translationCount++;
+            }
+
+            await delay(delayed);
+          });
+        })
+        .on("error", (error) => {
+          console.error(error);
+          reject(error);
+        })
+        .on("finish", async () => {
+          await queue.onIdle();
+
+          console.info("Translation has finished", nodes);
+
+          writeStream.write(stringifySync(nodes, { format: "SRT" }) + "\n\n");
+          writeStream.end();
+
+          console.info("Writing to file has finished");
+
+          // 输出总的翻译次数
+          console.info(
+            `${filePath} Total translations performed: ${translationCount};`,
+            `Translation cache count: ${translationCacheCount} `
+          );
+
+          resolve(outputPath);
+        });
+    });
   }
 
   async translateSrtStreamGroup(
@@ -99,38 +177,42 @@ class TranslateModel {
             const nodesForThisGroup = group;
 
             queue.add(async () => {
-              const translatedText = await this.translate.translate(
-                textForThisGroup,
-                targetLanguage
-              );
-              translationCount++;
-
-              console.info("Translating: ", textForThisGroup);
-              console.info("Translated: ", translatedText);
-
-              const translatedSegments = translatedText.split("\n");
-
-              if (translatedSegments[translatedSegments.length - 1] === "") {
-                translatedSegments.pop();
-              }
-
-              if (nodesForThisGroup.length !== translatedSegments.length) {
-                console.error("Translation segment mismatch!");
-                return;
-              }
-
-              for (let i = 0; i < nodesForThisGroup.length; i++) {
-                const translatedSegment = removeHeaderNumberAndDot(
-                  translatedSegments[i]
+              try {
+                const translatedText = await this.translate.translate(
+                  textForThisGroup,
+                  targetLanguage
                 );
-                nodesForThisGroup[i].data.text = translatedSegment;
+                translationCount++;
 
-                // Update the cache
-                translationCache[nodesForThisGroup[i].data.text] =
-                  translatedSegment;
+                console.info("Translating: ", textForThisGroup);
+                console.info("Translated: ", translatedText);
+
+                const translatedSegments = translatedText.split("\n");
+
+                if (translatedSegments[translatedSegments.length - 1] === "") {
+                  translatedSegments.pop();
+                }
+
+                if (nodesForThisGroup.length !== translatedSegments.length) {
+                  console.error("Translation segment mismatch!");
+                  return;
+                }
+
+                for (let i = 0; i < nodesForThisGroup.length; i++) {
+                  const translatedSegment = removeHeaderNumberAndDot(
+                    translatedSegments[i]
+                  );
+                  nodesForThisGroup[i].data.text = translatedSegment;
+
+                  // Update the cache
+                  translationCache[nodesForThisGroup[i].data.text] =
+                    translatedSegment;
+                }
+
+                await delay(delayed);
+              } catch (error) {
+
               }
-
-              await delay(delayed);
             });
 
             // Reset the group and text
@@ -196,10 +278,10 @@ class TranslateModel {
 }
 
 // const test = new TranslateModel(TranslateType.GOOGLE, {
-//   apiKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+//   googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
 // })
 //   .translateSrtStreamGroup(
-//     resolve(__dirname, "../cjob-132-copy.srt"),
+//     resolve(__dirname, "../Cyberpunk.Edgerunners.S01E06.DUBBED.1080p.WEBRip.x265-RARBG.srt"),
 //     resolve(__dirname, "..", "output.srt"),
 //     "zh-CN",
 //     4,
