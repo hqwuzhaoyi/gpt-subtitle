@@ -20,7 +20,7 @@ export function ImagePreviewModal() {
   console.debug("imagePreview", imagePreview);
   return (
     <Dialog open={imagePreview.visible} onOpenChange={setImagePreviewVisible}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="box-content">
         <DialogHeader>
           <DialogTitle>{imagePreview.image?.title}</DialogTitle>
           <DialogDescription>
@@ -28,7 +28,7 @@ export function ImagePreviewModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="overflow-hidden rounded-md w-auto h-[60vh] mx-auto">
+          <div className="overflow-hidden rounded-md w-full mx-auto">
             {imagePreview.image && (
               <Image
                 src={imagePreview.image?.src}
@@ -36,7 +36,7 @@ export function ImagePreviewModal() {
                 width={500}
                 height={300}
                 className={cn(
-                  "h-auto w-auto object-cover transition-all hover:scale-105"
+                  "h-auto w-full object-cover transition-all hover:scale-105"
                   // aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
                 )}
               />
