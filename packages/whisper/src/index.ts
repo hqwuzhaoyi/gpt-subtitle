@@ -14,7 +14,7 @@ export const whisper = async (
   targetPath,
   videoLanguage,
   model = "ggml-medium.bin",
-  id = "main",
+  id = "main"
 ) => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
@@ -89,6 +89,7 @@ export const extractAudio = async (targetPath, aduioPath) => {
     const ffmpeg = child_process.spawn(
       "ffmpeg",
       [
+        "-y",
         "-i",
         `"${targetPath}"`,
         "-vn",
