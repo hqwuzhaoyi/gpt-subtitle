@@ -60,26 +60,32 @@ export class TranslateService {
     return new Promise((resolve, reject) => {
       const translateName = this.translateFileName(filename);
 
-      const existUrl = this.existFile(translateName, dir);
-      if (existUrl) {
-        resolve({
-          url: existUrl,
-          filename: translateName,
-          path: path.join(this.staticDir, dir, translateName),
-        });
-        return;
-      }
+      // const existUrl = this.existFile(translateName, dir);
+      // if (existUrl) {
+      //   resolve({
+      //     url: existUrl,
+      //     filename: translateName,
+      //     path: path.join(this.staticDir, dir, translateName),
+      //   });
+      //   return;
+      // }
 
-      const model = new TranslateModel(TranslateType.GPT3, {
-        baseUrl: process.env.BASE_URL,
-        apiKey: process.env.OPENAI_API_KEY,
-      })
+      const model = new TranslateModel(
+        (process.env.TranslateModel as TranslateType) ?? TranslateType.GPT3,
+        {
+          baseUrl: process.env.BASE_URL,
+          gpt3Key: process.env.OPENAI_API_KEY,
+          googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+        }
+      )
         .translateSrtStreamGroup(
           path.join(this.staticDir, dir, filename),
           path.join(this.staticDir, dir, translateName),
-          process.env.LANGUAGE ?? "Chinese",
-          4,
-          300
+          process.env.LANGUAGE ?? "zh-CN",
+          process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
+          process.env.TRANSLATE_DELAY
+            ? Number(process.env.TRANSLATE_DELAY)
+            : 500
         )
         .then(() => {
           resolve({
@@ -129,16 +135,22 @@ export class TranslateService {
         return;
       }
 
-      const model = new TranslateModel(TranslateType.GPT3, {
-        baseUrl: process.env.BASE_URL,
-        apiKey: process.env.OPENAI_API_KEY,
-      })
+      const model = new TranslateModel(
+        (process.env.TranslateModel as TranslateType) ?? TranslateType.GPT3,
+        {
+          baseUrl: process.env.BASE_URL,
+          gpt3Key: process.env.OPENAI_API_KEY,
+          googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+        }
+      )
         .translateSrtStreamGroup(
           subtitle.filePath,
           translatePath,
-          process.env.LANGUAGE ?? "Chinese",
-          4,
-          300
+          process.env.LANGUAGE ?? "zh-CN",
+          process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
+          process.env.TRANSLATE_DELAY
+            ? Number(process.env.TRANSLATE_DELAY)
+            : 500
         )
         .then(() => {
           resolve({
