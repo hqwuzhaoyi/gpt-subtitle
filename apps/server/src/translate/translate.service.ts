@@ -8,8 +8,6 @@ import { staticPath } from "utils";
 import { TranslateResult } from "shared-types";
 import { FilesService } from "@/files/files.service";
 
-console.debug("staticPath", staticPath);
-
 @Injectable()
 export class TranslateService {
   constructor(
