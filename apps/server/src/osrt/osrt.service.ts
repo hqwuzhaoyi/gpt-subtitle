@@ -87,7 +87,7 @@ export class OsrtService {
     try {
       // 这将会创建一个以`staticPath`为前缀的URL
       // 注意，这假设`filePath`始终在`uploadsRoot`目录或其子目录下
-      return path.join(staticPath, relativePath);
+      return staticPath + relativePath;
     } catch (error) {
       this.logger.error("filePathToUrl error");
       this.logger.error(error);
