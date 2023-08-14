@@ -1,5 +1,7 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
+[English](./README.md) | 简体中文
+
 ![whisper_preview](pictures/whisper_preview.png)
 
 [查看当前开发任务](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:

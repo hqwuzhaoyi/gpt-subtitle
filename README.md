@@ -1,5 +1,7 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
+English | [简体中文](./README-zh_CN.md)
+
 ![whisper_preview](pictures/whisper_preview.png)
 
 [View Current Development Task](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
@@ -74,8 +76,6 @@ Replace `your_api_key` with your own API key.
 ```sh
 npm run deploy:prod
 ```
-
-
 
 ## :whale: Docker Deployment
 
