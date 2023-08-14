@@ -168,7 +168,7 @@ importers:
       postcss: 8.4.27
       react: 18.2.0
       react-dom: 18.2.0
-      react-wrap-balancer: ^0.5.0
+      react-wrap-balancer: ^1.0.0
       shared-types: workspace:*
       socket.io-client: 4.7.2
       swr: ^2.2.0
@@ -213,7 +213,7 @@ importers:
       postcss: 8.4.27
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      react-wrap-balancer: 0.5.0_react@18.2.0
+      react-wrap-balancer: 1.0.0_react@18.2.0
       shared-types: link:../../packages/shared-types
       socket.io-client: 4.7.2
       swr: 2.2.0_react@18.2.0
@@ -8798,8 +8798,8 @@ packages:
       tslib: 2.6.1
     dev: false
 
-  /react-wrap-balancer/0.5.0_react@18.2.0:
-    resolution: {integrity: sha512-5vwe5QDczQ9zwAtv3iEVj8hdMbNwQtM/QlSNLJfDUzRE9noPtxevb+Kon916Mu2RUorCrAtashQ1F9BVBjdeZg==}
+  /react-wrap-balancer/1.0.0_react@18.2.0:
+    resolution: {integrity: sha512-yjDH+I8WGyDfh95gKhX/6ckfSBAltwQkxiYxtLPlyIRQNUVSjvz1uHR6Hpy+zHyOkJQw6GEC5RPglA41QXvzyw==}
     peerDependencies:
       react: '>=16.8.0 || ^17.0.0 || ^18'
     dependencies:
