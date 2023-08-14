@@ -53,6 +53,11 @@ RUN yarn turbo run build --filter=api
 FROM base AS runner
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p /app/uploads/video
 
 COPY --from=installer /entrypoint.sh /entrypoint.sh
