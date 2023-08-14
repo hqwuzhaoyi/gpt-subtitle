@@ -11,8 +11,6 @@ make
 
 bash ./models/download-ggml-model.sh base.en
 
-make
-
 ./main -f samples/jfk.wav
 
 # 编译 medium 配置
