@@ -31,7 +31,26 @@ This project runs on the Node.js platform, so you need to install Node.js on you
 
 ```sh
 pnpm install
+
+```
+
+Install whisper
+
+```sh
 sh setup-whisper.sh
+```
+
+Install ffmpeg, please install it yourself for other systems
+
+```sh
+brew install ffmpeg
+```
+
+Also need to install redis and mysql, please install other systems by yourself
+
+```sh
+brew install redis
+brew install mysql
 ```
 
 ## Usage
@@ -42,7 +61,7 @@ Before using the translation feature, you need to register an account on the [Op
 
 ```sh
 OPENAI_API_KEY= // OpenAI API KEY
-GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY 可以不填
+GOOGLE_TRANSLATE_API_KEY= // Google Translate API KEY
 BASE_URL= // OpenAI API URL
 WEB_PORT=3000 // web service port
 SERVER_PORT=3001  // backend service port
@@ -55,16 +74,16 @@ TRANSLATE_GROUP=4 // Translate sentences into groups, up to how many sentences a
 TranslateModel=google # google or gpt3
 
 
-REDIS_PORT=6379 // Redis 端口
-REDIS_HOST=localhost // Redis 地址
-MYSQL_HOST=localhost // MySQL 地址
-MYSQL_PORT=3306 // MySQL 端口
-MYSQL_USER=root // MySQL 用户名
-MYSQL_PASSWORD=123456 // MySQL 密码
-MYSQL_DATABASE=gpt_subtitle // MySQL 数据库名
+REDIS_PORT=6379 // Redis port
+REDIS_HOST=localhost // Redis address
+MYSQL_HOST=localhost // MySQL address
+MYSQL_PORT=3306 // MySQL port
+MYSQL_USER=root // MySQL username
+MYSQL_PASSWORD=123456 // MySQL password
+MYSQL_DATABASE=gpt_subtitle // MySQL database name
 
-API_URL=http://localhost:3001 // 后端 API 地址
-NEXT_PUBLIC_API_URL=http://localhost:3001 // 同上， 后端 API 地址
+API_URL=http://localhost:3001 // backend API address
+NEXT_PUBLIC_API_URL=http://localhost:3001 // same as above, backend API address
 ```
 
 Replace `your_api_key` with your own API key.

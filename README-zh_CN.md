@@ -12,7 +12,7 @@ GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [
 
 通过接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在你可以:
 
-- 扫描文件夹内的视频和音频，并转换成srt字幕文件 :mag: :film_strip: :headphones:
+- 扫描文件夹内的视频和音频，并转换成 srt 字幕文件 :mag: :film_strip: :headphones:
 - 利用优化算法进行多语言字幕文件的翻译 :speech_balloon: :globe_with_meridians:
 
 ## :wrench: 技术栈
@@ -31,10 +31,27 @@ GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [
 
 ```sh
 pnpm install
+
+```
+
+安装 whisper
+
+```sh
 sh setup-whisper.sh
 ```
 
+安装 ffmpeg,其他系统请自行安装
 
+```sh
+brew install ffmpeg
+```
+
+也需要安装 redis 和 mysql，其他系统请自行安装
+
+```sh
+brew install redis
+brew install mysql
+```
 
 ## 使用方法
 
@@ -76,8 +93,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3001 // 同上， 后端 API 地址
 ```sh
 npm run deploy:prod
 ```
-
-
 
 ## :whale: Docker 部署
 
