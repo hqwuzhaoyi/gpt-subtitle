@@ -379,8 +379,8 @@ export class OsrtService {
           return [];
         }
         job.progress(80);
-        const srtPath = getSrtFileName(audioPath);
-        fs.renameSync(audioPath + ".srt", srtPath);
+        const srtPath = getSrtFileName(finalAudioPath);
+        fs.renameSync(finalAudioPath + ".srt", srtPath);
         const subtitleFiles = await this.srtTranslate(
           videoDirPath,
           srtFile,
@@ -399,6 +399,7 @@ export class OsrtService {
         this.logger.warn(language, fileName, model);
       }
     } catch (error) {
+      return [];
       this.logger.error("findFileThenTranslate error", error);
     }
   }
