@@ -107,3 +107,27 @@ npm run deploy:prod
    ```
    docker-compose up -d
    ```
+
+## setup-whisper
+
+`setup-whisper.sh`, install whisper script
+
+You can choose the downloaded model by uncommenting before `make`
+
+```sh
+# more info about whisper.cpp: https://github.com/ggerganov/whisper.cpp
+# make tiny.en
+# make tiny
+# make base.en
+# make base
+# make small.en
+# make small
+# make medium.en
+# make medium
+# make large-v1
+# make large
+```
+
+The larger the model, the better the translation effect, but the slower it is. It is recommended to use the large model for languages other than English.
+
+Nvidia GPU can accelerate the operation of models, but CUDA needs to be installed. For details, see [whisper](https://github.com/ggerganov/whisper.cpp) project instructions.

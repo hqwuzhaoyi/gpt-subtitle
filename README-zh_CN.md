@@ -105,3 +105,27 @@ npm run deploy:prod
 ```bash
 docker-compose up -d
 ```
+
+## setup-whisper
+
+`setup-whisper.sh` ,安装 whisper 脚本
+
+可以选择下载的模型,把 make 之前的注释去掉即可
+
+```sh
+# more info about whisper.cpp: https://github.com/ggerganov/whisper.cpp
+# make tiny.en
+# make tiny
+# make base.en
+# make base
+# make small.en
+# make small
+# make medium.en
+# make medium
+# make large-v1
+# make large
+```
+
+模型越大，翻译效果越好，但是速度越慢，建议除了英语使用 large 模型
+
+Nvida GPU 可以加速模型的运行，但是需要安装 CUDA，详情见 [whisper](https://github.com/ggerganov/whisper.cpp) 项目的说明
