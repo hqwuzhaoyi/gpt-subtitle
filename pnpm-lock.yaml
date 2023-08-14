@@ -171,7 +171,7 @@ importers:
       react-wrap-balancer: ^0.5.0
       shared-types: workspace:*
       socket.io-client: 4.7.2
-      swr: ^2.2.0
+      swr: ^2.2.1
       tailwind-merge: ^1.13.2
       tailwindcss: 3.3.1
       tailwindcss-animate: ^1.0.6
@@ -216,7 +216,7 @@ importers:
       react-wrap-balancer: 0.5.0_react@18.2.0
       shared-types: link:../../packages/shared-types
       socket.io-client: 4.7.2
-      swr: 2.2.0_react@18.2.0
+      swr: 2.2.1_react@18.2.0
       tailwind-merge: 1.14.0
       tailwindcss: 3.3.1_postcss@8.4.27
       tailwindcss-animate: 1.0.6_tailwindcss@3.3.1
@@ -9537,11 +9537,12 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  /swr/2.2.0_react@18.2.0:
-    resolution: {integrity: sha512-AjqHOv2lAhkuUdIiBu9xbuettzAzWXmCEcLONNKJRba87WAefz8Ca9d6ds/SzrPc235n1IxWYdhJ2zF3MNUaoQ==}
+  /swr/2.2.1_react@18.2.0:
+    resolution: {integrity: sha512-KJVA7dGtOBeZ+2sycEuzUfVIP5lZ/cd0xjevv85n2YG0x1uHJQicjAtahVZL6xG3+TjqhbBqimwYzVo3saeVXQ==}
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
     dependencies:
+      client-only: 0.0.1
       react: 18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
