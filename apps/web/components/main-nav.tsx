@@ -24,10 +24,12 @@ export function MainNav() {
           href="/preview/tasks"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname === "/preview/tasks" ? "text-foreground" : "text-foreground/60"
+            pathname === "/preview/tasks"
+              ? "text-foreground"
+              : "text-foreground/60"
           )}
         >
-          Tasks
+          Whisper Tasks
         </Link>
         <Link
           href="/preview/translate"
@@ -38,7 +40,7 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-          Translate
+         Subtitle Translate
         </Link>
       </nav>
     </div>
