@@ -100,6 +100,14 @@ npm run deploy:prod
 
 1. change the args inside `docker-compose.yml`
 
+    ```text
+    args:
+         - WEB_PORT=3000
+         - SERVER_PORT=3001
+         - API_URL=http://localhost:3001
+         - STATIC_PATH=/static
+    ```
+
 2. run command
 
 ```bash
