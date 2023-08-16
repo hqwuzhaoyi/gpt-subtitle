@@ -9,9 +9,12 @@
     "test": "turbo run test",
     "deploy:local": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env local",
     "deploy:dev": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env development",
-    "deploy:prod": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env production"
+    "deploy:prod": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env production",
+    "publish-packages": "changeset version && changeset publish"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
+    "changeset": "^0.2.6",
     "commander": "^11.0.0",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.2.1"
