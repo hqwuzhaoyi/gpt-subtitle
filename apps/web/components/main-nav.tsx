@@ -40,7 +40,18 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-         Subtitle Translate
+          Subtitle Translate
+        </Link>
+        <Link
+          href={process.env.NEXT_PUBLIC_API_URL + "/queues"}
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            pathname?.includes("/queues")
+              ? "text-foreground"
+              : "text-foreground/60"
+          )}
+        >
+          Queues
         </Link>
       </nav>
     </div>
