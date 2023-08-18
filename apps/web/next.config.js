@@ -13,7 +13,9 @@ const nextConfig = {
 
     return config;
   },
-
+  images: {
+    domains: ["avatars.githubusercontent.com", "images.unsplash.com"],
+  },
   async rewrites() {
     return [
       {

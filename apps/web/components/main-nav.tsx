@@ -32,6 +32,17 @@ export function MainNav() {
           Whisper Tasks
         </Link>
         <Link
+          href="/preview/gallery"
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            pathname === "/preview/gallery"
+              ? "text-foreground"
+              : "text-foreground/60"
+          )}
+        >
+          Gallery
+        </Link>
+        <Link
           href="/preview/translate"
           className={cn(
             "transition-colors hover:text-foreground/80",
