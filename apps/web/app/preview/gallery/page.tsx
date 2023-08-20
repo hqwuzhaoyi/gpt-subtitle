@@ -11,6 +11,8 @@ import { listenNowAlbums, madeForYouAlbums } from "./data/albums";
 import { AlbumArtwork } from "./components/album-artwork";
 import { FileListResult } from "shared-types";
 import { isEmpty, ifElse } from "ramda";
+import { ModelSelect } from "@/components/ModelSelect";
+import { ActionBar } from "./components/action-bar";
 
 export const metadata: Metadata = {
   title: "Whisper Tasks",
@@ -46,7 +48,7 @@ export default async function TaskPage() {
   };
 
   const data = await queryData();
-  console.debug("data", data);
+
   return (
     <>
       <div className=" h-full flex-1 flex-col space-y-8 p-8 md:flex">
@@ -59,7 +61,11 @@ export default async function TaskPage() {
           </div>
           <div className="flex items-center space-x-2">{/* <UserNav /> */}</div>
         </div>
+
         <Separator className="my-4" />
+
+        <ActionBar />
+
         <div className="relative">
           <ScrollArea className="h-[600px] w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-14">

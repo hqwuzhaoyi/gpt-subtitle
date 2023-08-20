@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { outPutSrtList, autoStart } from "../api/osrt";
 import { Label } from "@/components/ui/label";
 import { LanguageSelect } from "./LanguageSelect";
-import { ModelSelect } from "./ModelSelect";
+import { ModelSelect } from "@/components/ModelSelect";
 import { ModelType } from "../data/types";
 import { LanguageEnum } from "shared-types";
 
@@ -44,7 +44,7 @@ export const Autostart = ({ models }: { models: ModelType[] }) => {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">Model</Label>
-                <ModelSelect value={model} onChange={setModel} />
+                <ModelSelect />
               </div>
             </div>
           </AlertDialogDescription>

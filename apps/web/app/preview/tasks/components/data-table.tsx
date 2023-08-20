@@ -27,17 +27,17 @@ import {
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
-import { outPutSrtList, autoStart, outPutSrtAudios } from "../api/osrt";
+import { outPutSrtList, outPutSrtAudios } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
-import { ModelSelect } from "./ModelSelect";
+import { ModelSelect } from "@/components/ModelSelect";
 import { Autostart } from "./Autostart";
-import { ModelType, TableType } from "../data/types";
+import { TableType } from "../data/types";
 import { Task } from "../data/schema";
 import { useModels } from "./hooks/useModels";
-import { useImagePreview } from "@/atoms/imagePreview";
 import { ImagePreviewModal } from "./ImagePreviewModal";
 import { LanguageEnum } from "shared-types";
+import { useWhisperModel } from "@/atoms/whisperModel";
 
 const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000");
 
@@ -124,7 +124,7 @@ export function DataTable<TData extends Task, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const { list } = useList(type);
   const { data: models = [], isLoading: modelsLoading } = useModels();
-  const [model, setModel] = React.useState<ModelType | undefined>(models?.[0]);
+  const { model } = useWhisperModel();
 
   const [data, setData] = React.useState(initData);
 
@@ -227,7 +227,7 @@ export function DataTable<TData extends Task, TValue>({
           Model
         </div>
         <div className="flex-auto pr-4">
-          <ModelSelect value={model} onChange={setModel} />
+          <ModelSelect />
         </div>
         <div className="flex-initial">
           <Autostart models={models} />

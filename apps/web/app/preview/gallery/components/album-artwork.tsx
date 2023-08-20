@@ -97,7 +97,7 @@ export function AlbumArtwork({
         </ContextMenuContent>
       </ContextMenu>
       <div className="space-y-1 text-sm">
-        <HoverCard>
+        <HoverCard openDelay={300}>
           <HoverCardTrigger>
             <h3 className="font-medium leading-none truncate cursor-default">
               {album.name}
