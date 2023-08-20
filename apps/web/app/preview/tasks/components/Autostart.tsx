@@ -15,7 +15,8 @@ import { outPutSrtList, autoStart } from "../api/osrt";
 import { Label } from "@/components/ui/label";
 import { LanguageSelect } from "./LanguageSelect";
 import { ModelSelect } from "./ModelSelect";
-import { LanguageEnum, ModelType } from "../data/types";
+import { ModelType } from "../data/types";
+import { LanguageEnum } from "shared-types";
 
 export const Autostart = ({ models }: { models: ModelType[] }) => {
   const [language, setLanguage] = React.useState<LanguageEnum>(

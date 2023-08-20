@@ -32,11 +32,12 @@ import useSWR from "swr";
 import { io } from "socket.io-client";
 import { ModelSelect } from "./ModelSelect";
 import { Autostart } from "./Autostart";
-import { LanguageEnum, ModelType, TableType } from "../data/types";
+import { ModelType, TableType } from "../data/types";
 import { Task } from "../data/schema";
 import { useModels } from "./hooks/useModels";
 import { useImagePreview } from "@/atoms/imagePreview";
 import { ImagePreviewModal } from "./ImagePreviewModal";
+import { LanguageEnum } from "shared-types";
 
 const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000");
 

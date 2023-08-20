@@ -2,10 +2,23 @@
   "name": "shared-types",
   "version": "1.1.0",
   "description": "",
-  "main": "index.ts",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.5.0",
+    "eslint": "^8.46.0",
+    "eslint-config-custom": "workspace:*",
+    "jest": "^29.6.2",
+    "jest-presets": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.1.6"
+  }
 }

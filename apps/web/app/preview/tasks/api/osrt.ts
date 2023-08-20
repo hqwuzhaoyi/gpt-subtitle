@@ -3,8 +3,9 @@ import {
   AudioListResult,
   CreateWhisperJobItem,
   FileListResult,
+  LanguageEnum,
 } from "shared-types";
-import { LanguageEnum, ModelType } from "../data/types";
+import { ModelType } from "../data/types";
 export const outPutSrt = async (
   language: string,
   id?: string,

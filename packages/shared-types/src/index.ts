@@ -1,6 +1,9 @@
 type FileItem = {
   id: number;
   fileName: string;
+  baseName: string;
+  extName: string;
+  filePath: string;
   path: string;
   status: string;
 };
@@ -14,6 +17,8 @@ type VideoFileItem = FileItem & {
   subtitle: FileItem[];
   isProcessing: boolean;
   processingJobId?: string;
+  poster?: string;
+  fanart?: string;
 };
 
 type AudioListItem = FileItem & {
@@ -37,3 +42,10 @@ export type TranslateResult = {
   filename: string;
   path: string;
 };
+
+export enum LanguageEnum {
+  English = "en",
+  Japanese = "ja",
+  Chinese = "cn",
+  Auto = "auto",
+}

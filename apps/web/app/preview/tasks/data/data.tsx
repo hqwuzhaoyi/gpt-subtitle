@@ -9,7 +9,7 @@ import {
   XCircle,
   Globe2,
 } from "lucide-react";
-import { LanguageEnum } from "./types";
+import { LanguageEnum } from "shared-types";
 
 export const labels = [
   {

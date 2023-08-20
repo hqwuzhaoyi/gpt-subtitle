@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LanguageEnum } from "./types";
+import { LanguageEnum } from "shared-types";
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
