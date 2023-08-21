@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LanguageSelect } from "./LanguageSelect";
+import { LanguageSelect } from "../../../../components/LanguageSelect";
 import { Slider } from "@/components/ui/slider";
 import {
   setImagePreview,

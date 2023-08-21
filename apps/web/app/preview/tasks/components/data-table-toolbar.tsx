@@ -10,7 +10,7 @@ import { DataTableViewOptions } from "./data-table-view-options";
 import { priorities, statuses } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Task } from "../data/schema";
-import { ModelType } from "../data/types";
+import { ModelType } from "@/types/index";
 import { createJobs, terminateAllJobs } from "../api/osrt";
 import { toast } from "@/components/ui/use-toast";
 

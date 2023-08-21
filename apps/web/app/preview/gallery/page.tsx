@@ -6,13 +6,9 @@ import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
-import { listenNowAlbums, madeForYouAlbums } from "./data/albums";
 import { AlbumArtwork } from "./components/album-artwork";
 import { FileListResult } from "shared-types";
 import { isEmpty, ifElse } from "ramda";
-import { ModelSelect } from "@/components/ModelSelect";
-import { ActionBar } from "./components/action-bar";
 
 export const metadata: Metadata = {
   title: "Whisper Tasks",
@@ -38,11 +34,14 @@ export default async function TaskPage() {
     return (data as FileListResult).map((item) => {
       return {
         name: item.fileName,
+        processingJobId: item.processingJobId,
+        id: item.id + "",
         cover: ifElse(
           isEmpty,
           () => item.poster,
           () => item.fanart
         )(item.fanart),
+        path: item.subtitle?.[0]?.path,
       };
     });
   };
@@ -63,8 +62,6 @@ export default async function TaskPage() {
         </div>
 
         <Separator className="my-4" />
-
-        <ActionBar />
 
         <div className="relative">
           <ScrollArea className="h-[600px] w-full">

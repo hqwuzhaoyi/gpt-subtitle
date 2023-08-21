@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useModels } from "./useModels";
+import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
 import { setWhisperModel, useWhisperModel } from "@/atoms/whisperModel";
 

@@ -2,6 +2,9 @@ export interface Album {
   name: string;
   artist?: string;
   cover?: string;
+  id?: string;
+  processingJobId?: string;
+  path?: string;
 }
 
 export const listenNowAlbums: Album[] = [

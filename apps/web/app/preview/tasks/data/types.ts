@@ -12,7 +12,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-export type ModelType = string;
+
 
 export interface TaskListItem {
   title: string;

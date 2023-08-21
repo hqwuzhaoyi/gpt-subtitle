@@ -5,7 +5,7 @@ import {
   FileListResult,
   LanguageEnum,
 } from "shared-types";
-import { ModelType } from "../data/types";
+import { ModelType } from "@/types/index";
 export const outPutSrt = async (
   language: string,
   id?: string,
