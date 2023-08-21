@@ -1,10 +1,16 @@
 {
-    "cSpell.words": [
-        "Osrt"
-    ],
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#372D10",
-        "titleBar.activeBackground": "#4D3E17",
-        "titleBar.activeForeground": "#FDFBF7"
+  "cSpell.words": ["Osrt"],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#372D10",
+    "titleBar.activeBackground": "#4D3E17",
+    "titleBar.activeForeground": "#FDFBF7"
+  },
+  "eslint.workingDirectories": [
+    {
+      "pattern": "./apps/*/"
+    },
+    {
+      "pattern": "./packages/*/"
     }
+  ]
 }
