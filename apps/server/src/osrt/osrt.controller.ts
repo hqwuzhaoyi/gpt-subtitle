@@ -76,6 +76,17 @@ export class OsrtController {
     return this.osrtService.translate(ln, id, model, priority, fileType);
   }
 
+  @Post(":id/translate")
+  translatePost(
+    @Param("id") id: string,
+    @Body("ln") ln: string,
+    @Body("model") model: string,
+    @Body("priority") priority: number,
+    @Body("fileType") fileType?: FileType
+  ) {
+    return this.osrtService.translate(ln, id, model, priority, fileType);
+  }
+
   @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {
     return this.osrtService.createJobs(createOsrtDto);
   }
