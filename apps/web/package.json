@@ -13,6 +13,7 @@
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-checkbox": "^1.0.4",
+    "@radix-ui/react-context-menu": "^2.1.4",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-hover-card": "^1.0.6",
@@ -27,6 +28,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@tanstack/react-table": "^8.9.3",
     "@types/node": "20.5.0",
+    "@types/ramda": "^0.29.3",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "autoprefixer": "10.4.15",
@@ -41,6 +43,7 @@
     "next": "13.4.16",
     "next-themes": "^0.2.1",
     "postcss": "8.4.27",
+    "ramda": "^0.29.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-wrap-balancer": "^1.0.0",
@@ -53,5 +56,8 @@
     "typescript": "^5.1.6",
     "utils": "workspace:*",
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:^"
   }
 }

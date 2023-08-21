@@ -5,19 +5,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ModelType } from "../data/types";
-import { useModels } from "./hooks/useModels";
+import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
+import { setWhisperModel, useWhisperModel } from "@/atoms/whisperModel";
 
-interface ModelSelectProps {
-  value?: ModelType;
-  onChange: (value: ModelType) => void;
-}
-
-export const ModelSelect = ({ value, onChange }: ModelSelectProps) => {
+export const ModelSelect = () => {
   const { data: models = [], isLoading: modelsLoading } = useModels();
+
+  const { model: value } = useWhisperModel();
   return (
-    <Select onValueChange={onChange} defaultValue={value}>
+    <Select onValueChange={setWhisperModel} defaultValue={value}>
       <SelectTrigger>
         {modelsLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

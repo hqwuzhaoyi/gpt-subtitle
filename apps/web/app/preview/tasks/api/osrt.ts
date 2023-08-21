@@ -3,8 +3,9 @@ import {
   AudioListResult,
   CreateWhisperJobItem,
   FileListResult,
+  LanguageEnum,
 } from "shared-types";
-import { LanguageEnum, ModelType } from "../data/types";
+import { ModelType } from "@/types/index";
 export const outPutSrt = async (
   language: string,
   id?: string,
@@ -13,9 +14,12 @@ export const outPutSrt = async (
   fileType?: string
 ): Promise<void> => {
   try {
-    const response = await request.get(
-      `/osrt/${language}/${id}/${model}/${priority}/${fileType}`
-    );
+    const response = await request.post(`/osrt/${id}/translate`, {
+      ln: language,
+      model,
+      priority,
+      fileType,
+    });
     return response.data;
   } catch (error) {
     console.error(error);

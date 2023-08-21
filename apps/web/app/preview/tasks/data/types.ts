@@ -1,11 +1,6 @@
 import { RowData } from "@tanstack/react-table";
+import { LanguageEnum } from "shared-types";
 
-export enum LanguageEnum {
-  English = "en",
-  Japanese = "ja",
-  Chinese = "cn",
-  Auto = "auto",
-}
 
 export type TableType = "video" | "audio";
 
@@ -17,7 +12,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-export type ModelType = string;
+
 
 export interface TaskListItem {
   title: string;

@@ -4,6 +4,7 @@ const nextConfig = {
   output: "standalone",
   experimental: {
     appDir: true,
+    serverActions: true,
   },
   webpack: (config) => {
     config.externals.push({
@@ -13,7 +14,9 @@ const nextConfig = {
 
     return config;
   },
-
+  images: {
+    domains: ["avatars.githubusercontent.com", "images.unsplash.com", "localhost"],
+  },
   async rewrites() {
     return [
       {

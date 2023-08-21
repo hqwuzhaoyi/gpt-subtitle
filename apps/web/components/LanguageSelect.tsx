@@ -9,8 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { labels, languages, priorities, statuses } from "../data/data";
-import { LanguageEnum } from "../data/types";
+import {
+  labels,
+  languages,
+  priorities,
+  statuses,
+} from "../app/preview/tasks/data/data";
+import { LanguageEnum } from "shared-types";
 
 export const LanguageSelect = ({
   value,

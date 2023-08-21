@@ -333,8 +333,8 @@ export class WatchService {
     };
 
     return {
-      poster: resultPath(poster),
-      fanart: resultPath(fanart),
+      poster: poster && resultPath(poster),
+      fanart: fanart && resultPath(fanart),
     };
   }
 
