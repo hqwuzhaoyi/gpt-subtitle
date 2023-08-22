@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - changeset
+      - changeset2
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
