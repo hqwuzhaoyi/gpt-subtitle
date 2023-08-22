@@ -7,7 +7,7 @@
     "changeset": "changeset",
     "changeset-publish": "changeset publish",
     "changeset-tag": "changeset tag",
-    "ci:publish": "pnpm build-package && git status && pnpm publish -r && pnpm changeset tag",
+    "ci:publish": "pnpm changeset tag",
     "ci:version": "pnpm changelog && pnpx changeset version && pnpm install --no-frozen-lockfile && git add .",
     "clean": "turbo run clean",
     "deploy:dev": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env development",
