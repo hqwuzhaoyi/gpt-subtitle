@@ -2,11 +2,12 @@
   "private": true,
   "scripts": {
     "build": "dotenv -- turbo run build",
+    "build-package": "dotenv -- turbo run build --filter='./packages/*'",
     "changelog": "echo 'generate master changelog' && conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "changeset": "changeset",
     "changeset-publish": "changeset publish",
     "changeset-tag": "changeset tag",
-    "ci:publish": "pnpm build && git status && pnpm publish -r && pnpm changeset tag",
+    "ci:publish": "pnpm build-package && git status && pnpm publish -r && pnpm changeset tag",
     "ci:version": "pnpm changelog && pnpx changeset version && pnpm install --no-frozen-lockfile && git add .",
     "clean": "turbo run clean",
     "deploy:dev": "./check-pm2.sh npm run build && pm2 startOrRestart ecosystem.config.js --env development",
