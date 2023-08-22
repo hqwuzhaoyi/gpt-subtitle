@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Set up NPM credentials
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
@@ -50,7 +50,7 @@ jobs:
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Create versions PR & prepare publish
         id: changesets
@@ -62,8 +62,8 @@ jobs:
           # Custom versioning script in package.json
           publish: pnpm ci:publish
           # Messages
-          commit: 'chore(deploy): Release'
-          title: 'chore(deploy): Release'
+          commit: "chore(deploy): Release"
+          title: "chore(deploy): Release"
         env:
           # npm publish token required for publishing. Set this in secrets
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
