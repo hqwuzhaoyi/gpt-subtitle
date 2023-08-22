@@ -1,5 +1,17 @@
 # web
 
+## 1.0.0
+
+### Major Changes
+
+- d1bc4bb: add Gallery Menu, move eslint to eslint-config-custom
+
+### Patch Changes
+
+- Updated dependencies [d1bc4bb]
+  - shared-types@2.0.0
+  - utils@0.1.1
+
 ## 0.1.1
 
 ### Patch Changes

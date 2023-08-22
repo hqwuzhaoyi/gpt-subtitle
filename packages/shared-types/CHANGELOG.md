@@ -1,5 +1,11 @@
 # shared-types
 
+## 2.0.0
+
+### Major Changes
+
+- d1bc4bb: add Gallery Menu, move eslint to eslint-config-custom
+
 ## 1.1.1
 
 ### Patch Changes
