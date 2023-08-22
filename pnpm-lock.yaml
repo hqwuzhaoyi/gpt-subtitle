@@ -162,7 +162,7 @@ importers:
       '@tanstack/react-table': ^8.9.3
       '@types/node': 20.5.0
       '@types/ramda': ^0.29.3
-      '@types/react': ^18.2.14
+      '@types/react': ^18.2.20
       '@types/react-dom': ^18.2.7
       autoprefixer: 10.4.15
       axios: ^1.4.0
@@ -345,7 +345,7 @@ importers:
   packages/ui:
     specifiers:
       '@types/jest': ^29.5.3
-      '@types/react': ^17.0.62
+      '@types/react': ^18.2.20
       '@types/react-dom': ^18.2.7
       eslint: ^8.46.0
       eslint-config-custom: workspace:*
@@ -360,7 +360,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@types/jest': 29.5.3
-      '@types/react': 17.0.64
+      '@types/react': 18.2.20
       '@types/react-dom': 18.2.7
       eslint: 8.47.0
       eslint-config-custom: link:../eslint-config-custom
@@ -3649,14 +3649,6 @@ packages:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
       '@types/react': 18.2.20
-
-  /@types/react/17.0.64:
-    resolution: {integrity: sha512-IlgbX/vglDTwrCRgad6fTCzOT+D/5C0xwuvrzfuqfhg9gJrkFqAGADpUFlEtqbrP1IEo9QLSbo41MaFfoIu9Aw==}
-    dependencies:
-      '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.3
-      csstype: 3.1.2
-    dev: true
 
   /@types/react/18.2.20:
     resolution: {integrity: sha512-WKNtmsLWJM/3D5mG4U84cysVY31ivmyw85dE84fOCk5Hx78wezB/XEjVPWl2JTZ5FkEeaTJf+VgUAUn3PE7Isw==}
