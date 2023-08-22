@@ -54,9 +54,10 @@ jobs:
 
       - name: Create versions PR & prepare publish
         id: changesets
-        uses: changesets/action@master
+        uses: changesets/action@v1
         # if: github.ref == 'refs/heads/master'
         with:
+          status: git status
           # Custom versioning script in package.json
           version: pnpm ci:version
           # Custom versioning script in package.json
