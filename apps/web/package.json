@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --passWithNoTests --watch",
+    "test:coverage": "jest --passWithNoTests --coverage"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -58,6 +61,15 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:^"
+    "@testing-library/jest-dom": "^6.0.1",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.3",
+    "eslint-config-custom": "workspace:^",
+    "jest": "^29.6.2",
+    "jest-environment-jsdom": "^29.6.2",
+    "jest-mock-axios": "^4.7.2",
+    "react-test-renderer": "^18.2.0"
   }
 }

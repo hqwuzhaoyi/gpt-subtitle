@@ -13,7 +13,6 @@ type ImagePreviewType = {
 export const imagePreviewAtom = atom({
   visible: false,
   image: null,
-  title: null,
 } as ImagePreviewType);
 
 export const useImagePreview = () => {
