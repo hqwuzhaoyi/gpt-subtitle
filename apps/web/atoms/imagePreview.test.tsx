@@ -30,7 +30,6 @@ describe("Image Preview Hooks and Actions", () => {
     expect(result.current).toEqual({
       visible: false,
       image: null,
-      title: null,
     });
   });
 
