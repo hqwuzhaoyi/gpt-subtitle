@@ -1,8 +1,8 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import { Translator } from "./types";
 
 export class GPTTranslator implements Translator {
-  model: OpenAIApi;
+  model: OpenAI;
   baseUrl: string;
   apiKey: string;
   constructor(params: { baseUrl?: string; apiKey?: string } = {}) {
@@ -12,11 +12,10 @@ export class GPTTranslator implements Translator {
   }
 
   create() {
-    const configuration = new Configuration({
-      basePath: this.baseUrl ?? process.env.BASE_URL,
+    const openai = new OpenAI({
+      baseURL: this.baseUrl ?? process.env.BASE_URL,
       apiKey: this.apiKey ?? process.env.OPENAI_API_KEY,
     });
-    const openai = new OpenAIApi(configuration);
 
     this.model = openai;
   }
@@ -36,7 +35,7 @@ export class GPTTranslator implements Translator {
 
   async translate(text, language = "Chinese") {
     try {
-      const completion = await this.model.createChatCompletion({
+      const completion = await this.model.chat.completions.create({
         model: "gpt-3.5-turbo",
         temperature: 0.6,
         messages: [
@@ -50,9 +49,9 @@ export class GPTTranslator implements Translator {
 
       console.log(
         "translate result: ",
-        completion.data.choices[0].message.content
+        completion.choices[0].message.content
       );
-      return completion.data.choices[0].message.content;
+      return completion.choices[0].message.content;
     } catch (error) {
       console.log(error);
     }

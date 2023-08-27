@@ -1,11 +1,8 @@
 import { GPTTranslator } from "./gpt3";
 import SubtitleProcessor from "./fileStream";
-// import dotenv from "dotenv";
-// dotenv.config();
-import fs from "fs";
-import { parse, map, stringifySync, filter } from "subtitle";
 
-import { resolve } from "path";
+import fs from "fs";
+import { parse, stringifySync, filter } from "subtitle";
 
 import PQueue from "p-queue";
 import { GoogleTranslator } from "./google";
@@ -210,9 +207,7 @@ class TranslateModel {
                 }
 
                 await delay(delayed);
-              } catch (error) {
-
-              }
+              } catch (error) {}
             });
 
             // Reset the group and text
@@ -277,8 +272,10 @@ class TranslateModel {
   }
 }
 
-// const test = new TranslateModel(TranslateType.GOOGLE, {
-//   googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+// const test = new TranslateModel(TranslateType.GPT3, {
+//   // googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+//   gpt3Key: process.env.OPENAI_API_KEY,
+//   baseUrl: process.env.BASE_URL,
 // })
 //   .translateSrtStreamGroup(
 //     resolve(__dirname, "../Cyberpunk.Edgerunners.S01E06.DUBBED.1080p.WEBRip.x265-RARBG.srt"),
