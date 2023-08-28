@@ -51,8 +51,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile && ls -a && git status
 
-      # - name: Run Tests
-      #   run: pnpm ci:test
+      - name: Run Tests
+        run: pnpm ci:test
 
       - name: Create versions PR & prepare publish
         id: changesets
