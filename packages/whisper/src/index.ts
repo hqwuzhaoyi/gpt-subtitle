@@ -8,7 +8,7 @@ import * as child_process from "child_process";
 // const __dirname = path.dirname(__filename);
 // const child = child_process.spawn("node", ["./path/to/other/script.js"]);
 
-let mainProcessMap = new Map<string, child_process.ChildProcess>();
+export let mainProcessMap = new Map<string, child_process.ChildProcess>();
 
 export const whisper = async (
   targetPath,
