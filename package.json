@@ -19,7 +19,7 @@
     "lint": "turbo run lint",
     "publish-packages": "changeset version && changeset publish",
     "sort": "npx sort-package-json",
-    "test": "pnpm with-env turbo run test --no-cache --continue -- --testLocationInResults",
+    "test": "pnpm with-env turbo run test --no-cache --continue -- --testLocationInResults --passWithNoTests ",
     "test:watch": "pnpm with-env turbo run test:watch --no-cache --continue",
     "with-env": "dotenv -e .env.local --"
   },
