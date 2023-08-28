@@ -13,7 +13,9 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "dev": "tsc -w",
     "lint": "eslint \"src/**/*.ts*\"",
-    "test": "jest"
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --passWithNoTests --watch",
+    "test:coverage": "jest --passWithNoTests --coverage"
   },
   "jest": {
     "preset": "jest-presets/jest/node"

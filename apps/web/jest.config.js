@@ -21,6 +21,7 @@ const customJestConfig = {
     "^components/(.*)$": "<rootDir>/components/$1",
     "^hooks/(.*)$": "<rootDir>/hooks/$1",
   },
+  coverageReporters: ["json-summary", "text", "lcov"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

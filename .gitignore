@@ -27,3 +27,5 @@ whisper
 .pnpm-store/
 ~/.npmrc
 .npmrc
+
+coverage/

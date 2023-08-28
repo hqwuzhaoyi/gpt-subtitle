@@ -3,7 +3,7 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: "jest-environment-jsdom",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   modulePathIgnorePatterns: [
     "<rootDir>/test/__fixtures__",
@@ -11,4 +11,5 @@ module.exports = {
     "<rootDir>/dist",
   ],
   preset: "ts-jest",
+  coverageReporters: ["json-summary", "text", "lcov"],
 };

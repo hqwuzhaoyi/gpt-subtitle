@@ -29,6 +29,9 @@
     "test:watch": {
       "cache": false
     },
+    "test:coverage": {
+      "dependsOn": ["^build"]
+    },
     "lint": {
       "dependsOn": ["^build"]
     },
