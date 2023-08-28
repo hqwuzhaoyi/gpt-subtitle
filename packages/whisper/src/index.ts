@@ -66,7 +66,6 @@ export const whisper = async (
 
 export const stopAllWhisper = () => {
   for (let [key, value] of mainProcessMap) {
-    console.log(key, value);
     value.kill("SIGTERM");
   }
   mainProcessMap.clear();
