@@ -5,5 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "ts-jest": "^29.1.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^29.6.4"
   }
 }
