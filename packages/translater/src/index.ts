@@ -1,10 +1,8 @@
-import { GPTTranslator } from "./gpt3";
-import SubtitleProcessor from "./fileStream";
-
 import fs from "fs";
 import { parse, stringifySync, filter } from "subtitle";
 
 import PQueue from "p-queue";
+import { GPTTranslator } from "./gpt3";
 import { GoogleTranslator } from "./google";
 import { Translator } from "./types";
 
@@ -286,4 +284,4 @@ class TranslateModel {
 //   )
 //   .catch(console.error);
 
-export { TranslateModel, SubtitleProcessor };
+export { TranslateModel };

@@ -47,13 +47,11 @@ export class GPTTranslator implements Translator {
         ],
       });
 
-      console.log(
-        "translate result: ",
-        completion.choices[0].message.content
-      );
+      console.log("translate result: ", completion.choices[0].message.content);
       return completion.choices[0].message.content;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 }
