@@ -58,7 +58,7 @@
     "tailwindcss-animate": "^1.0.6",
     "typescript": "^5.1.6",
     "utils": "workspace:*",
-    "zod": "^3.21.4"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.0.1",
