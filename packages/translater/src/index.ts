@@ -22,7 +22,7 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function removeHeaderNumberAndDot(segment) {
+export function removeHeaderNumberAndDot(segment) {
   return segment.replace(/^\d+\./, "").trim();
 }
 

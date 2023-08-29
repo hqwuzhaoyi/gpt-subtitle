@@ -1,4 +1,4 @@
-import { TranslateModel, TranslateType } from "../index";
+import { TranslateModel, TranslateType, removeHeaderNumberAndDot } from "../index";
 import * as fs from "fs";
 
 jest.mock("fs");
@@ -31,6 +31,15 @@ describe("TranslateModel", () => {
     translateModel = new TranslateModel(TranslateType.GOOGLE, {
       googleKey: "testGoogleKey",
     });
+  });
+
+  it("removeHeaderNumberAndDot should remove header number and dot", () => {
+    expect(removeHeaderNumberAndDot("1. some text")).toBe(
+      "some text"
+    );
+    expect(removeHeaderNumberAndDot("1. some text")).not.toBe(
+      "1. some text"
+    );
   });
 
   it("should translate SRT stream", async () => {
