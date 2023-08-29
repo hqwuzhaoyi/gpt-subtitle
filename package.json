@@ -21,8 +21,8 @@
     "lint": "turbo run lint",
     "publish-packages": "changeset version && changeset publish",
     "sort": "npx sort-package-json",
-    "test": "pnpm with-env turbo run test --no-cache --continue -- --testLocationInResults --passWithNoTests ",
-    "test:coverage": "pnpm with-env turbo run test:coverage --no-cache --continue --passWithNoTests ",
+    "test": "pnpm with-env turbo run test --no-cache --continue -- --testLocationInResults --passWithNoTests",
+    "test:coverage": "pnpm with-env turbo run test:coverage --no-cache --continue -- --passWithNoTests",
     "test:watch": "pnpm with-env turbo run test:watch --no-cache --continue",
     "with-env": "dotenv -e .env.local --"
   },
