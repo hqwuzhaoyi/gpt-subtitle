@@ -1,4 +1,8 @@
-import { TranslateModel, TranslateType, removeHeaderNumberAndDot } from "../index";
+import {
+  TranslateModel,
+  TranslateType,
+  removeHeaderNumberAndDot,
+} from "../index";
 import * as fs from "fs";
 
 jest.mock("fs");
@@ -34,15 +38,12 @@ describe("TranslateModel", () => {
   });
 
   it("removeHeaderNumberAndDot should remove header number and dot", () => {
-    expect(removeHeaderNumberAndDot("1. some text")).toBe(
-      "some text"
-    );
-    expect(removeHeaderNumberAndDot("1. some text")).not.toBe(
-      "1. some text"
-    );
+    expect(removeHeaderNumberAndDot("1. some text")).toBe("some text");
+    expect(removeHeaderNumberAndDot("1. some text")).not.toBe("1. some text");
   });
 
-  it("should translate SRT stream", async () => {
+  it("translateSrtStream should translate SRT stream", async () => {
+    let dataCallbacks = [];
     const fakeStream = {
       pipe: jest.fn().mockReturnThis(),
       on: jest.fn().mockImplementation((event, callback) => {
@@ -50,7 +51,7 @@ describe("TranslateModel", () => {
           callback();
         } else if (event === "data") {
           // 模拟一些数据，以触发translate调用
-          callback({ data: { text: "some text" } });
+          dataCallbacks.push(callback);
         }
         return fakeStream;
       }),
@@ -71,12 +72,81 @@ describe("TranslateModel", () => {
       .spyOn(translateModel.translate, "translate")
       .mockResolvedValue("translated text");
 
-    await translateModel.translateSrtStream("inputPath", "outputPath", "en");
+    for (let i = 0; i < 3; i++) {
+      for (const callback of dataCallbacks) {
+        callback({ data: { text: `some text ${i}` } });
+      }
+    }
+
+    const translatePromise = translateModel.translateSrtStream(
+      "inputPath",
+      "outputPath",
+      "en"
+    );
+
+    const allDataHandled = new Promise<void>((resolve) => {
+      let i = 0;
+      function triggerDataEvents() {
+        if (i < 10) {
+          const promises = dataCallbacks.map((callback) => {
+            return Promise.resolve(callback({ data: { text: `some text 0` } }));
+          });
+
+          Promise.all(promises).then(() => {
+            i++;
+            setTimeout(triggerDataEvents, 100); // 延迟 100ms 然后再次触发
+          });
+        } else {
+          resolve(); // 结束 Promise
+        }
+      }
+      triggerDataEvents();
+    });
+
+    await allDataHandled;
+
+    await translatePromise;
 
     expect(fakeStream.pipe).toHaveBeenCalled();
     expect(fakeStream.on).toHaveBeenCalledWith("finish", expect.any(Function));
     expect(fakeStream.write).toHaveBeenCalledWith(expect.any(String));
     expect(fakeStream.end).toHaveBeenCalled();
     expect(translateSpy).toHaveBeenCalled();
+  });
+
+  it("translateSrtStream should handle stream errors", async () => {
+    const fakeStream = {
+      pipe: jest.fn().mockReturnThis(),
+      on: jest.fn().mockImplementation((event, callback) => {
+        if (event === "error") {
+          callback(new Error("Stream error"));
+        }
+        return fakeStream;
+      }),
+      createReadStream: jest.fn().mockReturnThis(),
+      createWriteStream: jest.fn().mockReturnThis(),
+      write: jest.fn(),
+      end: jest.fn(),
+    };
+
+    jest
+      .spyOn(fs, "createReadStream")
+      .mockImplementation(() => fakeStream as any);
+    jest
+      .spyOn(fs, "createWriteStream")
+      .mockImplementation(() => fakeStream as any);
+
+    try {
+      await translateModel.translateSrtStream("inputPath", "outputPath", "en");
+    } catch (e) {
+      if (e instanceof Error) {
+        expect(e.message).toBe("Stream error");
+      }
+    }
+
+    expect(fakeStream.pipe).toHaveBeenCalled();
+    expect(fakeStream.on).toHaveBeenCalledWith("error", expect.any(Function));
+    expect(fakeStream.write).not.toHaveBeenCalled();
+    expect(fakeStream.end).not.toHaveBeenCalled();
   });
 });
