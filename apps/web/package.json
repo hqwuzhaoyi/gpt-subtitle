@@ -39,7 +39,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
-    "eslint": "8.46.0",
+    "eslint": "8.48.0",
     "eslint-config-next": "13.3.0",
     "jotai": "^2.4.1",
     "lucide-react": "^0.265.0",
