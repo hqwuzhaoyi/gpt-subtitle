@@ -27,7 +27,7 @@ jest.mock("../gpt3", () => {
   };
 });
 
-describe("TranslateModel", () => {
+describe("TranslateModel translateSrtStream function", () => {
   let translateModel: TranslateModel;
 
   beforeEach(() => {
@@ -35,6 +35,10 @@ describe("TranslateModel", () => {
     translateModel = new TranslateModel(TranslateType.GOOGLE, {
       googleKey: "testGoogleKey",
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("removeHeaderNumberAndDot should remove header number and dot", () => {
@@ -71,12 +75,6 @@ describe("TranslateModel", () => {
     const translateSpy = jest
       .spyOn(translateModel.translate, "translate")
       .mockResolvedValue("translated text");
-
-    for (let i = 0; i < 3; i++) {
-      for (const callback of dataCallbacks) {
-        callback({ data: { text: `some text ${i}` } });
-      }
-    }
 
     const translatePromise = translateModel.translateSrtStream(
       "inputPath",

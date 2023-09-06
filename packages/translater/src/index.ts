@@ -30,6 +30,9 @@ class TranslateModel {
   translate: Translator;
   options: TranslateOptions;
   concurrency: number = 5;
+
+  filterLastNode = null;
+
   constructor(type = TranslateType.GOOGLE, options: TranslateOptions = {}) {
     if (type === TranslateType.GOOGLE) {
       this.translate = new GoogleTranslator({
@@ -42,6 +45,21 @@ class TranslateModel {
       });
     }
     this.options = options;
+  }
+
+  filterFunc(node) {
+    if (node.type === "cue") {
+      if (
+        this.filterLastNode &&
+        node.data.text === this.filterLastNode.data.text
+      ) {
+        this.filterLastNode.data.end = node.data.end;
+        this.filterLastNode.merged = true;
+        return false;
+      }
+      this.filterLastNode = node;
+    }
+    return true;
   }
 
   async translateSrtStream(
@@ -139,23 +157,10 @@ class TranslateModel {
 
       let group = [];
       let textToTranslate = "";
-      let lastNode = null;
 
       inputStream
         .pipe(parse())
-        .pipe(
-          filter((node) => {
-            if (node.type === "cue") {
-              if (lastNode && node.data.text === lastNode.data.text) {
-                lastNode.data.end = node.data.end;
-                lastNode.merged = true;
-                return false; // 不将当前节点添加到结果数组中
-              }
-              lastNode = node;
-            }
-            return true;
-          })
-        )
+        .pipe(filter(this.filterFunc))
         .on("data", (node) => {
           nodes.push(node);
           group.push(node);
@@ -197,11 +202,11 @@ class TranslateModel {
                   const translatedSegment = removeHeaderNumberAndDot(
                     translatedSegments[i]
                   );
-                  nodesForThisGroup[i].data.text = translatedSegment;
-
                   // Update the cache
                   translationCache[nodesForThisGroup[i].data.text] =
                     translatedSegment;
+
+                  nodesForThisGroup[i].data.text = translatedSegment;
                 }
 
                 await delay(delayed);
