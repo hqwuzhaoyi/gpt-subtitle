@@ -183,7 +183,7 @@ importers:
       jest-environment-jsdom: ^29.6.2
       jest-mock-axios: ^4.7.2
       jotai: ^2.4.1
-      lucide-react: ^0.265.0
+      lucide-react: ^0.274.0
       next: 13.4.19
       next-themes: ^0.2.1
       postcss: 8.4.29
@@ -232,7 +232,7 @@ importers:
       eslint: 8.48.0
       eslint-config-next: 13.3.0_w2g2uv42be7wag4oipwkfv43p4
       jotai: 2.4.1_gq4reeurwxuj4hvyerswzzqthy
-      lucide-react: 0.265.0_react@18.2.0
+      lucide-react: 0.274.0_react@18.2.0
       next: 13.4.19_ng3hjngmeb53o2yidgazeud7lu
       next-themes: 0.2.1_m2l4knchnqa6bzxbbtfxlzoxdy
       postcss: 8.4.29
@@ -8977,8 +8977,8 @@ packages:
     engines: {node: '>=16.14'}
     dev: false
 
-  /lucide-react/0.265.0_react@18.2.0:
-    resolution: {integrity: sha512-znyvziBEUQ7CKR31GiU4viomQbJrpDLG5ac+FajwiZIavC3YbPFLkzQx3dCXT4JWJx/pB34EwmtiZ0ElGZX0PA==}
+  /lucide-react/0.274.0_react@18.2.0:
+    resolution: {integrity: sha512-qiWcojRXEwDiSimMX1+arnxha+ROJzZjJaVvCC0rsG6a9pUPjZePXSq7em4ZKMp0NDm1hyzPNkM7UaWC3LU2AA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
