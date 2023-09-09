@@ -333,26 +333,19 @@ export class WatchService {
     };
 
     return {
-      poster: poster && resultPath(poster),
-      fanart: fanart && resultPath(fanart),
+      poster: poster ? resultPath(poster) : null,
+      fanart: fanart ? resultPath(fanart) : null,
     };
   }
 
   async updateVideoImage(filePath: string) {
     const { poster, fanart } = this.getNfoImage(filePath);
-    // console.debug("poster", poster);
-    // console.debug("fanart", fanart);
-    // console.debug("filePath", filePath);
-    const existsInDb = await this.videoFilesRepository.findOne({
-      where: { filePath },
-    });
 
-    // console.debug("existsInDb", existsInDb);
     const result = await this.videoFilesRepository.update(
       { filePath },
       { poster, fanart }
     );
-    // console.debug("result", result);
+
     return result;
   }
 
