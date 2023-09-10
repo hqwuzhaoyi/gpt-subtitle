@@ -12,6 +12,9 @@ module.exports = {
     "<rootDir>/node_modules",
     "<rootDir>/dist",
   ],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/$1", // Adjust the right-hand side to match your project structure
+  },
   preset: "ts-jest",
   coverageReporters: ["json-summary", "text", "lcov"],
 };
