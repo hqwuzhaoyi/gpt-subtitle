@@ -1,9 +1,23 @@
-name: Release
+name: Build & Test
 
 on:
   push:
     branches:
       - master
+      - v[0-9]+.[0-9]+.x-staging
+      - v[0-9]+.[0-9]+.x
+    paths-ignore:
+      - README.md
+      - .github/**
+      - "!.github/workflows/build.yml"
+      - "!.github/actions/build-rust/action.yml"
+      - "!.github/actions/setup-node/action.yml"
+  pull_request:
+  merge_group:
+    branches:
+      - master
+      - v[0-9]+.[0-9]+.x-staging
+      - v[0-9]+.[0-9]+.x
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -12,9 +26,10 @@ env:
   PNPM_CACHE_FOLDER: .pnpm-store
 
 jobs:
-  release:
-    name: Release
+  unit-test:
+    name: Unit Test
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -40,32 +55,11 @@ jobs:
           node-version: 16.x
           cache: "pnpm"
 
-      - name: Set up NPM credentials
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: setup pnpm config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile && ls -a && git status
 
-      - name: Create versions PR & prepare publish
-        id: changesets
-        uses: changesets/action@v1
-        # if: github.ref == 'refs/heads/master'
-        with:
-          status: git status
-          # Custom versioning script in package.json
-          version: pnpm ci:version
-          # Custom versioning script in package.json
-          publish: pnpm ci:publish
-          # Messages
-          commit: "chore(deploy): Release"
-          title: "chore(deploy): Release"
-        env:
-          # npm publish token required for publishing. Set this in secrets
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # automatically available in actions
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Tests
+        run: pnpm ci:test
