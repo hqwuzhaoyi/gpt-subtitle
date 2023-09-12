@@ -19,7 +19,7 @@ export class TranslateService {
 
   async findAll() {}
 
-  fileStaticPath(fileName: string, dir = "") {
+  private fileStaticPath(fileName: string, dir = "") {
     const dirPath = dir ? dir.slice(1) + "/" : "";
 
     return `${staticPath}${dirPath}${fileName}`;
@@ -31,7 +31,7 @@ export class TranslateService {
     if (exists) {
       console.log("文件存在");
       console.log(
-        "file exist, return url" + `${this.fileStaticPath(fileName, dir)}`
+        "file exist, return url: " + `${this.fileStaticPath(fileName, dir)}`
       );
       return this.fileStaticPath(fileName, dir);
     } else {
@@ -40,7 +40,7 @@ export class TranslateService {
     }
   }
 
-  translateFileName(fileName) {
+  private translateFileName(fileName) {
     const fileObj = path.parse(fileName);
     const translateName =
       fileObj.name + "." + (process.env.LANGUAGE ?? "Chinese") + fileObj.ext;
@@ -99,7 +99,7 @@ export class TranslateService {
     });
   }
 
-  translateFilePath(filePath, translateName) {
+  private translateFilePath(filePath, translateName) {
     const fileDir = path.dirname(filePath);
     const translatePath = path.join(fileDir, translateName);
     return translatePath;
