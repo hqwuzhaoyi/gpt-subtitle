@@ -1,6 +1,7 @@
 module.exports = {
-  rootDir: "src",
+  rootDir: ".",
   roots: ["<rootDir>"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   transform: {
     "^.+\\.(t|j)s$": "ts-jest",
   },
@@ -13,7 +14,7 @@ module.exports = {
     "<rootDir>/dist",
   ],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/$1", // Adjust the right-hand side to match your project structure
+    "^@/(.*)$": "<rootDir>/src/$1", // Adjust the right-hand side to match your project structure
   },
   preset: "ts-jest",
   coverageReporters: ["json-summary", "text", "lcov"],
