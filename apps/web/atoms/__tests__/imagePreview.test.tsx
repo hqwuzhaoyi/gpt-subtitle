@@ -5,20 +5,13 @@ import {
   setImagePreviewImage,
   setImagePreview,
   imagePreviewAtom,
-} from "./imagePreview";
-import { atom } from "jotai";
+} from "../imagePreview";
 import { jotaiStore } from "lib/store"; // 假设这样引入
 import { Provider } from "jotai";
 
 const wrapper = ({ children }: { children: any }) => (
   <Provider store={jotaiStore}>{children}</Provider>
 );
-
-// jest.mock("lib/store", () => ({
-//   jotaiStore: {
-//     set: jest.fn(),
-//   },
-// }));
 
 describe("Image Preview Hooks and Actions", () => {
   it("should set form name from server", () => {
