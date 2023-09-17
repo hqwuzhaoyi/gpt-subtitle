@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { PlusCircle } from "lucide-react";
+import { CheckCircle2, PlusCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -52,7 +52,7 @@ export function AlbumArtwork({
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-md">
+          <div className="overflow-hidden rounded-md relative">
             {album.cover && (
               <Image
                 src={album.cover}
@@ -65,6 +65,9 @@ export function AlbumArtwork({
                 )}
               />
             )}
+            {album.path && (
+              <CheckCircle2 className="absolute right-1 top-1  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
+            )}
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
@@ -73,7 +76,7 @@ export function AlbumArtwork({
               setOpen(true);
             }}
           >
-            Start
+            {album.path ? "Restart" : "Start"}
           </ContextMenuItem>
           {album.processingJobId && (
             <ContextMenuItem

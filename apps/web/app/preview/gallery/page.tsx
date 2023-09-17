@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { AlbumArtwork } from "./components/album-artwork";
 import { FileListResult } from "shared-types";
-import { isEmpty, ifElse } from "ramda";
+import { isNil, ifElse } from "ramda";
 
 export const metadata: Metadata = {
   title: "Whisper Tasks",
@@ -25,14 +25,14 @@ export default async function TaskPage() {
 
     const jsonResponse = await response.json(); // 等待JSON解析
     const { data } = jsonResponse; // 从解析后的JSON中解构data
-
+    console.debug(data);
     return (data as FileListResult).map((item) => {
       return {
         name: item.fileName,
         processingJobId: item.processingJobId,
         id: item.id + "",
         cover: ifElse(
-          isEmpty,
+          isNil,
           () => item.poster,
           () => item.fanart
         )(item.fanart),
