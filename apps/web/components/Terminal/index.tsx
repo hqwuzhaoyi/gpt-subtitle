@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
 import { ScrollArea } from "../ui/scroll-area";
@@ -11,6 +11,8 @@ interface TerminalProps {
 
 export function Terminal({ jobId }: TerminalProps) {
   const [messages, setMessages] = useState<string[]>([]);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const eventSource = new EventSource(
@@ -26,6 +28,13 @@ export function Terminal({ jobId }: TerminalProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const element = scrollContainerRef.current;
+      element.scrollTop = element.scrollHeight; // 在每次messages更新后，将滚动条设置到底部
+    }
+  }, [messages]);
+
   return (
     <aside className="bg-black text-white p-6 rounded-lg w-full   font-mono">
       <div className="flex justify-between items-center">
@@ -36,8 +45,15 @@ export function Terminal({ jobId }: TerminalProps) {
         </div>
         <p className="text-sm">bash</p>
       </div>
-      <ScrollArea className="h-72  rounded-md leading-normal">
-        {/* <div className="mt-4 h-[18rem] overflow-auto"> */}
+      {/* <ScrollArea className="h-72  rounded-md leading-normal"> */}
+      {/* <div ref={scrollContainerRef}> */}
+      <div
+        className={clsx(
+          "mt-4 h-[18rem] overflow-auto",
+          styles["scrollbar"]
+        )}
+        ref={scrollContainerRef}
+      >
         {messages.map((message, index) => (
           <p
             key={index}
@@ -47,7 +63,8 @@ export function Terminal({ jobId }: TerminalProps) {
           </p> // 渲染每个从后端推送过来的消息
         ))}
         {/* </div> */}
-      </ScrollArea>
+      </div>
+      {/* // </ScrollArea> */}
     </aside>
   );
 }

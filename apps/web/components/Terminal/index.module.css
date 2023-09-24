@@ -50,3 +50,20 @@
     opacity: 1;
   }
 }
+
+/* ScrollableComponent.module.css */
+.scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: black;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
