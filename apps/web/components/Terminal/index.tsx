@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
+import { ScrollArea } from "../ui/scroll-area";
 
-export function Terminal() {
+interface TerminalProps {
+  jobId: string;
+}
+
+export function Terminal({ jobId }: TerminalProps) {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://localhost:3001/osrt/stream");
+    const eventSource = new EventSource(
+      "http://localhost:3001/osrt/stream?jobId=" + jobId
+    ); // 创建一个新的EventSource实例，指向后端的SSE流
 
     eventSource.onmessage = ({ data }) => {
       const parsedData = JSON.parse(data);
@@ -20,7 +27,7 @@ export function Terminal() {
   }, []);
 
   return (
-    <aside className="bg-black text-white p-6 rounded-lg w-full max-w-lg font-mono">
+    <aside className="bg-black text-white p-6 rounded-lg w-full   font-mono">
       <div className="flex justify-between items-center">
         <div className="flex space-x-2 text-red-500">
           <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -29,7 +36,8 @@ export function Terminal() {
         </div>
         <p className="text-sm">bash</p>
       </div>
-      <div className="mt-4">
+      <ScrollArea className="h-72  rounded-md leading-normal">
+        {/* <div className="mt-4 h-[18rem] overflow-auto"> */}
         {messages.map((message, index) => (
           <p
             key={index}
@@ -38,7 +46,8 @@ export function Terminal() {
             {message}
           </p> // 渲染每个从后端推送过来的消息
         ))}
-      </div>
+        {/* </div> */}
+      </ScrollArea>
     </aside>
   );
 }

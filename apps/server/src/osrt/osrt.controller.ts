@@ -8,12 +8,14 @@ import {
   Delete,
   Req,
   Sse,
+  Query,
 } from "@nestjs/common";
 import { OsrtService } from "./osrt.service";
 import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { Request } from "express";
-import { Observable, interval, map } from "rxjs";
+import { Observable, filter, interval, map } from "rxjs";
+import { eventSubject } from "./event.subject";
 
 @Controller("osrt")
 export class OsrtController {
@@ -104,17 +106,12 @@ export class OsrtController {
   }
 
   @Sse("stream")
-  stream() {
-    return new Observable((observer) => {
-      observer.next({ data: { msg: "aaa" } });
-
-      setTimeout(() => {
-        observer.next({ data: { msg: "bbb" } });
-      }, 2000);
-
-      setTimeout(() => {
-        observer.next({ data: { msg: "ccc" } });
-      }, 5000);
-    });
+  streamEvents(@Query("jobId") jobId: string): Observable<any> {
+    return eventSubject.asObservable().pipe(
+      filter((event) => event.jobId === jobId),
+      map((data) => {
+        return { data };
+      })
+    );
   }
 }

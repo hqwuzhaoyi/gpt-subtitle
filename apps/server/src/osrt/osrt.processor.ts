@@ -7,6 +7,7 @@ import { Logger } from "@nestjs/common";
 import { FilesService } from "@/files/files.service";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { WatchService } from "@/files/watch/watch.service";
+import { eventSubject } from "./event.subject";
 
 @Processor("audio")
 export class QueueProcessor {
@@ -34,6 +35,12 @@ export class QueueProcessor {
     this.osrtGateway.notifyClient(job.id as string, "start", job.data);
     const { language, id, model, fileType } = job.data;
     try {
+      console.debug("job.data", job.data);
+      eventSubject.next({
+        msg: `translation Job ${job.id}: ${JSON.stringify(job.data)}`,
+        jobId: String(job.id),
+      });
+
       let videoPath, audioPath, srtPath, fileName, srtFile;
       if (fileType === "audio") {
         const audioFileEntity = await this.filesService.findAudioFile(id);
@@ -55,9 +62,14 @@ export class QueueProcessor {
         throw new Error("Unsupported file type " + fileType);
       }
 
-      this.logger.log(
-        `Start processing job... ${job.id} ${language} ${id} ${model}`
-      );
+      const startLog = `Start processing job... ${job.id} ${language} ${id} ${model}`;
+
+      this.logger.log(startLog);
+
+      eventSubject.next({
+        msg: startLog,
+        jobId: String(job.id),
+      });
 
       const subTitle = await this.osrtService.findFileThenTranslate(
         {
@@ -77,6 +89,13 @@ export class QueueProcessor {
       this.osrtGateway.notifyClient(job.id as string, "completed", {
         ...job.data,
         subTitle,
+      });
+
+      eventSubject.next({
+        msg: `Finished processing job... ${
+          job.id
+        } ${language} ${id} ${model} ${JSON.stringify(job.data)}`,
+        jobId: String(job.id),
       });
 
       // 你可以通过 job.progress 更新任务进度

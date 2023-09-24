@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p $WEB_PORT",
     "build": "next build",
-    "start": "next start",
+    "start": "next start  -p $WEB_PORT",
     "lint": "next lint",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",

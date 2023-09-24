@@ -10,11 +10,22 @@ import * as child_process from "child_process";
 
 export let mainProcessMap = new Map<string, child_process.ChildProcess>();
 
-export const whisper = async (
+interface WhisperInterface {
+  (
+    targetPath: string,
+    videoLanguage: string,
+    model?: string,
+    id?: string,
+    sendEvent?: (data) => void
+  ): Promise<number | string>;
+}
+
+export const whisper: WhisperInterface = async (
   targetPath,
   videoLanguage,
   model = "ggml-medium.bin",
-  id = "main"
+  id = "main",
+  sendEvent
 ) => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
@@ -42,8 +53,16 @@ export const whisper = async (
       ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
     );
-    mainProcess.stdout.pipe(process.stdout);
-    mainProcess.stderr.pipe(process.stderr);
+    mainProcess.stdout.on("data", (data) => {
+      console.log(`stdout: ${data}`);
+
+      sendEvent(data);
+    });
+
+    mainProcess.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+      sendEvent(data);
+    });
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
       mainProcess = null;

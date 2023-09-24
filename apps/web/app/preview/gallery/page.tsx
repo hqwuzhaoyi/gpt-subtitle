@@ -13,12 +13,16 @@ export const metadata: Metadata = {
 
 export default async function TaskPage() {
   const queryData = async () => {
-    const response = await fetch("http://localhost:3000/preview/gallery/api", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:${process.env.WEB_PORT}/preview/gallery/api`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-cache",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -26,7 +30,9 @@ export default async function TaskPage() {
 
     const jsonResponse = await response.json(); // 等待JSON解析
     const { data } = jsonResponse; // 从解析后的JSON中解构data
+
     console.debug(data);
+
     return (data as FileListResult).map((item) => {
       return {
         name: item.fileName,
@@ -62,7 +68,6 @@ export default async function TaskPage() {
 
           <Separator className="my-4" />
 
-          <Terminal />
           <div className="relative">
             <ScrollArea className="h-[600px] w-full">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-14">
