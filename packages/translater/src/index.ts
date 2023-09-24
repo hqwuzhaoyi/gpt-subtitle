@@ -160,7 +160,7 @@ class TranslateModel {
 
       inputStream
         .pipe(parse())
-        .pipe(filter(this.filterFunc))
+        .pipe(filter((node) => this.filterFunc(node)))
         .on("data", (node) => {
           nodes.push(node);
           group.push(node);
