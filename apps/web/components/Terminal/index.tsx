@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
 import { ScrollArea } from "../ui/scroll-area";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
 
 interface TerminalProps {
   jobId: string;
@@ -11,7 +13,7 @@ interface TerminalProps {
 
 export function Terminal({ jobId }: TerminalProps) {
   const [messages, setMessages] = useState<string[]>([]);
-
+  const [refresh, setRefresh] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,14 +28,14 @@ export function Terminal({ jobId }: TerminalProps) {
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [jobId]);
 
   useEffect(() => {
-    if (scrollContainerRef.current) {
+    if (scrollContainerRef.current && refresh) {
       const element = scrollContainerRef.current;
       element.scrollTop = element.scrollHeight; // 在每次messages更新后，将滚动条设置到底部
     }
-  }, [messages]);
+  }, [messages, refresh]);
 
   return (
     <aside className="bg-black text-white p-6 rounded-lg w-full   font-mono">
@@ -43,15 +45,19 @@ export function Terminal({ jobId }: TerminalProps) {
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
           <div className="w-3 h-3 rounded-full bg-green-500" />
         </div>
-        <p className="text-sm">bash</p>
+        <div className="flex gap-2 items-center">
+          <div className="flex items-center space-x-2">
+            <Switch checked={refresh} onCheckedChange={setRefresh} />
+            <Label htmlFor="airplane-mode">refresh</Label>
+          </div>
+
+          {/* <p className="text-sm">bash</p> */}
+        </div>
       </div>
       {/* <ScrollArea className="h-72  rounded-md leading-normal"> */}
       {/* <div ref={scrollContainerRef}> */}
       <div
-        className={clsx(
-          "mt-4 h-[18rem] overflow-auto",
-          styles["scrollbar"]
-        )}
+        className={clsx("mt-4 h-[18rem] overflow-auto", styles["scrollbar"])}
         ref={scrollContainerRef}
       >
         {messages.map((message, index) => (
