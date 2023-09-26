@@ -6,7 +6,7 @@ import { FilesService } from "@/files/files.service";
 import * as path from "path";
 import { staticPath, videoDirPath } from "utils";
 import { WatchService } from "@/files/watch/watch.service";
-
+import * as url from "url";
 @Injectable()
 export class SubtitleService {
   constructor(
@@ -30,7 +30,10 @@ export class SubtitleService {
     try {
       // 这将会创建一个以`staticPath`为前缀的URL
       // 注意，这假设`filePath`始终在`uploadsRoot`目录或其子目录下
-      return path.join(staticPath, relativePath);
+      return url.resolve(
+        staticPath,
+        relativePath
+      );
     } catch (error) {
       this.logger.error("filePathToUrl error");
       this.logger.error(error);
