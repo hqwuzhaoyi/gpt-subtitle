@@ -1,5 +1,7 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
+<div align="center">
+
 [![Build & Test](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml)
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle?ref=badge_shield&issueType=license)
@@ -11,6 +13,7 @@
 [查看当前开发任务](https://hqwuzhaoyi.notion.site/gpt-subtitle-b1eed463063a484f93bdfca91277fc3a?pvs=4) :clipboard:
 
 GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain:，为你提供音频和视频的本地翻译功能。不仅能够将字幕转换成对话并进行翻译，而且支持多种语言的翻译，并能方便地将字幕翻译成其他语言。 :artificial_satellite:
+</div>
 
 ## :sparkles: 主要特性:
 
@@ -64,19 +67,26 @@ brew install mysql
 在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，可以在根目录下从`.env.template`拷贝一个名为 `.env` 的文件，并在其中添加如下配置：
 
 ```sh
-OPENAI_API_KEY= // OpenAI API KEY
-GOOGLE_TRANSLATE_API_KEY= // Google 翻译 API KEY 可以不填
-BASE_URL= // OpenAI API URL
-WEB_PORT=3000 // 前端端口
-SERVER_PORT=3001  // 后端端口
+OPENAI_API_KEY= # OpenAI API KEY
+GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
+BASE_URL= # OpenAI API URL
+WEB_PORT=3000 # Front-end port
+SERVER_PORT=3001  # Backend port
 
-STATIC_PATH=/static // 静态文件路径
-OUTPUT_SRT_THEN_TRANSLATE=true // 是否先输出 SRT 文件再翻译
-LANGUAGE=zh-CN // 输出 SRT 文件再翻译语言
-TRANSLATE_DELAY=1500 // 调用翻译接口间的延迟
-TRANSLATE_GROUP=4 // 翻译句子进行分组翻译，一次最多翻译多少句
+STATIC_PATH=/static # Static file path
+OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
+LANGUAGE=zh-CN # Output SRT file and then translate the language
+TRANSLATE_DELAY=1500 # Delay between calling translation interface
+TRANSLATE_GROUP=4 # Translate sentences for grouping translation, how many sentences can be translated at most at a time
 TranslateModel=google # google or gpt3
 
+REDIS_PORT=6379 # Redis port
+REDIS_HOST=subtitle_redis # Redis address
+MYSQL_HOST=subtitle_mysql # MySQL address
+MYSQL_PORT=3306 # MySQL port
+MYSQL_USER=root # MySQL user
+MYSQL_PASSWORD=123456 # MySQL passowrd
+MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
 API_URL=http://localhost:3001 # Backend API address
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
