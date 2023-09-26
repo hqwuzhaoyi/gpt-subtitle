@@ -1,8 +1,10 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
-[![Build & Test](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml)
+<div align="center">
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle?ref=badge_shield&issueType=license)
+[![Build & Test](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle?ref=badge_shield&issueType=license)
+
+</div>
 
 English | [简体中文](./README-zh_CN.md)
 
@@ -64,30 +66,29 @@ brew install mysql
 Before using the translation feature, you need to register an account on the [OpenAI official website](https://beta.openai.com/signup/) and apply for an API KEY. After obtaining the API KEY, you can copy a `.env` file from `.env.template` in the root directory and add the following configuration:
 
 ```sh
-OPENAI_API_KEY= // OpenAI API KEY
-GOOGLE_TRANSLATE_API_KEY= // Google Translate API KEY
-BASE_URL= // OpenAI API URL
-WEB_PORT=3000 // web service port
-SERVER_PORT=3001  // backend service port
+OPENAI_API_KEY= # OpenAI API KEY
+GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
+BASE_URL= # OpenAI API URL
+WEB_PORT=3000 # Front-end port
+SERVER_PORT=3001  # Backend port
 
-STATIC_PATH=/static //  static file path
-OUTPUT_SRT_THEN_TRANSLATE=true // Whether to output SRT file before translation
-LANGUAGE=zh-CN // Output SRT file translation language
-TRANSLATE_DELAY=1500 // Delay between calls to translation interface
-TRANSLATE_GROUP=4 // Translate sentences into groups, up to how many sentences at a time
+STATIC_PATH=/static # Static file path
+OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
+LANGUAGE=zh-CN # Output SRT file and then translate the language
+TRANSLATE_DELAY=1500 # Delay between calling translation interface
+TRANSLATE_GROUP=4 # Translate sentences for grouping translation, how many sentences can be translated at most at a time
 TranslateModel=google # google or gpt3
 
+REDIS_PORT=6379 # Redis port
+REDIS_HOST=subtitle_redis # Redis address
+MYSQL_HOST=subtitle_mysql # MySQL address
+MYSQL_PORT=3306 # MySQL port
+MYSQL_USER=root # MySQL user
+MYSQL_PASSWORD=123456 # MySQL passowrd
+MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
-REDIS_PORT=6379 // Redis port
-REDIS_HOST=localhost // Redis address
-MYSQL_HOST=localhost // MySQL address
-MYSQL_PORT=3306 // MySQL port
-MYSQL_USER=root // MySQL username
-MYSQL_PASSWORD=123456 // MySQL password
-MYSQL_DATABASE=gpt_subtitle // MySQL database name
-
-API_URL=http://localhost:3001 // backend API address
-NEXT_PUBLIC_API_URL=http://localhost:3001 // same as above, backend API address
+API_URL=http://localhost:3001 # Backend API address
+NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
 ```
 
 Replace `your_api_key` with your own API key.
