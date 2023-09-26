@@ -59,7 +59,7 @@ jobs:
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install Dependencies
-        run: pnpm install --no-frozen-lockfile && ls -a && git status
+        run: pnpm install && ls -a && git status
 
       - name: Run Tests
         run: pnpm ci:test
