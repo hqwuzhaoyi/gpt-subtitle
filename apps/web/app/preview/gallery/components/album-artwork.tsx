@@ -44,7 +44,7 @@ export function AlbumArtwork({
 
   const { mutate } = useSWRConfig();
 
-  const reloadList = (id) => {
+  const reloadList = (id: string) => {
     mutate(["/api/gallery"]);
   };
 
