@@ -1,6 +1,6 @@
 ---
-"server": major
-"web": major
+"server": minor
+"web": minor
 "whisper": minor
 ---
 
