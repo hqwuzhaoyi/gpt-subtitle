@@ -56,12 +56,12 @@ export const whisper: WhisperInterface = async (
     mainProcess.stdout.on("data", (data) => {
       console.log(`stdout: ${data}`);
 
-      sendEvent(data);
+      sendEvent && sendEvent(data);
     });
 
     mainProcess.stderr.on("data", (data) => {
       console.error(`stderr: ${data}`);
-      sendEvent(data);
+      sendEvent &&  sendEvent(data);
     });
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
