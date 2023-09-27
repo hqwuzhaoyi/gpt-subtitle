@@ -1,6 +1,6 @@
 import { Subject } from "rxjs";
 
-interface IEvent {
+export interface IEvent {
   jobId: string;
   msg: string;
 }

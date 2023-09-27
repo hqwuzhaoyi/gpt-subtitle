@@ -9,17 +9,21 @@ import {
   Req,
   Sse,
   Query,
+  Inject,
 } from "@nestjs/common";
 import { OsrtService } from "./osrt.service";
 import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { Request } from "express";
-import { Observable, filter, interval, map } from "rxjs";
-import { eventSubject } from "./event.subject";
+import { Observable, Subject, filter, interval, map } from "rxjs";
+import { IEvent } from "./event.subject";
 
 @Controller("osrt")
 export class OsrtController {
-  constructor(private readonly osrtService: OsrtService) {}
+  constructor(
+    private readonly osrtService: OsrtService,
+    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>
+  ) {}
 
   @Post()
   create(@Body() createOsrtDto: CreateOsrtDto) {
@@ -107,7 +111,7 @@ export class OsrtController {
 
   @Sse("stream")
   streamEvents(@Query("jobId") jobId: string): Observable<any> {
-    return eventSubject.asObservable().pipe(
+    return this.eventSubject.asObservable().pipe(
       filter((event) => event.jobId === jobId),
       map((data) => {
         return { data };

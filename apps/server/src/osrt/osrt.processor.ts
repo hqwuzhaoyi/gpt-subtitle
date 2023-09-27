@@ -3,11 +3,12 @@ import { Processor, Process } from "@nestjs/bull";
 import { Job } from "bull";
 import { OsrtService } from "./osrt.service";
 import { SharedGateway } from "../shared/shared.gateway";
-import { Logger } from "@nestjs/common";
+import { Inject, Logger } from "@nestjs/common";
 import { FilesService } from "@/files/files.service";
 import { CreateOsrtDto } from "./dto/create-osrt.dto";
 import { WatchService } from "@/files/watch/watch.service";
-import { eventSubject } from "./event.subject";
+import { IEvent } from "./event.subject";
+import { Subject } from "rxjs";
 
 @Processor("audio")
 export class QueueProcessor {
@@ -15,7 +16,8 @@ export class QueueProcessor {
     private readonly osrtService: OsrtService,
     private readonly osrtGateway: SharedGateway,
     private readonly filesService: FilesService,
-    private readonly watchService: WatchService
+    private readonly watchService: WatchService,
+    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>
   ) {}
 
   private logger: Logger = new Logger("MessageGateway");
@@ -36,7 +38,7 @@ export class QueueProcessor {
     const { language, id, model, fileType } = job.data;
     try {
       console.debug("job.data", job.data);
-      eventSubject.next({
+      this.eventSubject.next({
         msg: `translation Job ${job.id}: ${JSON.stringify(job.data)}`,
         jobId: String(job.id),
       });
@@ -66,7 +68,7 @@ export class QueueProcessor {
 
       this.logger.log(startLog);
 
-      eventSubject.next({
+      this.eventSubject.next({
         msg: startLog,
         jobId: String(job.id),
       });
@@ -91,7 +93,7 @@ export class QueueProcessor {
         subTitle,
       });
 
-      eventSubject.next({
+      this.eventSubject.next({
         msg: `Finished processing job... ${
           job.id
         } ${language} ${id} ${model} ${JSON.stringify(job.data)}`,

@@ -12,7 +12,8 @@ import { staticPath, videoDirPath } from "utils";
 
 import { FilesService } from "@/files/files.service";
 import { TranslateService } from "@/translate/translate.service";
-import { eventSubject } from "./event.subject";
+import { IEvent } from "./event.subject";
+import { Subject } from "rxjs";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
@@ -26,7 +27,8 @@ export class OsrtService {
     @InjectQueue("audio") private audioQueue: Queue,
     private readonly filesService: FilesService,
     private readonly translateService: TranslateService,
-    @Inject("STATIC_DIR") private staticDir: string
+    @Inject("STATIC_DIR") private staticDir: string,
+    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>
   ) {}
 
   private logger: Logger = new Logger("OsrtService");
@@ -335,7 +337,7 @@ export class OsrtService {
       job.progress(10);
       if (srtPath) {
         console.info("srtPath exist", srtPath + ".srt");
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtPath exist ${srtPath}.srt`,
           jobId: String(job.id),
         });
@@ -344,7 +346,7 @@ export class OsrtService {
           srtFile,
           targetSrtPath
         );
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtTranslate done ${JSON.stringify(result)}`,
           jobId: String(job.id),
         });
@@ -352,7 +354,7 @@ export class OsrtService {
         return result;
       } else if (audioPath) {
         console.info("audioPath exist", audioPath);
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `audioPath exist ${audioPath}`,
           jobId: String(job.id),
         });
@@ -362,7 +364,7 @@ export class OsrtService {
           model,
           job.id.toString(),
           (data) => {
-            eventSubject.next({
+            this.eventSubject.next({
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
@@ -379,7 +381,7 @@ export class OsrtService {
           srtFile,
           srtPath
         );
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtTranslate done ${JSON.stringify(subtitleFiles)}`,
           jobId: String(job.id),
         });
@@ -387,11 +389,11 @@ export class OsrtService {
         return [...subtitleFiles, { path: audioPath }];
       } else if (videoPath) {
         console.info("videoPath exist", videoPath);
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `videoPath exist ${videoPath}`,
           jobId: String(job.id),
         });
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `start extractAudio`,
           jobId: String(job.id),
         });
@@ -400,12 +402,12 @@ export class OsrtService {
           fileName,
           videoPath
         );
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `extractAudio done ${finalAudioPath}`,
           jobId: String(job.id),
         });
         job.progress(30);
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `start whisper ${finalAudioPath} ${language} ${model} ${job.id.toString()}`,
           jobId: String(job.id),
         });
@@ -415,13 +417,13 @@ export class OsrtService {
           model,
           job.id.toString(),
           (data) => {
-            eventSubject.next({
+            this.eventSubject.next({
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
           }
         );
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `whisper done ${status}`,
           jobId: String(job.id),
         });
@@ -431,7 +433,7 @@ export class OsrtService {
         job.progress(80);
         const srtPath = getSrtFileName(finalAudioPath);
         fs.renameSync(finalAudioPath + ".srt", srtPath);
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtPath ${srtPath}`,
           jobId: String(job.id),
         });
@@ -440,7 +442,7 @@ export class OsrtService {
           srtFile,
           srtPath
         );
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtTranslate done ${JSON.stringify(subtitleFiles)}`,
           jobId: String(job.id),
         });
@@ -455,14 +457,14 @@ export class OsrtService {
         this.logger.warn("audioPath not exist", audioPath);
         this.logger.warn("videoPath not exist", videoPath);
         this.logger.warn(language, fileName, model);
-        eventSubject.next({
+        this.eventSubject.next({
           msg: `srtPath not exist ${srtPath}`,
           jobId: String(job.id),
         });
       }
     } catch (error) {
       this.logger.error("findFileThenTranslate error", error);
-      eventSubject.next({
+      this.eventSubject.next({
         msg: `findFileThenTranslate error ${error.message}`,
         jobId: String(job.id),
       });
