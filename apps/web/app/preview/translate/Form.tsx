@@ -25,7 +25,7 @@ const Form = () => {
   const [file, setFile] = useState<File | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
 
-  const key = useMemo(() => {
+  const key: [string, File] | null = useMemo(() => {
     return file ? ["/api/file/upload", file] : null;
   }, [file]);
 
@@ -33,14 +33,21 @@ const Form = () => {
     return filename ? ["/api/file/translate", filename] : null;
   }, [filename]);
 
-  const { data: response, mutate: mutateResponse } = useSWR<FileUploadResponse>(
+  const { data: response, mutate: mutateResponse } = useSWR(
     key,
-    ([, file] = []) => uploadFile({ file })
+    async (fileKey: typeof key) => {
+      const [, file] = fileKey || [];
+      if (!file) return Promise.resolve(null);
+      return uploadFile({ file });
+    }
   );
-  const { data: translateResponse, mutate: translateMutateResponse } =
-    useSWR<FileUploadResponse>(translateKey, ([, filename] = []) =>
-      translateFile(filename)
-    );
+  const { data: translateResponse, mutate: translateMutateResponse } = useSWR(
+    translateKey,
+    (key: typeof translateKey) => {
+      const [, filename] = key || [];
+      return translateFile(filename);
+    }
+  );
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

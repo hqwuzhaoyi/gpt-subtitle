@@ -31,8 +31,6 @@ export default async function TaskPage() {
     const jsonResponse = await response.json(); // 等待JSON解析
     const { data } = jsonResponse; // 从解析后的JSON中解构data
 
-    console.debug(data);
-
     return (data as FileListResult).map((item) => {
       return {
         name: item.fileName,

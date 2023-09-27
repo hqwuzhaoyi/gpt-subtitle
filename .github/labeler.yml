@@ -1,0 +1,71 @@
+docs:
+  - 'docs/**/*'
+  - '**/README.md'
+  - 'packages/templates/**/*'
+
+test:
+  - 'tests/**/*'
+  - '**/tests/**/*'
+  - '**/__tests__/**/*'
+
+mod:dev:
+  - 'scripts/**/*'
+  - 'packages/cli/**/*'
+  - 'packages/debug/**/*'
+  - 'packages/eslint*/**/*'
+  - 'packages/jest-presets/**/*'
+  - 'packages/tsconfig/**/*'
+
+mod:plugin:
+  - 'plugins/**/*'
+
+plugin:bookmark-block:
+  - 'plugins/bookmark-block/**/*'
+
+plugin:copilot:
+  - 'plugins/copilot/**/*'
+
+mod:infra:
+  - 'packages/infra/**/*'
+
+mod:sdk:
+  - 'packages/sdk/**/*'
+
+mod:plugin-cli:
+  - 'packages/plugin-cli/**/*'
+
+mod:i18n: 'packages/i18n/**/*'
+
+mod:env: 'packages/env/**/*'
+
+mod:hooks: 'packages/hooks/**/*'
+
+mod:store:
+  - 'packages/jotai/**/*'
+  - '**/atoms/**/*'
+
+mode:utils:
+  - 'packages/logger/**/*'
+  - 'packages/shared-types/**/*'
+  - 'packages/translator/**/*'
+  - 'packages/ui/**/*'
+  - 'packages/utils/**/*'
+  - 'packages/whisper/**/*'
+
+rust:
+  - '**/*.rs'
+  - '**/Cargo.toml'
+  - '**/Cargo.lock'
+  - '**/rust-toolchain'
+  - '**/rust-toolchain.toml'
+  - '**/rustfmt.toml'
+
+app:core: 'apps/core/**/*'
+
+app:electron: 'apps/electron/**/*'
+
+app:server: 'apps/server/**/*'
+
+app:docs: 'apps/docs/**/*'
+
+app:web: 'apps/web/**/*'

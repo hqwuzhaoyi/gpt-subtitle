@@ -1,5 +1,9 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
+[![Build & Test](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle?ref=badge_shield&issueType=license)
+
 English | [简体中文](./README-zh_CN.md)
 
 ![whisper_preview](pictures/whisper_preview.png)

@@ -1,5 +1,9 @@
 # GPT-Subtitle :speech_balloon: :globe_with_meridians:
 
+[![Build & Test](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/hqwuzhaoyi/gpt-subtitle/actions/workflows/build.yml)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhqwuzhaoyi%2Fgpt-subtitle?ref=badge_shield&issueType=license)
+
 [English](./README.md) | 简体中文
 
 ![whisper_preview](pictures/whisper_preview.png)
@@ -100,13 +104,13 @@ npm run deploy:prod
 
 1. change the args inside `docker-compose.yml`
 
-    ```text
-    args:
-         - WEB_PORT=3000
-         - SERVER_PORT=3001
-         - API_URL=http://localhost:3001
-         - STATIC_PATH=/static
-    ```
+   ```text
+   args:
+        - WEB_PORT=3000
+        - SERVER_PORT=3001
+        - API_URL=http://localhost:3001
+        - STATIC_PATH=/static
+   ```
 
 2. run command
 

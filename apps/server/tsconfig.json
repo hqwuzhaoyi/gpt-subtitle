@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "Node16",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -17,6 +17,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "resolvePackageJsonExports": true,
+    "moduleResolution": "node16",
     "paths": {
       "@/*": ["src/*"],
       "@Helper/*": ["src/common/helper/*"]
