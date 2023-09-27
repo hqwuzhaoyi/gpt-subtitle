@@ -33,8 +33,8 @@ export const whisper: WhisperInterface = async (
   const modelPath = path.join(whisperRoot, "models", model);
   console.log("modelPath", modelPath);
 
-  if (mainProcessMap.has(targetPath)) {
-    console.log("mainProcessMap.has(targetPath)", targetPath);
+  if (mainProcessMap.has(id)) {
+    console.log("mainProcessMap.has(id)", id);
     return;
   }
 
@@ -53,6 +53,8 @@ export const whisper: WhisperInterface = async (
       ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
     );
+    mainProcessMap.set(id, mainProcess);
+
     mainProcess.stdout.on("data", (data) => {
       console.log(`stdout: ${data}`);
 
@@ -61,7 +63,7 @@ export const whisper: WhisperInterface = async (
 
     mainProcess.stderr.on("data", (data) => {
       console.error(`stderr: ${data}`);
-      sendEvent &&  sendEvent(data);
+      sendEvent && sendEvent(data);
     });
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
@@ -79,7 +81,6 @@ export const whisper: WhisperInterface = async (
         mainProcessMap.delete(id);
       }
     });
-    mainProcessMap.set(id, mainProcess);
   });
 };
 
