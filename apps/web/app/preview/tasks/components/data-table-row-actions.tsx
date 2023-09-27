@@ -68,12 +68,12 @@ export function DataTableRowActions<TData extends Task>({
     }
   };
   const stopWhisper = async () => {
-    await outPutSrtStop(row.original.processingJobId);
+    await outPutSrtStop(task.processingJobId);
     mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const downLoad = async () => {
-    console.debug("downLoad", row.original.path);
-    window.open(row.original.path);
+    console.debug("downLoad", task.path);
+    window.open(task.path);
   };
   return (
     <DropdownMenu>

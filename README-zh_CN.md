@@ -78,16 +78,10 @@ TRANSLATE_GROUP=4 // 翻译句子进行分组翻译，一次最多翻译多少�
 TranslateModel=google # google or gpt3
 
 
-REDIS_PORT=6379 // Redis 端口
-REDIS_HOST=localhost // Redis 地址
-MYSQL_HOST=localhost // MySQL 地址
-MYSQL_PORT=3306 // MySQL 端口
-MYSQL_USER=root // MySQL 用户名
-MYSQL_PASSWORD=123456 // MySQL 密码
-MYSQL_DATABASE=gpt_subtitle // MySQL 数据库名
-
-API_URL=http://localhost:3001 // 后端 API 地址
-NEXT_PUBLIC_API_URL=http://localhost:3001 // 同上， 后端 API 地址
+API_URL=http://localhost:3001 # Backend API address
+NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+WEB_URL=http://localhost:3000 # Web address
+NEXT_PUBLIC_WEB_URL=http://localhost:3000 # Same as above. WEB address
 ```
 
 ### 运行程序

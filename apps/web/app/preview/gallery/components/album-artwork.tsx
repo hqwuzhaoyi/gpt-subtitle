@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CheckCircle2, PlusCircle, TerminalSquare } from "lucide-react";
+import { CheckCircle2, TerminalSquare } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -11,7 +11,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-import { Album } from "../data/albums";
+import { Album } from "../data/schema";
 
 import {
   HoverCard,
@@ -23,6 +23,7 @@ import { StartModal } from "@/components/Modal/StartModal";
 import React from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Terminal } from "@/components/Terminal";
+import { useSWRConfig } from "swr";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
@@ -40,6 +41,13 @@ export function AlbumArtwork({
   ...props
 }: AlbumArtworkProps) {
   const [open, setOpen] = React.useState(false);
+
+  const { mutate } = useSWRConfig();
+
+  const reloadList = (id) => {
+    mutate(["/api/gallery"]);
+  };
+
   return (
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
@@ -122,7 +130,12 @@ export function AlbumArtwork({
 
         {/* <p className="text-xs text-muted-foreground">{album.artist}</p> */}
 
-        <StartModal id={album.id + ""} open={open} onOpenChange={setOpen} />
+        <StartModal
+          id={album.id + ""}
+          open={open}
+          onOpenChange={setOpen}
+          continueCallback={reloadList}
+        />
       </div>
     </div>
   );

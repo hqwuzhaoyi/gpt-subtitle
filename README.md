@@ -78,16 +78,10 @@ TRANSLATE_GROUP=4 // Translate sentences into groups, up to how many sentences a
 TranslateModel=google # google or gpt3
 
 
-REDIS_PORT=6379 // Redis port
-REDIS_HOST=localhost // Redis address
-MYSQL_HOST=localhost // MySQL address
-MYSQL_PORT=3306 // MySQL port
-MYSQL_USER=root // MySQL username
-MYSQL_PASSWORD=123456 // MySQL password
-MYSQL_DATABASE=gpt_subtitle // MySQL database name
-
-API_URL=http://localhost:3001 // backend API address
-NEXT_PUBLIC_API_URL=http://localhost:3001 // same as above, backend API address
+API_URL=http://localhost:3001 # Backend API address
+NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+WEB_URL=http://localhost:3000 # Web address
+NEXT_PUBLIC_WEB_URL=http://localhost:3000 # Same as above. WEB address
 ```
 
 Replace `your_api_key` with your own API key.
