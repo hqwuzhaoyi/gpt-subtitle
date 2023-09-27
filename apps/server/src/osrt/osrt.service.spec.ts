@@ -8,6 +8,7 @@ import { WatchService } from "@/files/watch/watch.service";
 import { TranslateService } from "@/translate/translate.service";
 import Bull, { JobStatusClean, Queue } from "bull";
 import { getQueueToken } from "@nestjs/bull";
+import { Subject } from "rxjs";
 describe("OsrtService", () => {
   let processor: QueueProcessor;
   let osrtService: OsrtService;
@@ -22,8 +23,9 @@ describe("OsrtService", () => {
   const translateLanguage = "translateLanguage";
   const translateModel = "translateModel";
   const translateResult = "translateResult";
-
+  let mockSubject: Subject<any>;
   beforeEach(async () => {
+    mockSubject = new Subject<any>();
     const mockOsrtService = {
       // mock your methods
       findFileThenTranslate: jest
@@ -70,6 +72,7 @@ describe("OsrtService", () => {
           provide: "STATIC_DIR",
           useValue: "/static",
         },
+        { provide: "EVENT_SUBJECT", useValue: mockSubject },
       ],
     }).compile();
 

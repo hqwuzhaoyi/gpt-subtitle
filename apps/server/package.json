@@ -46,7 +46,6 @@
     "openai": "^4.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "rxjs-marbles": "^7.0.1",
     "shared-types": "workspace:*",
     "socket.io": "4.7.2",
     "translator": "workspace:*",

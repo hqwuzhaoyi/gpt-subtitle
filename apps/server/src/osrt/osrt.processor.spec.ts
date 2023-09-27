@@ -5,6 +5,7 @@ import { SharedGateway } from "../shared/shared.gateway";
 import { FilesService } from "@/files/files.service";
 import { WatchService } from "@/files/watch/watch.service";
 import { Job } from "bull";
+import { Subject } from "rxjs";
 
 describe("QueueProcessor", () => {
   let processor: QueueProcessor;
@@ -20,8 +21,9 @@ describe("QueueProcessor", () => {
   const translateLanguage = "translateLanguage";
   const translateModel = "translateModel";
   const translateResult = "translateResult";
-
+  let mockSubject: Subject<any>;
   beforeEach(async () => {
+    mockSubject = new Subject<any>();
     const mockOsrtService = {
       // mock your methods
       findFileThenTranslate: jest
@@ -60,6 +62,7 @@ describe("QueueProcessor", () => {
         { provide: SharedGateway, useValue: mockSharedGateway },
         { provide: FilesService, useValue: mockFilesService },
         { provide: WatchService, useValue: mockWatchService },
+        { provide: "EVENT_SUBJECT", useValue: mockSubject },
       ],
     }).compile();
 
