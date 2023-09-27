@@ -84,7 +84,7 @@ REDIS_HOST=subtitle_redis # Redis address
 MYSQL_HOST=subtitle_mysql # MySQL address
 MYSQL_PORT=3306 # MySQL port
 MYSQL_USER=root # MySQL user
-MYSQL_PASSWORD=123456 # MySQL passowrd
+MYSQL_PASSWORD=123456 # MySQL password
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
 API_URL=http://localhost:3001 # Backend API address
