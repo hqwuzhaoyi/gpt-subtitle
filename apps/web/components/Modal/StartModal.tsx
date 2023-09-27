@@ -24,10 +24,12 @@ export const StartModal = ({
   id,
   open,
   onOpenChange,
+  continueCallback,
 }: {
   id: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  continueCallback?: (id: string) => void;
 }) => {
   const [language, setLanguage] = React.useState<LanguageEnum>(
     LanguageEnum.Auto
@@ -60,6 +62,7 @@ export const StartModal = ({
                 return;
               }
               await outPutSrt(language, id, model);
+              continueCallback && continueCallback(id);
             }}
           >
             Continue

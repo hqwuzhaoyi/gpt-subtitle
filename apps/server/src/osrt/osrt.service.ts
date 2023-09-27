@@ -12,6 +12,8 @@ import { staticPath, videoDirPath } from "utils";
 
 import { FilesService } from "@/files/files.service";
 import { TranslateService } from "@/translate/translate.service";
+import { IEvent } from "./event.subject";
+import { Subject } from "rxjs";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
@@ -25,7 +27,8 @@ export class OsrtService {
     @InjectQueue("audio") private audioQueue: Queue,
     private readonly filesService: FilesService,
     private readonly translateService: TranslateService,
-    @Inject("STATIC_DIR") private staticDir: string
+    @Inject("STATIC_DIR") private staticDir: string,
+    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>
   ) {}
 
   private logger: Logger = new Logger("OsrtService");
@@ -107,6 +110,8 @@ export class OsrtService {
         acc[job.data.id] = job.id;
         return acc;
       }, {});
+
+      console.debug("currentJobsIdMap", currentJobsIdMap);
 
       const videos = await this.filesService.findRelatedFilesForVideo();
 
@@ -332,20 +337,38 @@ export class OsrtService {
       job.progress(10);
       if (srtPath) {
         console.info("srtPath exist", srtPath + ".srt");
+        this.eventSubject.next({
+          msg: `srtPath exist ${srtPath}.srt`,
+          jobId: String(job.id),
+        });
         const result = await this.srtTranslate(
           videoDirPath,
           srtFile,
           targetSrtPath
         );
+        this.eventSubject.next({
+          msg: `srtTranslate done ${JSON.stringify(result)}`,
+          jobId: String(job.id),
+        });
         job.progress(100);
         return result;
       } else if (audioPath) {
         console.info("audioPath exist", audioPath);
+        this.eventSubject.next({
+          msg: `audioPath exist ${audioPath}`,
+          jobId: String(job.id),
+        });
         const status = await whisper(
           audioPath,
           language,
           model,
-          job.id.toString()
+          job.id.toString(),
+          (data) => {
+            this.eventSubject.next({
+              msg: `whisper ${data}`,
+              jobId: String(job.id),
+            });
+          }
         );
         job.progress(50);
         if (status === "SIGTERM") {
@@ -358,34 +381,71 @@ export class OsrtService {
           srtFile,
           srtPath
         );
+        this.eventSubject.next({
+          msg: `srtTranslate done ${JSON.stringify(subtitleFiles)}`,
+          jobId: String(job.id),
+        });
         job.progress(100);
         return [...subtitleFiles, { path: audioPath }];
       } else if (videoPath) {
         console.info("videoPath exist", videoPath);
-
+        this.eventSubject.next({
+          msg: `videoPath exist ${videoPath}`,
+          jobId: String(job.id),
+        });
+        this.eventSubject.next({
+          msg: `start extractAudio`,
+          jobId: String(job.id),
+        });
         const finalAudioPath = await this.handleAudio(
           audioPath,
           fileName,
           videoPath
         );
+        this.eventSubject.next({
+          msg: `extractAudio done ${finalAudioPath}`,
+          jobId: String(job.id),
+        });
         job.progress(30);
+        this.eventSubject.next({
+          msg: `start whisper ${finalAudioPath} ${language} ${model} ${job.id.toString()}`,
+          jobId: String(job.id),
+        });
         const status = await whisper(
           finalAudioPath,
           language,
           model,
-          job.id.toString()
+          job.id.toString(),
+          (data) => {
+            this.eventSubject.next({
+              msg: `whisper ${data}`,
+              jobId: String(job.id),
+            });
+          }
         );
+        this.eventSubject.next({
+          msg: `whisper done ${status}`,
+          jobId: String(job.id),
+        });
         if (status === "SIGTERM") {
           return [];
         }
         job.progress(80);
         const srtPath = getSrtFileName(finalAudioPath);
         fs.renameSync(finalAudioPath + ".srt", srtPath);
+        this.eventSubject.next({
+          msg: `srtPath ${srtPath}`,
+          jobId: String(job.id),
+        });
         const subtitleFiles = await this.srtTranslate(
           videoDirPath,
           srtFile,
           srtPath
         );
+        this.eventSubject.next({
+          msg: `srtTranslate done ${JSON.stringify(subtitleFiles)}`,
+          jobId: String(job.id),
+        });
         job.progress(100);
         return [
           ...subtitleFiles,
@@ -397,10 +457,18 @@ export class OsrtService {
         this.logger.warn("audioPath not exist", audioPath);
         this.logger.warn("videoPath not exist", videoPath);
         this.logger.warn(language, fileName, model);
+        this.eventSubject.next({
+          msg: `srtPath not exist ${srtPath}`,
+          jobId: String(job.id),
+        });
       }
     } catch (error) {
-      return [];
       this.logger.error("findFileThenTranslate error", error);
+      this.eventSubject.next({
+        msg: `findFileThenTranslate error ${error.message}`,
+        jobId: String(job.id),
+      });
+      return [];
     }
   }
   private async handleAudio(

@@ -1,36 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { CheckCircle2, PlusCircle } from "lucide-react";
+import { CheckCircle2, TerminalSquare } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-import { Album } from "../data/albums";
-import { playlists } from "../data/playlists";
+import { Album } from "../data/schema";
 
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import {
-  outPutSrt,
-  outPutSrtStop,
-  terminateAllJobs,
-} from "../../tasks/api/osrt";
+import { outPutSrtStop } from "../../tasks/api/osrt";
 import { StartModal } from "@/components/Modal/StartModal";
 import React from "react";
 import { toast } from "@/components/ui/use-toast";
+import { Terminal } from "@/components/Terminal";
+import { useSWRConfig } from "swr";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
@@ -48,6 +41,13 @@ export function AlbumArtwork({
   ...props
 }: AlbumArtworkProps) {
   const [open, setOpen] = React.useState(false);
+
+  const { mutate } = useSWRConfig();
+
+  const reloadList = (id: string) => {
+    mutate(["/api/gallery"]);
+  };
+
   return (
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
@@ -65,9 +65,21 @@ export function AlbumArtwork({
                 )}
               />
             )}
-            {album.path && (
-              <CheckCircle2 className="absolute right-1 top-1  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
-            )}
+            <div className="absolute right-1 top-1 flex gap-2">
+              {album.path && (
+                <CheckCircle2 className="  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
+              )}
+              {album.processingJobId && (
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <TerminalSquare className=" opacity-80 rounded-full shadow-md text-gray-400"></TerminalSquare>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-[36rem] p-0 border-none bg-transparent">
+                    <Terminal jobId={album.processingJobId}></Terminal>
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+            </div>
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
@@ -118,7 +130,12 @@ export function AlbumArtwork({
 
         {/* <p className="text-xs text-muted-foreground">{album.artist}</p> */}
 
-        <StartModal id={album.id + ""} open={open} onOpenChange={setOpen} />
+        <StartModal
+          id={album.id + ""}
+          open={open}
+          onOpenChange={setOpen}
+          continueCallback={reloadList}
+        />
       </div>
     </div>
   );

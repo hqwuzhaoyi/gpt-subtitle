@@ -84,11 +84,13 @@ REDIS_HOST=subtitle_redis # Redis address
 MYSQL_HOST=subtitle_mysql # MySQL address
 MYSQL_PORT=3306 # MySQL port
 MYSQL_USER=root # MySQL user
-MYSQL_PASSWORD=123456 # MySQL passowrd
+MYSQL_PASSWORD=123456 # MySQL password
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
 API_URL=http://localhost:3001 # Backend API address
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+WEB_URL=http://localhost:3000 # Web address
+NEXT_PUBLIC_WEB_URL=http://localhost:3000 # Same as above. WEB address
 ```
 
 Replace `your_api_key` with your own API key.

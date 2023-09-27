@@ -33,7 +33,7 @@ import { io } from "socket.io-client";
 import { ModelSelect } from "@/components/ModelSelect";
 import { AutoStartModal } from "../../../../components/Modal/Autostart";
 import { TableType } from "../data/types";
-import { Task } from "../data/schema";
+import { Task, taskSchema } from "../data/schema";
 import { useModels } from "../../../../hooks/useModels";
 import { ImagePreviewModal } from "./ImagePreviewModal";
 import { LanguageEnum } from "shared-types";
@@ -96,7 +96,7 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
     throw new Error("unknown type" + type);
   }
 
-  return result;
+  return result.map((item) => taskSchema.parse(item));
 };
 
 function useList(type: TableType) {

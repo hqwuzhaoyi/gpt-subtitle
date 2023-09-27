@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { AlbumArtwork } from "./components/album-artwork";
-import { FileListResult } from "shared-types";
-import { isNil, ifElse } from "ramda";
+
+import { GalleryList } from "./components/gallery-list";
+import { queryGallery } from "./data/query";
 
 export const metadata: Metadata = {
   title: "Whisper Tasks",
@@ -11,37 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function TaskPage() {
-  const queryData = async () => {
-    const response = await fetch("http://localhost:3000/preview/gallery/api", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const jsonResponse = await response.json(); // 等待JSON解析
-    const { data } = jsonResponse; // 从解析后的JSON中解构data
-    return (data as FileListResult).map((item) => {
-      return {
-        name: item.fileName,
-        processingJobId: item.processingJobId,
-        id: item.id + "",
-        cover: ifElse(
-          isNil,
-          () => item.poster,
-          () => item.fanart
-        )(item.fanart),
-        path: item.subtitle?.[0]?.path,
-      };
-    });
-  };
-
   try {
-    const data = await queryData();
+    const data = await queryGallery();
 
     return (
       <>
@@ -61,21 +31,7 @@ export default async function TaskPage() {
           <Separator className="my-4" />
 
           <div className="relative">
-            <ScrollArea className="h-[600px] w-full">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-14">
-                {data.map((album) => (
-                  <AlbumArtwork
-                    key={album.name}
-                    album={album}
-                    className="w-[220px] h-[120px]"
-                    aspectRatio="portrait"
-                    width={220}
-                    height={120}
-                  />
-                ))}
-              </div>
-              <ScrollBar />
-            </ScrollArea>
+            <GalleryList initialData={data} />
           </div>
         </div>
       </>

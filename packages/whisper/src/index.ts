@@ -10,11 +10,22 @@ import * as child_process from "child_process";
 
 export let mainProcessMap = new Map<string, child_process.ChildProcess>();
 
-export const whisper = async (
+interface WhisperInterface {
+  (
+    targetPath: string,
+    videoLanguage: string,
+    model?: string,
+    id?: string,
+    sendEvent?: (data) => void
+  ): Promise<number | string>;
+}
+
+export const whisper: WhisperInterface = async (
   targetPath,
   videoLanguage,
   model = "ggml-medium.bin",
-  id = "main"
+  id = "main",
+  sendEvent
 ) => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
@@ -22,8 +33,8 @@ export const whisper = async (
   const modelPath = path.join(whisperRoot, "models", model);
   console.log("modelPath", modelPath);
 
-  if (mainProcessMap.has(targetPath)) {
-    console.log("mainProcessMap.has(targetPath)", targetPath);
+  if (mainProcessMap.has(id)) {
+    console.log("mainProcessMap.has(id)", id);
     return;
   }
 
@@ -42,8 +53,18 @@ export const whisper = async (
       ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
       { shell: true }
     );
-    mainProcess.stdout.pipe(process.stdout);
-    mainProcess.stderr.pipe(process.stderr);
+    mainProcessMap.set(id, mainProcess);
+
+    mainProcess.stdout.on("data", (data) => {
+      console.log(`stdout: ${data}`);
+
+      sendEvent && sendEvent(data);
+    });
+
+    mainProcess.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+      sendEvent && sendEvent(data);
+    });
     mainProcess.on("error", reject);
     mainProcess.on("close", (code) => {
       mainProcess = null;
@@ -60,7 +81,6 @@ export const whisper = async (
         mainProcessMap.delete(id);
       }
     });
-    mainProcessMap.set(id, mainProcess);
   });
 };
 

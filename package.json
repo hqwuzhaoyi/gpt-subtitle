@@ -8,7 +8,7 @@
     "changeset-publish": "changeset publish",
     "changeset-tag": "changeset tag",
     "coverage:per-package": "npm run test:coverage",
-    "coverage:total": "yarn coverage:per-package && node coverage-total.js",
+    "coverage:total": "npm run coverage:per-package && node coverage-total.js",
     "ci:publish": "pnpm build-package && git status && pnpm publish -r --no-git-checks && pnpm changeset tag",
     "ci:test": "cp .env.template .env &&  pnpm build && pnpm with-env turbo run test --no-cache --continue",
     "ci:version": "pnpm changelog && pnpx changeset version && pnpm install --no-frozen-lockfile && git add .",
