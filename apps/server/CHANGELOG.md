@@ -1,5 +1,16 @@
 # server
 
+## 1.1.0
+
+### Minor Changes
+
+- ae3e98d: Increased push notifications for Gallery
+
+### Patch Changes
+
+- Updated dependencies [ae3e98d]
+  - whisper@0.2.0
+
 ## 1.0.0
 
 ### Major Changes

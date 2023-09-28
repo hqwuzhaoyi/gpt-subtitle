@@ -1,5 +1,11 @@
 # web
 
+## 1.1.0
+
+### Minor Changes
+
+- ae3e98d: Increased push notifications for Gallery
+
 ## 1.0.0
 
 ### Major Changes
