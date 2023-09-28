@@ -9,44 +9,38 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    strategy:
+      matrix:
+        node-version: [16]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: setup caching
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.PNPM_CACHE_FOLDER }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
       - name: setup pnpm
-        uses: pnpm/action-setup@v2.0.1
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 8
 
-      - name: setup node.js
-        uses: actions/setup-node@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
       - name: Set up NPM credentials
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install Dependencies
         run: pnpm install && ls -a && git status
