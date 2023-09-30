@@ -11,6 +11,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
 import * as path from "path";
 import * as fs from "fs";
+import { promises as fsPromises } from "fs";
 
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
 const audioExtensions = ["mp3", "wav", "ogg", "flac"];
@@ -48,29 +49,23 @@ export class FilesService {
   }
 
   // 使用路径删除文件
-  public removeWithPath(filePath) {
-    return new Promise(async (resolve, reject) => {
-      fs.unlink(filePath, async (err) => {
-        if (err) {
-          console.error("Error:", err);
-          reject(filePath);
-        } else {
-          console.log("File removed:", filePath);
-          this.subtitleFilesRepository
-            .delete({
-              filePath: filePath,
-            })
-            .then((res) => {
-              console.log("remove subtitle success");
-              resolve(res);
-            })
-            .catch((err) => {
-              console.error("Error:", err);
-              reject(filePath);
-            });
-        }
-      });
-    });
+  public async removeWithPath(filePath: string) {
+    try {
+      await fsPromises.unlink(filePath);
+      console.log("File removed:", filePath);
+    } catch (err) {
+      console.error("Error:", err);
+      throw err;
+    }
+
+    try {
+      const res = await this.subtitleFilesRepository.delete({ filePath });
+      console.log("Remove subtitle success");
+      return res;
+    } catch (err) {
+      console.error("Error:", err);
+      throw err;
+    }
   }
 
   public async findVideoFiles(): Promise<FileEntity[]> {
