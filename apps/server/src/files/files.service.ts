@@ -48,7 +48,7 @@ export class FilesService {
   }
 
   // 使用路径删除文件
-  removeWithPath(filePath) {
+  public removeWithPath(filePath) {
     return new Promise(async (resolve, reject) => {
       fs.unlink(filePath, async (err) => {
         if (err) {
@@ -73,42 +73,42 @@ export class FilesService {
     });
   }
 
-  async findVideoFiles(): Promise<FileEntity[]> {
+  public async findVideoFiles(): Promise<FileEntity[]> {
     return this.videoFilesRepository.find({
       where: {
         extName: In(videoExtensions.map((ext) => "." + ext)),
       },
     });
   }
-  async findVideoFile(id): Promise<VideoFileEntity> {
+  public async findVideoFile(id): Promise<VideoFileEntity> {
     return this.videoFilesRepository.findOne({
       where: {
         id: id,
       },
     });
   }
-  async findSubtitleFile(id): Promise<SubtitleFileEntity> {
+  public async findSubtitleFile(id): Promise<SubtitleFileEntity> {
     return this.subtitleFilesRepository.findOne({
       where: {
         id: id,
       },
     });
   }
-  async findAudioFile(id): Promise<AudioFileEntity> {
+  public async findAudioFile(id): Promise<AudioFileEntity> {
     return this.audioFilesRepository.findOne({
       where: {
         id: id,
       },
     });
   }
-  async findAudioFiles(): Promise<FileEntity[]> {
+  public async findAudioFiles(): Promise<FileEntity[]> {
     return this.audioFilesRepository.find({
       where: {
         extName: In(audioExtensions.map((ext) => "." + ext)),
       },
     });
   }
-  async findSubtitleFiles(): Promise<SubtitleFileEntity[]> {
+  public async findSubtitleFiles(): Promise<SubtitleFileEntity[]> {
     return this.subtitleFilesRepository.find({
       where: {
         extName: In(subtitleExtensions.map((ext) => "." + ext)),
@@ -116,16 +116,25 @@ export class FilesService {
     });
   }
 
-  async findRelatedFilesForVideo(): Promise<VideoFileEntity[]> {
+  public async findRelatedFilesForVideo({
+    skip,
+    take,
+  }: {
+    skip?: number;
+    take?: number;
+  } = {}): Promise<VideoFileEntity[]> {
+    console.debug(skip, take);
     // 查找所有的视频文件并加载关联的音频和字幕文件
     const videoFiles = await this.videoFilesRepository.find({
       relations: ["audioFile", "audioFile.subtitleFiles"],
+      skip,
+      take,
     });
 
     return videoFiles;
   }
 
-  async findRelatedFilesForAudio(): Promise<AudioFileEntity[]> {
+  public async findRelatedFilesForAudio(): Promise<AudioFileEntity[]> {
     // 查找所有的视频文件并加载关联的音频和字幕文件
     const audioFiles = await this.audioFilesRepository.find({
       relations: ["subtitleFiles"],

@@ -17,6 +17,7 @@ import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { Request } from "express";
 import { Observable, Subject, filter, interval, map, tap } from "rxjs";
 import { IEvent } from "./event.subject";
+import { PaginationDto } from "./dto/pagination.dto";
 
 @Controller("osrt")
 export class OsrtController {
@@ -31,9 +32,9 @@ export class OsrtController {
   }
 
   @Get("list")
-  async list(@Req() req: Request) {
-    console.debug("req", req.headers.host);
-    return await this.osrtService.list();
+  async list(@Query() paginationDto: PaginationDto) {
+    console.debug('paginationDto', paginationDto)
+    return await this.osrtService.list(paginationDto);
   }
   @Get("audios")
   async findAudios() {
