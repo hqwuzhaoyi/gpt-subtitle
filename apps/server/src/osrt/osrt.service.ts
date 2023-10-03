@@ -14,6 +14,7 @@ import { FilesService } from "@/files/files.service";
 import { TranslateService } from "@/translate/translate.service";
 import { IEvent } from "./event.subject";
 import { Subject } from "rxjs";
+import { PaginationDto } from "./dto/pagination.dto";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
@@ -100,8 +101,17 @@ export class OsrtService {
     }
   }
 
-  async list(): Promise<FileListResult> {
+  async list(paginationDto: PaginationDto = {}): Promise<FileListResult> {
     try {
+      let filesServiceOptions = {};
+      if (paginationDto.page && paginationDto.limit) {
+        const skippedItems = (paginationDto.page - 1) * paginationDto.limit;
+        filesServiceOptions = {
+          ...filesServiceOptions,
+          skip: skippedItems,
+          take: paginationDto.limit,
+        };
+      }
       const currentJobs = await this.audioQueue.getActive();
       const currentJobsFiles = currentJobs.map((job) => {
         return job.data.id;
@@ -113,7 +123,8 @@ export class OsrtService {
 
       console.debug("currentJobsIdMap", currentJobsIdMap);
 
-      const videos = await this.filesService.findRelatedFilesForVideo();
+      const videos =
+        await this.filesService.findRelatedFilesForVideo(filesServiceOptions);
 
       const result = await Promise.all(
         videos.map(async (videoFileEntity) => {
