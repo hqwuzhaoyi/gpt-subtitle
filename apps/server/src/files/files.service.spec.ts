@@ -32,12 +32,29 @@ const videoFile2 = {
   poster: "/path/to/poster2.jpg",
 };
 
+const audioFile1: any = {
+  id: 1,
+  fileName: "file1.mp3",
+  baseName: "file1",
+  extName: ".mp3",
+  filePath: "/path/to/file1.mp3",
+  status: "active",
+};
+const audioFile2: any = {
+  id: 2,
+  fileName: "file2.flac",
+  baseName: "file2",
+  extName: ".flac",
+  filePath: "/path/to/file2.flac",
+  status: "active",
+};
+
 const expectedVideoFiles: any = [videoFile1, videoFile2];
 
 describe("FilesService", () => {
   let service: FilesService;
   let mockVideoFileRepo: Partial<jest.Mocked<Repository<VideoFileEntity>>>;
-  let mockAudioFileRepo: jest.Mocked<Repository<AudioFileEntity>>;
+  let mockAudioFileRepo: Partial<jest.Mocked<Repository<AudioFileEntity>>>;
   let mockSubtitleFileRepo: Partial<
     jest.Mocked<Repository<SubtitleFileEntity>>
   >;
@@ -46,8 +63,13 @@ describe("FilesService", () => {
     mockSubtitleFileRepo = {
       delete: jest.fn().mockResolvedValue({ raw: { affectedRows: 1 } }),
       find: jest.fn(),
+      findOne: jest.fn(),
     };
 
+    mockAudioFileRepo = {
+      find: jest.fn(),
+      findOne: jest.fn(),
+    };
     mockVideoFileRepo = {
       find: jest.fn(),
       findOne: jest.fn(),
@@ -61,7 +83,7 @@ describe("FilesService", () => {
         },
         {
           provide: getRepositoryToken(AudioFileEntity), // Replace 'AudioFileEntity' with your actual entity name
-          useValue: {}, // Mock the repository methods you need
+          useValue: mockAudioFileRepo, // Mock the repository methods you need
         },
         {
           provide: getRepositoryToken(SubtitleFileEntity), // Replace 'SubtitleFileEntity' with your actual entity name
@@ -164,6 +186,101 @@ describe("FilesService", () => {
         take,
       });
       expect(result).toEqual(expectedVideoFiles);
+    });
+  });
+
+  describe("findAudioFile", () => {
+    it("should find audio file by id", async () => {
+      // Arrange
+      mockAudioFileRepo.findOne.mockResolvedValue(audioFile1);
+
+      // Act
+      const result = await service.findAudioFile(1);
+
+      // Assert
+      expect(result).toBe(audioFile1);
+    });
+
+    it("should find audio files", async () => {
+      // Arrange
+
+      const expectedAudioFiles = [audioFile1, audioFile2];
+      mockAudioFileRepo.find.mockResolvedValue(expectedAudioFiles);
+
+      // Act
+      const result = await service.findAudioFiles();
+
+      // Assert
+      expect(result).toBe(expectedAudioFiles);
+    });
+
+    it("should find related files for audio", async () => {
+      // Arrange
+      const skip = 0;
+      const take = 10;
+
+      mockAudioFileRepo.find.mockResolvedValue([audioFile1, audioFile2]);
+
+      // Act
+      const result = await service.findRelatedFilesForAudio({ skip, take });
+
+      // Assert
+      expect(mockAudioFileRepo.find).toHaveBeenCalledWith({
+        relations: ["subtitleFiles"],
+        skip,
+        take,
+      });
+      expect(result).toEqual([audioFile1, audioFile2]);
+    });
+  });
+
+  describe("findSubtitleFile", () => {
+    it("should find subtitle file by id", async () => {
+      // Arrange
+      const expectedSubtitleFile: any = {
+        id: 1,
+        fileName: "file1.srt",
+        baseName: "file1",
+        extName: ".srt",
+        filePath: "/path/to/file1.srt",
+        status: "active",
+      };
+      mockSubtitleFileRepo.findOne.mockResolvedValue(expectedSubtitleFile);
+
+      // Act
+      const result = await service.findSubtitleFile(1);
+
+      // Assert
+      expect(result).toBe(expectedSubtitleFile);
+    });
+
+    it("should find subtitle files", async () => {
+      // Arrange
+      const expectedSubtitleFiles: any = [
+        {
+          id: 1,
+          fileName: "file1.srt",
+          baseName: "file1",
+          extName: ".srt",
+          filePath: "/path/to/file1.srt",
+          status: "active",
+        },
+        {
+          id: 2,
+          fileName: "file2.srt",
+          baseName: "file2",
+          extName: ".srt",
+          filePath: "/path/to/file2.srt",
+          status: "active",
+        },
+      ];
+      mockSubtitleFileRepo.find.mockResolvedValue(expectedSubtitleFiles);
+
+      // Act
+      const result = await service.findSubtitleFiles();
+
+      // Assert
+      expect(result).toBe(expectedSubtitleFiles);
     });
   });
 });

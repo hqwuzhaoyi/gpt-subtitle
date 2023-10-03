@@ -118,7 +118,6 @@ export class FilesService {
     skip?: number;
     take?: number;
   } = {}): Promise<VideoFileEntity[]> {
-    console.debug(skip, take);
     // 查找所有的视频文件并加载关联的音频和字幕文件
     const videoFiles = await this.videoFilesRepository.find({
       relations: ["audioFile", "audioFile.subtitleFiles"],
@@ -129,10 +128,18 @@ export class FilesService {
     return videoFiles;
   }
 
-  public async findRelatedFilesForAudio(): Promise<AudioFileEntity[]> {
+  public async findRelatedFilesForAudio({
+    skip,
+    take,
+  }: {
+    skip?: number;
+    take?: number;
+  } = {}): Promise<AudioFileEntity[]> {
     // 查找所有的视频文件并加载关联的音频和字幕文件
     const audioFiles = await this.audioFilesRepository.find({
       relations: ["subtitleFiles"],
+      skip,
+      take,
     });
 
     return audioFiles;
