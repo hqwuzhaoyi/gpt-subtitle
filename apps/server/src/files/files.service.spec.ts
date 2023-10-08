@@ -64,15 +64,18 @@ describe("FilesService", () => {
       delete: jest.fn().mockResolvedValue({ raw: { affectedRows: 1 } }),
       find: jest.fn(),
       findOne: jest.fn(),
+      count: jest.fn(),
     };
 
     mockAudioFileRepo = {
       find: jest.fn(),
       findOne: jest.fn(),
+      count: jest.fn(),
     };
     mockVideoFileRepo = {
       find: jest.fn(),
       findOne: jest.fn(),
+      count: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -187,6 +190,18 @@ describe("FilesService", () => {
       });
       expect(result).toEqual(expectedVideoFiles);
     });
+
+    it("should return video count", async () => {
+      // Arrange
+      const count = 10;
+      mockVideoFileRepo.count.mockResolvedValue(count);
+
+      // Act
+      const result = await service.videoFilesCount();
+
+      // Assert
+      expect(result).toBe(count);
+    });
   });
 
   describe("findAudioFile", () => {
@@ -231,6 +246,18 @@ describe("FilesService", () => {
         take,
       });
       expect(result).toEqual([audioFile1, audioFile2]);
+    });
+
+    it("should return audio count", async () => {
+      // Arrange
+      const count = 10;
+      mockAudioFileRepo.count.mockResolvedValue(count);
+
+      // Act
+      const result = await service.audioFilesCount();
+
+      // Assert
+      expect(result).toBe(count);
     });
   });
 
@@ -281,6 +308,18 @@ describe("FilesService", () => {
 
       // Assert
       expect(result).toBe(expectedSubtitleFiles);
+    });
+
+    it("should return subtitle count", async () => {
+      // Arrange
+      const count = 10;
+      mockSubtitleFileRepo.count.mockResolvedValue(count);
+
+      // Act
+      const result = await service.subtitleFilesCount();
+
+      // Assert
+      expect(result).toBe(count);
     });
   });
 });
