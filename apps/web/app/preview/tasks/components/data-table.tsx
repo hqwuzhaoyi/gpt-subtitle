@@ -219,7 +219,6 @@ export function DataTable<TData extends Task, TValue>({
   });
 
   const table = useReactTable({
-    debugTable: process.env.NODE_ENV === "development",
     data,
     columns,
     manualPagination: type === "video",

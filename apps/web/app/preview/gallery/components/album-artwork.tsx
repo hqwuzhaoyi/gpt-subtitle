@@ -24,12 +24,14 @@ import React from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Terminal } from "@/components/Terminal";
 import { useSWRConfig } from "swr";
+import { PaginationState } from "@tanstack/react-table";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
+  pagination: PaginationState;
 }
 
 export function AlbumArtwork({
@@ -38,6 +40,7 @@ export function AlbumArtwork({
   width,
   height,
   className,
+  pagination,
   ...props
 }: AlbumArtworkProps) {
   const [open, setOpen] = React.useState(false);
@@ -45,8 +48,11 @@ export function AlbumArtwork({
   const { mutate } = useSWRConfig();
 
   const reloadList = (id: string) => {
-    mutate(["/api/gallery"]);
+    mutate([
+      `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
+    ]);
   };
+
 
   return (
     <div className={cn("space-y-3", className)} {...props}>

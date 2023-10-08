@@ -11,7 +11,12 @@ export const metadata: Metadata = {
 
 export default async function TaskPage() {
   try {
-    const data = await queryGallery();
+    const data = await queryGallery({
+      pagination: {
+        pageIndex: 0,
+        pageSize: 50,
+      },
+    });
 
     return (
       <>
