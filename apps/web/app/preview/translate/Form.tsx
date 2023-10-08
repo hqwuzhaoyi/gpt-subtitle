@@ -1,27 +1,14 @@
 "use client";
 
-import { SetStateAction, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useSWR from "swr";
 import {
   uploadFile,
-  FileUploadRequest,
-  FileUploadResponse,
   translateFile,
 } from "./file";
 
-interface FormProps {
-  onUpload: (url: string) => void;
-}
 
 const Form = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
   const [file, setFile] = useState<File | null>(null);
   const [filename, setFilename] = useState<string | null>(null);
 
@@ -33,7 +20,7 @@ const Form = () => {
     return filename ? ["/api/file/translate", filename] : null;
   }, [filename]);
 
-  const { data: response, mutate: mutateResponse } = useSWR(
+  const { data: response } = useSWR(
     key,
     async (fileKey: typeof key) => {
       const [, file] = fileKey || [];
@@ -41,7 +28,7 @@ const Form = () => {
       return uploadFile({ file });
     }
   );
-  const { data: translateResponse, mutate: translateMutateResponse } = useSWR(
+  const { data: translateResponse } = useSWR(
     translateKey,
     (key: typeof translateKey) => {
       const [, filename] = key || [];

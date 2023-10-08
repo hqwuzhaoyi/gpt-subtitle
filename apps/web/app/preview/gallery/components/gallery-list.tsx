@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { AlbumArtwork } from "./album-artwork";
 import { Album } from "../data/schema";
@@ -39,7 +39,7 @@ export const GalleryList = ({
     [
       `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
     ],
-    ([url]) =>
+    ([]) =>
       queryGallery({
         pagination: {
           pageIndex: pagination.pageIndex + 1,
@@ -80,7 +80,6 @@ export const GalleryList = ({
               key={album.name}
               album={album}
               className="w-[220px] h-[120px]"
-              aspectRatio="portrait"
               width={220}
               height={120}
               pagination={pagination}

@@ -8,16 +8,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { LanguageSelect } from "../LanguageSelect";
 import { ModelSelect } from "@/components/ModelSelect";
-import { ModelType } from "@/types/index";
 import { LanguageEnum } from "shared-types";
-import { autoStart, outPutSrt } from "app/preview/tasks/api/osrt";
-import { useModels } from "@/hooks/useModels";
+import { outPutSrt } from "app/preview/tasks/api/osrt";
 import { useWhisperModel } from "@/atoms/whisperModel";
 
 export const StartModal = ({

@@ -1,4 +1,4 @@
-import { FileList, FileListResult } from "shared-types";
+import { FileList } from "shared-types";
 import { isNil, ifElse } from "ramda";
 import { Album, AlbumSchema } from "./schema";
 

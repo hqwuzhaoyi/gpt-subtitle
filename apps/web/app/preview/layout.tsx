@@ -1,17 +1,17 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+// import Link from "next/link";
+// import { ChevronRight } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "@/components/page-header";
-import { HomeNav } from "@/components/home-nav";
-import { siteConfig } from "@/config/site";
-import { Icons } from "@/components/icons";
+// import { cn } from "@/lib/utils";
+// import { buttonVariants } from "@/components/ui/button";
+// import {
+//   PageHeader,
+//   PageHeaderDescription,
+//   PageHeaderHeading,
+// } from "@/components/page-header";
+// import { HomeNav } from "@/components/home-nav";
+// import { siteConfig } from "@/config/site";
+// import { Icons } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Subtitles",

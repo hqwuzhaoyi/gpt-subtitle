@@ -28,7 +28,6 @@ import { PaginationState } from "@tanstack/react-table";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
-  aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
   pagination: PaginationState;
@@ -36,7 +35,6 @@ interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function AlbumArtwork({
   album,
-  aspectRatio = "portrait",
   width,
   height,
   className,
@@ -47,12 +45,11 @@ export function AlbumArtwork({
 
   const { mutate } = useSWRConfig();
 
-  const reloadList = (id: string) => {
+  const reloadList = () => {
     mutate([
       `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
     ]);
   };
-
 
   return (
     <div className={cn("space-y-3", className)} {...props}>

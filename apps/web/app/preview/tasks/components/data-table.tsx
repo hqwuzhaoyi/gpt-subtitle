@@ -35,7 +35,6 @@ import { ModelSelect } from "@/components/ModelSelect";
 import { AutoStartModal } from "../../../../components/Modal/Autostart";
 import { TableType } from "../data/types";
 import { Task, taskSchema } from "../data/schema";
-import { useModels } from "../../../../hooks/useModels";
 import { ImagePreviewModal } from "./ImagePreviewModal";
 import { LanguageEnum } from "shared-types";
 import { useWhisperModel } from "@/atoms/whisperModel";
@@ -170,7 +169,7 @@ export function DataTable<TData extends Task, TValue>({
     setData((list ?? []) as TData[]);
   }, [list]);
 
-  socket.on("jobUpdate", ({ jobId, status, data }) => {
+  socket.on("jobUpdate", ({ status, data }) => {
     // 处理任务更新
     // console.log(jobId, status, data);
     if (status === "start") {

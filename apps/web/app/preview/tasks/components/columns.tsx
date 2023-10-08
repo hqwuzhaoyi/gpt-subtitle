@@ -8,23 +8,10 @@ import { labels, languages, priorities, statuses } from "../data/data";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { LanguageSelect } from "../../../../components/LanguageSelect";
 import { Slider } from "@/components/ui/slider";
-import {
-  setImagePreview,
-  setImagePreviewImage,
-  setImagePreviewVisible,
-} from "@/atoms/imagePreview";
-import Image from "next/image";
+import { setImagePreview } from "@/atoms/imagePreview";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -91,7 +78,6 @@ export const columns: ColumnDef<Task>[] = [
                 height={50}
                 src={row.original.poster}
                 alt={row.original.poster}
-
                 className="opacity-100 flex-1"
               />
             </div>
