@@ -1,5 +1,17 @@
 # web
 
+## 1.2.0
+
+### Minor Changes
+
+- ba9550e: add pagination
+
+### Patch Changes
+
+- Updated dependencies [ba9550e]
+  - shared-types@2.1.0
+  - utils@0.2.0
+
 ## 1.1.0
 
 ### Minor Changes

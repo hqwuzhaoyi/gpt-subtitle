@@ -1,5 +1,11 @@
 # jest-presets
 
+## 0.2.0
+
+### Minor Changes
+
+- ba9550e: add pagination
+
 ## 0.1.1
 
 ### Patch Changes
