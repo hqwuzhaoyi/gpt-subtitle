@@ -76,7 +76,7 @@ export class OsrtService {
   }
 
   async autoStart(ln = autoTranslateLanguages, model) {
-    const allVideos = await this.list();
+    const { list: allVideos } = await this.list();
     return allVideos
       .filter((video) => video.status === "todo")
       .filter((video) => !video.isProcessing)
@@ -121,11 +121,9 @@ export class OsrtService {
         return acc;
       }, {});
 
-      console.debug("currentJobsIdMap", currentJobsIdMap);
-
       const videos =
         await this.filesService.findRelatedFilesForVideo(filesServiceOptions);
-
+      const totalCount = await this.filesService.videoFilesCount();
       const result = await Promise.all(
         videos.map(async (videoFileEntity) => {
           const audioFile = await videoFileEntity.audioFile;
@@ -151,7 +149,12 @@ export class OsrtService {
         })
       );
 
-      return result;
+      return {
+        list: result,
+        page: paginationDto.page,
+        limit: paginationDto.limit,
+        totalCount,
+      };
     } catch (error) {
       this.logger.error(error);
     }

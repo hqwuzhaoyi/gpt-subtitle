@@ -7,7 +7,8 @@
   "source": "./src/index.ts",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "author": "",
   "license": "ISC",

@@ -9,14 +9,19 @@ const outPutSrtList = async (): Promise<FileListResult> => {
   } catch (error: any) {
     console.error(error.message);
   }
-  return [];
+  return {
+    list: [],
+    totalCount: 0,
+    page: 1,
+    limit: 10,
+  };
 };
 
 export async function GET(request: Request) {
   try {
     let data;
 
-    const list = await outPutSrtList();
+    const { list } = await outPutSrtList();
     data = list.map((task) => {
       const status = task.isProcessing
         ? "in progress"

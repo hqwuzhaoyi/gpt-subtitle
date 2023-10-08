@@ -1,4 +1,4 @@
-import { FileListResult } from "shared-types";
+import { FileList, FileListResult } from "shared-types";
 import { isNil, ifElse } from "ramda";
 import { Album, AlbumSchema } from "./schema";
 
@@ -19,7 +19,7 @@ export const queryGallery: () => Promise<Album[]> = async () => {
 
   const jsonResponse = await response.json(); // 等待JSON解析
   const { data } = jsonResponse; // 从解析后的JSON中解构data
-  return (data as FileListResult).map((item) => {
+  return (data as FileList).map((item) => {
     return AlbumSchema.parse({
       id: item.id + "",
       name: item.fileName,

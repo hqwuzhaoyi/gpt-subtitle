@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -51,11 +52,21 @@ interface DataTableProps<TData, TValue> {
   type: TableType;
 }
 
-const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
-  let result;
+const queryList: (
+  type: TableType,
+  pagination: PaginationState
+) => Promise<{
+  list: Task[];
+  pageCount: number;
+}> = async (type, pagination) => {
+  let resultList;
+  let pageCount;
   if (type === "video") {
-    const list = await outPutSrtList();
-    result = list.map((task) => {
+    const { list, totalCount } = await outPutSrtList({
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+    });
+    resultList = list.map((task) => {
       const status = task.isProcessing
         ? "in progress"
         : task.subtitle?.length
@@ -73,9 +84,11 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
         processingJobId: task.processingJobId,
       };
     });
+
+    pageCount = Math.ceil(totalCount / pagination.pageSize);
   } else if (type === "audio") {
-    const list = await outPutSrtAudios();
-    result = list.map((task) => {
+    const data = await outPutSrtAudios();
+    resultList = data.map((task) => {
       const status = task.isProcessing
         ? "in progress"
         : task.subtitle
@@ -92,19 +105,29 @@ const queryList: (type: TableType) => Promise<Task[]> = async (type) => {
         processingJobId: task.processingJobId,
       };
     });
+    pageCount = Math.ceil(data.length / pagination.pageSize);
   } else {
     throw new Error("unknown type" + type);
   }
 
-  return result.map((item) => taskSchema.parse(item));
+  return {
+    list: resultList.map((item) => taskSchema.parse(item)),
+    pageCount,
+  };
 };
 
-function useList(type: TableType) {
-  const { data, error, isLoading } = useSWR(`/osrt/list/${type}`, () =>
-    queryList(type)
+function useList(type: TableType, pagination: PaginationState) {
+  const {
+    data: { list, pageCount } = {},
+    error,
+    isLoading,
+  } = useSWR(
+    `/osrt/list/${type}?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
+    () => queryList(type, pagination)
   );
   return {
-    list: data,
+    list,
+    pageCount,
     isLoading,
     error,
   };
@@ -122,8 +145,23 @@ export function DataTable<TData extends Task, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const { list } = useList(type);
-  const { data: models = [] } = useModels();
+
+  const [{ pageIndex, pageSize }, setPagination] =
+    React.useState<PaginationState>({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+  const pagination = React.useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
+
+  const { list, pageCount } = useList(type, pagination);
+
   const { model } = useWhisperModel();
 
   const [data, setData] = React.useState(initData);
@@ -181,14 +219,19 @@ export function DataTable<TData extends Task, TValue>({
   });
 
   const table = useReactTable({
+    debugTable: process.env.NODE_ENV === "development",
     data,
     columns,
+    manualPagination: type === "video",
     state: {
       sorting,
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination,
     },
+    pageCount,
+    onPaginationChange: setPagination,
     enableRowSelection: true,
     enableMultiRowSelection: true,
     onRowSelectionChange: setRowSelection,

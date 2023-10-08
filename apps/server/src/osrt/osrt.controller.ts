@@ -33,7 +33,6 @@ export class OsrtController {
 
   @Get("list")
   async list(@Query() paginationDto: PaginationDto) {
-    console.debug('paginationDto', paginationDto)
     return await this.osrtService.list(paginationDto);
   }
   @Get("audios")
