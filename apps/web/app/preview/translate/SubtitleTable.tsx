@@ -35,13 +35,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TranslateResult } from "shared-types";
 import {
   FileUploadResponse,
   deleteSubtitle,
   querySubtitles,
   translateFileWithId,
-  uploadFile,
   uploadSubtitle,
 } from "./file";
 import useSWR, { mutate } from "swr";
@@ -184,9 +182,9 @@ export function SubtitleTable() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data: subtitles = [], mutate: translateMutateResponse } = useSWR<
-    SubtitleItem[]
-  >("/subtitles", () => querySubtitles());
+  const { data: subtitles = [] } = useSWR<SubtitleItem[]>("/subtitles", () =>
+    querySubtitles()
+  );
   // const { data: translateResponse, mutate: translateMutateResponse } =
   //   useSWR<TranslateResult>(translateKey, ([, id] = []) =>
   //     translateFileWithId(id)
@@ -227,15 +225,12 @@ export function SubtitleTable() {
   const key = React.useMemo(() => {
     return file ? ["/api/file/upload", file] : null;
   }, [file]);
-  const { data: response, mutate: mutateResponse } = useSWR<FileUploadResponse>(
-    key,
-    ([, file] = []) => uploadSubtitle({ file }),
-    {
-      onSuccess: () => {
-        mutate("/subtitles");
-      },
-    }
-  );
+
+  useSWR<FileUploadResponse>(key, ([, file] = []) => uploadSubtitle({ file }), {
+    onSuccess: () => {
+      mutate("/subtitles");
+    },
+  });
 
   return (
     <div className="w-full">

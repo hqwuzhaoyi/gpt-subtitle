@@ -1,34 +1,16 @@
 "use client";
 
 import { Row, Table } from "@tanstack/react-table";
-import {
-  Copy,
-  MoreHorizontal,
-  Pen,
-  Star,
-  Tags,
-  Trash,
-  Play,
-  Ban,
-  DownloadCloud,
-} from "lucide-react";
+import { MoreHorizontal, Play, Ban, DownloadCloud } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { labels } from "../data/data";
 import { Task, taskSchema } from "../data/schema";
 import { outPutSrt, outPutSrtStop } from "../api/osrt";
 import { useSWRConfig } from "swr";

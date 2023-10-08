@@ -24,28 +24,31 @@ import React from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Terminal } from "@/components/Terminal";
 import { useSWRConfig } from "swr";
+import { PaginationState } from "@tanstack/react-table";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
-  aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
+  pagination: PaginationState;
 }
 
 export function AlbumArtwork({
   album,
-  aspectRatio = "portrait",
   width,
   height,
   className,
+  pagination,
   ...props
 }: AlbumArtworkProps) {
   const [open, setOpen] = React.useState(false);
 
   const { mutate } = useSWRConfig();
 
-  const reloadList = (id: string) => {
-    mutate(["/api/gallery"]);
+  const reloadList = () => {
+    mutate([
+      `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
+    ]);
   };
 
   return (

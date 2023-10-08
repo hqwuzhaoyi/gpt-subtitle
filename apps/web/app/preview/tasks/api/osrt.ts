@@ -46,9 +46,17 @@ export const terminateAllJobs = async (): Promise<void> => {
     throw new Error("Error uploading file");
   }
 };
-export const outPutSrtList = async (): Promise<FileListResult> => {
+export const outPutSrtList = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}): Promise<FileListResult> => {
   try {
-    const response = await request.get(`/osrt/list`);
+    const response = await request.get(
+      `/osrt/list?page=${page}&limit=${limit}`
+    );
     return response.data;
   } catch (error) {
     console.error(error);

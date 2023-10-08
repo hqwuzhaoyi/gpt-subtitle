@@ -14,10 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { LanguageSelect } from "../LanguageSelect";
 import { ModelSelect } from "@/components/ModelSelect";
-import { ModelType } from "@/types/index";
 import { LanguageEnum } from "shared-types";
 import { autoStart } from "app/preview/tasks/api/osrt";
-import { useModels } from "@/hooks/useModels";
 import { useWhisperModel } from "@/atoms/whisperModel";
 import { toast } from "../ui/use-toast";
 

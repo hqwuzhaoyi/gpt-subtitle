@@ -27,7 +27,14 @@ type AudioListItem = FileItem & {
   processingJobId?: string;
 };
 
-export type FileListResult = VideoFileItem[];
+export type FileList = VideoFileItem[];
+
+export type FileListResult = {
+  list: FileList;
+  page: number;
+  limit: number;
+  totalCount: number;
+};
 export type AudioListResult = AudioListItem[];
 
 export type CreateWhisperJobItem = {

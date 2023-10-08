@@ -7,18 +7,19 @@
   "source": "./src/index.ts",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^29.5.4",
-    "@types/node": "^20.5.9",
-    "eslint": "^8.48.0",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.8.3",
+    "eslint": "^8.51.0",
     "eslint-config-custom": "workspace:*",
-    "jest": "^29.6.4",
+    "jest": "^29.7.0",
     "jest-presets": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   }
 }

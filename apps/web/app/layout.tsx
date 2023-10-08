@@ -1,4 +1,4 @@
-import { StyleSwitcher } from "@/components/style-switcher";
+// import { StyleSwitcher } from "@/components/style-switcher";
 import "./globals.css";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";

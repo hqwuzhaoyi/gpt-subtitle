@@ -128,6 +128,18 @@ export class FilesService {
     return videoFiles;
   }
 
+  public async videoFilesCount(): Promise<number> {
+    return this.videoFilesRepository.count();
+  }
+
+  public async audioFilesCount(): Promise<number> {
+    return this.audioFilesRepository.count();
+  }
+
+  public async subtitleFilesCount(): Promise<number> {
+    return this.subtitleFilesRepository.count();
+  }
+
   public async findRelatedFilesForAudio({
     skip,
     take,

@@ -1,5 +1,5 @@
 import { request } from "@/lib/request";
-import { FileListResult } from "shared-types";
+import { FileList } from "shared-types";
 import { SubtitleItem } from "./types";
 
 export interface FileUploadResponse {
@@ -67,7 +67,7 @@ export const translateFile = async (
 };
 export const translateFileWithId = async (
   id: number
-): Promise<FileListResult> => {
+): Promise<FileList> => {
   const postData = {
     id,
     forceTranslate: true,
@@ -89,7 +89,7 @@ export const querySubtitles = async (): Promise<SubtitleItem[]> => {
     throw new Error("Error uploading file");
   }
 };
-export const deleteSubtitle = async (id: number): Promise<FileListResult> => {
+export const deleteSubtitle = async (id: number): Promise<FileList> => {
   console.debug("deleteSubtitle", id);
   try {
     const response = await request.delete(`/subtitle/${id}`);
