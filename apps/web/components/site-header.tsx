@@ -1,19 +1,19 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
 // import { CommandMenu } from "@/components/command-menu"
-import { Icons } from "@/components/icons"
-import { MainNav } from "@/components/main-nav"
+import { Icons } from "@/components/icons";
+import { MainNav } from "@/components/main-nav";
 // import { MobileNav } from "@/components/mobile-nav"
-import { ModeToggle } from "@/components/mode-toggle"
+import { ModeToggle } from "@/components/mode-toggle";
 
 export function SiteHeader() {
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
-       <MainNav />
+        <MainNav />
         {/*  <MobileNav /> */}
         <div className="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
           {/* <div className="w-full flex-1 md:w-auto md:flex-none">
@@ -57,9 +57,13 @@ export function SiteHeader() {
               </div>
             </Link> */}
             <ModeToggle />
+            {/* TODO: when login show sign out button and username */}
+            <Link href="/login">
+              <Button variant="outline">Login</Button>
+            </Link>
           </nav>
         </div>
       </div>
     </header>
-  )
+  );
 }

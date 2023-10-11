@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Request,
+  Response,
   UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "./auth.guard";
@@ -34,5 +35,15 @@ export class AuthController {
   @Get("profile")
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Post("logout")
+  async logout(@Request() req, @Response() res) {
+    // If you're using a blacklist, add the token to it.
+    // If tokens have an expiry, simply let it expire.
+
+    // Clear the JWT token on client side
+    res.clearCookie("jwt"); // If the JWT is stored in a cookie
+    return res.status(200).send({ message: "Logged out successfully" });
   }
 }
