@@ -8,23 +8,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "../api/auth";
-
+import { signIn, signOut, useSession } from "next-auth/react";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signIn" | "signUp";
+  error?: string;
 }
 
 export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [userName, setUserName] = React.useState<string>("");
+  const [username, setUserName] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
     try {
-      const data = await login(userName, password);
+      const data = await signIn("credentials", {
+        username,
+        password,
+        redirect: true,
+        callbackUrl: "/",
+      });
+
       console.log(data);
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +56,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
               onChange={(e) => setUserName(e.target.value)}
-              value={userName}
+              value={username}
             />
           </div>
           <div className="grid gap-1">
@@ -64,6 +72,9 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
               value={password}
             />
           </div>
+          {!!props.error && (
+            <p className="text-[0.8rem] text-red-600">Authentication Failed</p>
+          )}
           <Button disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

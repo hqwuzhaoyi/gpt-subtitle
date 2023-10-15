@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage(props: {
+  searchParams: { error: string | undefined };
+}) {
   return (
     <>
       <div className="md:hidden">
@@ -39,7 +41,7 @@ export default function AuthenticationPage() {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <UserAuthForm type="signIn" />
+            <UserAuthForm type="signIn" error={props.searchParams?.error} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

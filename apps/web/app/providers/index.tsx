@@ -8,3 +8,4 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <JotaiStoreProvider key="jotaiStoreProvider">{children}</JotaiStoreProvider>
   );
 }
+export * from './NextAuthProvider'

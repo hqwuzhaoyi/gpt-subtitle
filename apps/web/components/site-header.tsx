@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
@@ -8,6 +9,7 @@ import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 // import { MobileNav } from "@/components/mobile-nav"
 import { ModeToggle } from "@/components/mode-toggle";
+import { SigningButton } from "./login-button";
 
 export function SiteHeader() {
   return (
@@ -58,9 +60,9 @@ export function SiteHeader() {
             </Link> */}
             <ModeToggle />
             {/* TODO: when login show sign out button and username */}
-            <Link href="/login">
-              <Button variant="outline">Login</Button>
-            </Link>
+            {/* <Link href="/login"> */}
+            <SigningButton />
+            {/* </Link> */}
           </nav>
         </div>
       </div>
