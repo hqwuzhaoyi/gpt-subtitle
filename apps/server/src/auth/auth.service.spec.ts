@@ -27,6 +27,7 @@ describe("AuthService", () => {
           provide: JwtService,
           useValue: {
             signAsync: jest.fn(),
+            verifyAsync: jest.fn(),
           },
         },
         {
@@ -77,7 +78,11 @@ describe("AuthService", () => {
 
       const result = await authService.signIn("username", "password");
 
-      expect(result).toEqual({ access_token: "access-token" });
+      expect(result).toEqual({
+        access_token: "access-token",
+        id: 1,
+        username: "username",
+      });
       expect(jwtService.signAsync).toHaveBeenCalledWith({
         sub: user.id,
         username: user.username,
@@ -111,6 +116,43 @@ describe("AuthService", () => {
       const response = await authService.register(registerDto);
 
       expect(response).toEqual(result);
+    });
+  });
+
+  describe("refreshToken", () => {
+    it("should return a new access token when given a valid refresh token", async () => {
+      // Arrange
+      const token = "validToken";
+      const payload = { id: 1, username: "testuser" };
+      const newAccessToken = "newAccessToken";
+      jest.spyOn(jwtService, "verifyAsync").mockResolvedValueOnce(payload);
+      jest
+        .spyOn(jwtService, "signAsync")
+        .mockReturnValueOnce(Promise.resolve(newAccessToken));
+
+      // Act
+      const result = await authService.refreshToken(token);
+
+      // Assert
+      expect(result).toEqual(newAccessToken);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(token);
+      expect(jwtService.signAsync).toHaveBeenCalledWith({
+        sub: payload.id,
+        username: payload.username,
+      });
+    });
+
+    it("should throw an UnauthorizedException when given an invalid refresh token", async () => {
+      // Arrange
+      const token = "invalidToken";
+      const error = new Error("Invalid token");
+      jest.spyOn(jwtService, "verifyAsync").mockRejectedValueOnce(error);
+
+      // Act & Assert
+      await expect(authService.refreshToken(token)).rejects.toThrow(
+        UnauthorizedException
+      );
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(token);
     });
   });
 });

@@ -63,4 +63,15 @@ describe("AuthController", () => {
       expect(controller.getProfile({ user })).toBe(user);
     });
   });
+  describe("refreshToken", () => {
+    it("should refresh access token", async () => {
+      const token = "testtoken";
+      const newAccessToken = "newaccesstoken";
+      jest
+        .spyOn(authService, "refreshToken")
+        .mockImplementation(async () => newAccessToken);
+
+      expect(await controller.refreshToken({ token })).toBe(newAccessToken);
+    });
+  });
 });

@@ -26,6 +26,13 @@ export class AuthController {
   }
 
   @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post("refreshToken")
+  refreshToken(@Body() { token }) {
+    return this.authService.refreshToken(token);
+  }
+
+  @Public()
   @Post("register")
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);

@@ -19,7 +19,31 @@ export class AuthService {
     const payload = { sub: user.id, username: user.username };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      username: user.username,
+      id: user.id,
     };
+  }
+
+  async refreshToken(token: string) {
+    try {
+      // Verify the refresh token
+      const payload = await this.jwtService.verifyAsync(token);
+
+      // Optional: Check if the refresh token is in the database and still valid
+      // if not, throw an exception
+      console.debug("refreshToken payload: " + JSON.stringify(payload));
+
+      // Create a new access token
+      const user = { sub: payload.id, username: payload.username }; // this is just a placeholder. Adjust according to your payload structure
+      const newAccessToken = await this.jwtService.signAsync(user);
+
+      return newAccessToken;
+    } catch (error) {
+      // Handle token verification errors
+      throw new UnauthorizedException(
+        "Invalid refresh token: " + error.message
+      );
+    }
   }
 
   async register(registerDto: RegisterDto) {
