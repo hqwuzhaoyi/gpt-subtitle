@@ -15,9 +15,9 @@ import { StaticDirModule } from "./static-dir.provider";
 
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
-import { SubtitleModule } from './subtitle/subtitle.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { SubtitleModule } from "./subtitle/subtitle.module";
+import { AuthModule } from "./auth/auth.module";
+import { UsersModule } from "./users/users.module";
 
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -53,8 +53,8 @@ const rootPath = path.join(__dirname, "..", "..", "..");
       },
     }),
     BullBoardModule.forRoot({
-      route: '/queues',
-      adapter: ExpressAdapter // Or FastifyAdapter from `@bull-board/fastify`
+      route: "/queues",
+      adapter: ExpressAdapter, // Or FastifyAdapter from `@bull-board/fastify`
     }),
     ConfigModule.forRoot({
       envFilePath: [
@@ -102,6 +102,5 @@ export class AppModule implements OnModuleInit {
     } catch (err) {
       console.error(`Failed to ensure directory ${videoDir}: `, err);
     }
-
   }
 }

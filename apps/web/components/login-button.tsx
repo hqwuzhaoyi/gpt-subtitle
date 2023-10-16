@@ -11,8 +11,8 @@ export const SigningButton = () => {
   const router = useRouter();
   if (session?.user) {
     return (
-      <div>
-        <p>{session.user.name}</p>
+      <div className="flex flex-row items-center gap-2">
+        <p className="text-sm font-medium leading-none">{session.user.name}</p>
 
         <Button
           variant="outline"

@@ -3,9 +3,21 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import { Session } from "next-auth";
-import { User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 interface CustomSession extends Session {
   accessToken?: string;
+}
+
+async function refreshAccessToken(token: string) {
+  const resp = await fetch(backendURL + "/auth/refreshToken", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+  });
+  return await resp.json();
 }
 
 const backendURL = process.env.API_URL;
@@ -44,12 +56,16 @@ export const authOptions = {
           },
           body: JSON.stringify(credentialDetails),
         });
-        const user = await resp.json();
-        console.debug("user: " + JSON.stringify(user));
-        if (user.access_token) {
-          console.log("nextauth daki user: " + user.access_token);
-          user.asd = "111";
-          return user;
+        const data = await resp.json();
+        console.debug("user data: " + JSON.stringify(data));
+        if (data.access_token) {
+          return {
+            ...data,
+            user: {
+              ...data.user,
+              name: data.user.username,
+            },
+          };
         } else {
           console.log("check your credentials");
           return null;
@@ -71,31 +87,96 @@ export const authOptions = {
       console.debug("jwt account: " + JSON.stringify(account));
       console.debug("jwt profile: " + JSON.stringify(profile));
 
-      return token;
+      if (account && user && account?.type === "credentials") {
+        return {
+          ...token,
+          ...user,
+          accessToken: user.access_token,
+          accessTokenExpires: Date.now() + user.expires_in * 1000,
+          refreshToken: user.refresh_token,
+        };
+      } else {
+        if (account && user) {
+          return {
+            ...token,
+            accessToken: account.accessToken,
+            accessTokenExpires: Date.now() + account.expires_in * 1000,
+            refreshToken: account.refresh_token,
+          };
+        }
+      }
+
+      // on subsequent calls, token is provided and we need to check if it's expired
+      if (token?.accessTokenExpires) {
+        if (Date.now() / 1000 < token?.accessTokenExpires)
+          return { ...token, ...user };
+      } else if (token?.refreshToken) {
+        const data = await refreshAccessToken(token.refreshToken);
+        console.debug("refreshAccessToken data: " + JSON.stringify(data));
+
+        if (data.access_token) {
+          const user = { ...data.user, name: data.user.username };
+          const account = {
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+            expires_in: data.expires_in,
+          };
+
+          return {
+            ...token,
+            ...user,
+            accessToken: account.access_token,
+            accessTokenExpires: Date.now() + account.expires_in * 1000,
+            refreshToken: account.refresh_token,
+          };
+        } else {
+          return {
+            ...token,
+            error:
+              "Refresh token has expired. Please log in again to get a new refresh token.",
+          };
+        }
+      }
+
+      return { ...token, ...user };
     },
-    async session({ session, token, user }) {
-      // Send properties to the client, like an access_token from a provider.
-      (session as CustomSession).accessToken = token.accessToken as string;
+    async session({ session, token }: { session: Session; token: JWT }) {
       console.debug("session session: " + JSON.stringify(session));
+      if (token) {
+        session.user = token.user;
+        session.accessToken = token.accessToken;
+        session.error = token.error;
+      }
+
       return session;
     },
-    // async session({ session, token, user }) {
-    //   // session.accessToken = token.accessToken;
-    //   // session.idToken = token.idToken;
-    //   console.debug("session session: " + JSON.stringify(session));
-    //   console.debug("session token: " + JSON.stringify(token));
-    //   console.debug("session user: " + JSON.stringify(user));
-    //   return { session };
-    // },
-    // async jwt({ token, account, user }) {
-    //   console.debug("jwt token: " + JSON.stringify(token));
-    //   console.debug("jwt account: " + JSON.stringify(account));
-    //   console.debug("jwt user: " + JSON.stringify(user));
-    //   if (account) {
-    //     token.accessToken = account.access_token;
-    //     token.idToken = account.id_token;
+    // async session({
+    //   session,
+    //   token,
+    // }: {
+    //   session: Session;
+    //   token: JWT;
+    // }): Promise<Session> {
+    //   if (
+    //     token?.refreshTokenExpires &&
+    //     token?.accessTokenExpires &&
+    //     Date.now() / 1000 > token?.accessTokenExpires &&
+    //     Date.now() / 1000 > token?.refreshTokenExpires
+    //   ) {
+    //     return Promise.reject({
+    //       error: new Error(
+    //         "Refresh token has expired. Please log in again to get a new refresh token."
+    //       ),
+    //     });
     //   }
-    //   return token;
+
+    //   const accessTokenData = JSON.parse(atob(token.token.split(".")?.at(1)));
+    //   session.user = accessTokenData;
+    //   token.accessTokenExpires = accessTokenData.exp;
+
+    //   session.token = token?.token;
+
+    //   return Promise.resolve(session);
     // },
   },
   pages: {
