@@ -1,9 +1,24 @@
+import { Session as NextAuthSession } from "next-auth";
+
+declare module "next-auth/react" {
+  interface Session extends NextAuthSession {
+    refreshTokenExpires?: number;
+    accessTokenExpires?: string;
+    refreshToken?: string;
+    token?: string;
+    error?: string;
+    user?: User;
+    accessToken?: string;
+  }
+}
+
 declare module "next-auth" {
   /**
    * Returned by `useSession`, `getSession` and received as
    * a prop on the `SessionProvider` React Context
    */
-  interface Session {
+
+  interface Session extends NextAuthSession {
     refreshTokenExpires?: number;
     accessTokenExpires?: string;
     refreshToken?: string;

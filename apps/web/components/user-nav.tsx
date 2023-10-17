@@ -60,7 +60,7 @@ export function UserNav({ user }: { user: User }) {
         <DropdownMenuItem
           onClick={() => {
             signOut({ redirect: false }).then(() => {
-              router.push("/"); // Redirect to the home page after signing out
+              router.push("/login");
             });
           }}
         >

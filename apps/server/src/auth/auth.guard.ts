@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    return true;
+    // return true;
     if (isPublic) {
       // 💡 See this condition
       return true;
@@ -30,6 +30,7 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
+    console.debug("AuthGuard", token);
     if (!token) {
       throw new UnauthorizedException();
     }
