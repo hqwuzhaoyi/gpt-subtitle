@@ -2,30 +2,16 @@
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { signOut, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { UserNav } from "./user-nav";
+import { User } from "next-auth";
 
 export const SigningButton = () => {
   const { data: session, status } = useSession();
-  const router = useRouter();
-  if (session?.user) {
-    return (
-      <div className="flex flex-row items-center gap-2">
-        <p className="text-sm font-medium leading-none">{session.user.name}</p>
+  if (status === "loading") return null;
 
-        <Button
-          variant="outline"
-          onClick={() => {
-            signOut({ redirect: false }).then(() => {
-              router.push("/"); // Redirect to the home page after signing out
-            });
-          }}
-        >
-          Sign Out
-        </Button>
-      </div>
-    );
+  if (session?.user) {
+    return <UserNav user={session?.user as User}></UserNav>;
   }
   return (
     <Link href="/login">
