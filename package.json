@@ -34,7 +34,7 @@
     "@changesets/cli": "^2.26.2",
     "@types/node": "^20.8.4",
     "changeset": "^0.2.6",
-    "conventional-changelog-cli": "^3.0.0",
+    "conventional-changelog-cli": "^4.1.0",
     "eslint": "^8.51.0",
     "eslint-config-custom": "workspace:^",
     "jest": "^29.7.0",
