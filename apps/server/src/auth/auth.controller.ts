@@ -13,6 +13,7 @@ import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
 import { Public } from "./decorators/public.decorator";
 import { RegisterDto } from "./dto/register.dto";
+import { OAuthSignInDto } from "./dto/outhSignIn.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -52,5 +53,11 @@ export class AuthController {
     // Clear the JWT token on client side
     res.clearCookie("jwt"); // If the JWT is stored in a cookie
     return res.status(200).send({ message: "Logged out successfully" });
+  }
+
+  @Public()
+  @Post("oauthSignIn")
+  async oauthSignIn(@Body() oauthSignInDto: OAuthSignInDto) {
+    return this.authService.oauthSignIn(oauthSignInDto);
   }
 }

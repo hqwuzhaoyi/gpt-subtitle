@@ -3,6 +3,7 @@ import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "./dto/register.dto";
 import { jwtConstants } from "./constants";
+import { OAuthSignInDto } from "./dto/outhSignIn.dto";
 
 @Injectable()
 export class AuthService {
@@ -65,5 +66,32 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     const { username, password } = registerDto;
     return this.usersService.register(username, password);
+  }
+
+  async oauthSignIn(oauthData: OAuthSignInDto): Promise<any> {
+    let user = await this.usersService.findOneByProviderId(oauthData.user.id);
+
+    // 如果用户不存在，创建一个新用户
+    if (!user) {
+      user = await this.usersService.createOAuthUser(oauthData);
+    }
+
+    // 创建token的payload
+    const payload = { sub: user.id, username: user.username };
+
+    const refreshToken = await this.jwtService.signAsync(payload);
+    await this.usersService.storeRefreshToken(refreshToken, user.id);
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      refresh_token: refreshToken,
+      expires_in: jwtConstants.expiresIn,
+      user: {
+        name: user.username,
+        id: user.id,
+        image: user.image,
+        email: user.email,
+      },
+    };
   }
 }

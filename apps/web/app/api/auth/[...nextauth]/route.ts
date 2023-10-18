@@ -1,12 +1,11 @@
-import { SessionStrategy } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
-interface CustomSession extends Session {
-  accessToken?: string;
-}
+
+const backendURL = process.env.API_URL;
 
 async function refreshAccessToken(token: string) {
   const resp = await fetch(backendURL + "/auth/refreshToken", {
@@ -18,9 +17,22 @@ async function refreshAccessToken(token: string) {
     body: JSON.stringify({ token }),
   });
   return await resp.json();
+  // TODO: 失败处理
 }
 
-const backendURL = process.env.API_URL;
+async function oauthSignIn({ user, account }) {
+  const resp = await fetch(backendURL + "/auth/oauthSignIn", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user, account }),
+  });
+  return await resp.json();
+  // TODO: 失败处理
+}
+
 export const authOptions = {
   session: {
     strategy: "jwt",
@@ -72,6 +84,10 @@ export const authOptions = {
         }
       },
     }),
+    GitHubProvider({
+      clientId: "c2161b2fec5fcb2654ba",
+      clientSecret: "56f0dad5b82b66252c97181cf2cccf4d2554bef8",
+    }),
   ],
 
   callbacks: {
@@ -87,20 +103,35 @@ export const authOptions = {
       console.debug("jwt account: " + JSON.stringify(account));
       console.debug("jwt profile: " + JSON.stringify(profile));
 
-      if (account && user && account?.type === "credentials") {
-        return {
-          ...token,
-          ...user,
-          accessToken: user.access_token,
-          accessTokenExpires: Date.now() + user.expires_in * 1000,
-          refreshToken: user.refresh_token,
-        };
-      } else {
-        if (account && user) {
+      if (account && user) {
+        if (account?.type === "credentials") {
           return {
             ...token,
-            accessToken: account.accessToken,
-            accessTokenExpires: Date.now() + account.expires_in * 1000,
+            ...user,
+            accessToken: user.access_token,
+            accessTokenExpires:
+              user.expires_in && Date.now() + user.expires_in * 1000,
+            refreshToken: user.refresh_token,
+          };
+        } else if (account?.type === "oauth") {
+          const data = await oauthSignIn({ user, account });
+          // TODO: Oauth 登录
+          return {
+            ...token,
+            ...data,
+            accessToken: data.access_token,
+            accessTokenExpires:
+              data.expires_in &&
+              Date.now() + (data.expires_in as number) * 1000,
+            refreshToken: data.refresh_token,
+          };
+        } else {
+          return {
+            ...token,
+            accessToken: account.access_token,
+            accessTokenExpires:
+              account.expires_in &&
+              Date.now() + (account.expires_in as number) * 1000,
             refreshToken: account.refresh_token,
           };
         }
@@ -108,8 +139,13 @@ export const authOptions = {
 
       // on subsequent calls, token is provided and we need to check if it's expired
       if (token?.accessTokenExpires) {
-        if (Date.now() / 1000 < token?.accessTokenExpires)
-          return { ...token, ...user };
+        if (Date.now() / 1000 < token?.accessTokenExpires) {
+          if (user) {
+            return { ...token, ...user };
+          } else {
+            return { ...token };
+          }
+        }
       } else if (token?.refreshToken) {
         const data = await refreshAccessToken(token.refreshToken);
         console.debug("refreshAccessToken data: " + JSON.stringify(data));
@@ -143,41 +179,13 @@ export const authOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       console.debug("session session: " + JSON.stringify(session));
       if (token) {
-        session.user = token.user;
-        session.accessToken = token.accessToken;
-        session.error = token.error;
+        if (token.user) session.user = token.user;
+        if (token.accessToken) session.accessToken = token.accessToken;
+        if (token.error) session.error = token.error;
       }
 
       return session;
     },
-    // async session({
-    //   session,
-    //   token,
-    // }: {
-    //   session: Session;
-    //   token: JWT;
-    // }): Promise<Session> {
-    //   if (
-    //     token?.refreshTokenExpires &&
-    //     token?.accessTokenExpires &&
-    //     Date.now() / 1000 > token?.accessTokenExpires &&
-    //     Date.now() / 1000 > token?.refreshTokenExpires
-    //   ) {
-    //     return Promise.reject({
-    //       error: new Error(
-    //         "Refresh token has expired. Please log in again to get a new refresh token."
-    //       ),
-    //     });
-    //   }
-
-    //   const accessTokenData = JSON.parse(atob(token.token.split(".")?.at(1)));
-    //   session.user = accessTokenData;
-    //   token.accessTokenExpires = accessTokenData.exp;
-
-    //   session.token = token?.token;
-
-    //   return Promise.resolve(session);
-    // },
   },
   pages: {
     signIn: "/login",

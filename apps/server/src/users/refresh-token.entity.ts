@@ -5,7 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { User } from "./users.entity"; // Assume you already have a User entity
+import { RegularUser } from "./users.entity"; // Assume you already have a User entity
 
 @Entity()
 export class RefreshToken {
@@ -15,7 +15,7 @@ export class RefreshToken {
   @Column({ type: "text" })
   token: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => RegularUser)
   @JoinColumn({ name: "user_id" })
-  user: User;
+  user: RegularUser;
 }

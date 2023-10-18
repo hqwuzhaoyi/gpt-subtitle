@@ -22,7 +22,9 @@ request.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       // redirect to login page
-      window.location.href = "/login";
+      if (window) {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
