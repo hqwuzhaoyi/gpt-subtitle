@@ -44,7 +44,7 @@
     "eslint-config-next": "13.5.4",
     "jotai": "^2.4.3",
     "lucide-react": "^0.287.0",
-    "next": "13.5.4",
+    "next": "13.5.5",
     "next-themes": "^0.2.1",
     "postcss": "8.4.31",
     "ramda": "^0.29.1",
