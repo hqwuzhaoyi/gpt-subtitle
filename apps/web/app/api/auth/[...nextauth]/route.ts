@@ -33,11 +33,20 @@ async function oauthSignIn({ user, account }) {
   // TODO: 失败处理
 }
 
+const githubProvider =
+  process.env.GITHUB_CLIENT_ID &&
+  process.env.GITHUB_CLIENT_SECRET &&
+  GitHubProvider({
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  });
+
 export const authOptions = {
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  secret: process.env.AUTH_SECRET,
   providers: [
     CredentialsProvider({
       type: "credentials",
@@ -84,11 +93,8 @@ export const authOptions = {
         }
       },
     }),
-    GitHubProvider({
-      clientId: "c2161b2fec5fcb2654ba",
-      clientSecret: "56f0dad5b82b66252c97181cf2cccf4d2554bef8",
-    }),
-  ],
+    githubProvider,
+  ].filter(Boolean) as NextAuthConfig["providers"],
 
   callbacks: {
     jwt: async ({ token, user, account, profile }) => {
@@ -138,41 +144,41 @@ export const authOptions = {
       }
 
       // on subsequent calls, token is provided and we need to check if it's expired
-      if (token?.accessTokenExpires) {
-        if (Date.now() / 1000 < token?.accessTokenExpires) {
-          if (user) {
-            return { ...token, ...user };
-          } else {
-            return { ...token };
-          }
-        }
-      } else if (token?.refreshToken) {
-        const data = await refreshAccessToken(token.refreshToken);
-        console.debug("refreshAccessToken data: " + JSON.stringify(data));
+      // if (token?.accessTokenExpires) {
+      //   if (Date.now() / 1000 < token?.accessTokenExpires) {
+      //     if (user) {
+      //       return { ...token, ...user };
+      //     } else {
+      //       return { ...token };
+      //     }
+      //   }
+      // } else if (token?.refreshToken) {
+      //   const data = await refreshAccessToken(token.refreshToken);
+      //   console.debug("refreshAccessToken data: " + JSON.stringify(data));
 
-        if (data.access_token) {
-          const user = { ...data.user, name: data.user.username };
-          const account = {
-            access_token: data.access_token,
-            refresh_token: data.refresh_token,
-            expires_in: data.expires_in,
-          };
+      //   if (data.access_token) {
+      //     const user = { ...data.user, name: data.user.username };
+      //     const account = {
+      //       access_token: data.access_token,
+      //       refresh_token: data.refresh_token,
+      //       expires_in: data.expires_in,
+      //     };
 
-          return {
-            ...token,
-            ...user,
-            accessToken: account.access_token,
-            accessTokenExpires: Date.now() + account.expires_in * 1000,
-            refreshToken: account.refresh_token,
-          };
-        } else {
-          return {
-            ...token,
-            error:
-              "Refresh token has expired. Please log in again to get a new refresh token.",
-          };
-        }
-      }
+      //     return {
+      //       ...token,
+      //       ...user,
+      //       accessToken: account.access_token,
+      //       accessTokenExpires: Date.now() + account.expires_in * 1000,
+      //       refreshToken: account.refresh_token,
+      //     };
+      //   } else {
+      //     return {
+      //       ...token,
+      //       error:
+      //         "Refresh token has expired. Please log in again to get a new refresh token.",
+      //     };
+      //   }
+      // }
 
       return { ...token, ...user };
     },
