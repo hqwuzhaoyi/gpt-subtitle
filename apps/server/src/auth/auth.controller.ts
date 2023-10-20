@@ -39,11 +39,11 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Get("profile")
-  getProfile(@Request() req) {
-    return req.user;
-  }
+  // @UseGuards(AuthGuard)
+  // @Get("profile")
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
 
   @Post("logout")
   async logout(@Request() req, @Response() res) {
