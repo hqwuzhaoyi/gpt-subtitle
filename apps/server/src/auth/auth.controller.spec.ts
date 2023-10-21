@@ -7,6 +7,7 @@ import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { RegularUser, OAuthUser } from "@/users/users.entity";
 import { RefreshToken } from "@/users/refresh-token.entity";
+import { mockAccessToken, mockRegularUser } from "./testConstants";
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -44,10 +45,11 @@ describe("AuthController", () => {
         username: "testuser",
         password: "testpassword",
       };
-      const token = "testtoken";
-      jest.spyOn(authService, "signIn").mockImplementation(async () => token);
+      jest
+        .spyOn(authService, "signIn")
+        .mockImplementation(async () => mockAccessToken);
 
-      expect(await controller.signIn(signInDto)).toBe(token);
+      expect(await controller.signIn(signInDto)).toBe(mockAccessToken);
     });
   });
 
@@ -57,20 +59,12 @@ describe("AuthController", () => {
         username: "testuser",
         password: "testpassword",
       };
-      const user: RegularUser = {
-        id: 1,
-        username: "testuser",
-        password: "testpassword",
-        userType: "regular",
-        email: null,
-        image: null,
-        name: null,
-      };
+
       jest
         .spyOn(authService, "register")
-        .mockImplementation(async () => Promise.resolve(user));
+        .mockImplementation(async () => Promise.resolve(mockRegularUser));
 
-      expect(await controller.register(registerDto)).toBe(user);
+      expect(await controller.register(registerDto)).toBe(mockRegularUser);
     });
   });
 
@@ -83,13 +77,12 @@ describe("AuthController", () => {
   describe("refreshToken", () => {
     it("should refresh access token", async () => {
       const token = "testtoken";
-      const newAccessToken = "newaccesstoken";
       jest
         .spyOn(authService, "refreshToken")
-        .mockImplementation(async () => ({ access_token: newAccessToken }));
+        .mockImplementation(async () => ({ access_token: mockAccessToken }));
 
       expect(await controller.refreshToken({ token })).toStrictEqual({
-        access_token: newAccessToken,
+        access_token: mockAccessToken,
       });
     });
   });
