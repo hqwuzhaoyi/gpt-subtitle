@@ -2,7 +2,7 @@ import { request } from "@/lib/request";
 import { NextRequest, NextResponse } from "next/server";
 import { FileListResult, LanguageEnum } from "shared-types";
 
-export const outPutSrtList = async ({
+const outPutSrtList = async ({
   page,
   limit,
 }: {
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
   } catch (error: any) {
     console.error(error.message);
 
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     } else {
       return NextResponse.json({

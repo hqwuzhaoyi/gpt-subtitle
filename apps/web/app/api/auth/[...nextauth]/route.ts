@@ -20,7 +20,7 @@ async function refreshAccessToken(token: string) {
   // TODO: 失败处理
 }
 
-async function oauthSignIn({ user, account }) {
+async function oauthSignIn({ user, account }: any) {
   const resp = await fetch(backendURL + "/auth/oauthSignIn", {
     method: "POST",
     headers: {
