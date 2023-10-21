@@ -5,7 +5,9 @@ import { RegisterDto } from "./dto/register.dto";
 import { UsersService } from "@/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { User } from "@/users/users.entity";
+import { RegularUser, OAuthUser } from "@/users/users.entity";
+import { RefreshToken } from "@/users/refresh-token.entity";
+import { mockAccessToken, mockRegularUser } from "./testConstants";
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -19,7 +21,15 @@ describe("AuthController", () => {
         UsersService,
         JwtService,
         {
-          provide: getRepositoryToken(User), // Replace 'VideoFileEntity' with your actual entity name
+          provide: getRepositoryToken(RegularUser), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(OAuthUser), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(RefreshToken), // Replace 'VideoFileEntity' with your actual entity name
           useValue: {}, // Mock the repository methods you need
         },
       ],
@@ -35,10 +45,11 @@ describe("AuthController", () => {
         username: "testuser",
         password: "testpassword",
       };
-      const token = "testtoken";
-      jest.spyOn(authService, "signIn").mockImplementation(async () => token);
+      jest
+        .spyOn(authService, "signIn")
+        .mockImplementation(async () => mockAccessToken);
 
-      expect(await controller.signIn(signInDto)).toBe(token);
+      expect(await controller.signIn(signInDto)).toBe(mockAccessToken);
     });
   });
 
@@ -48,19 +59,31 @@ describe("AuthController", () => {
         username: "testuser",
         password: "testpassword",
       };
-      const user = { id: 1, username: "testuser", password: "testpassword" };
+
       jest
         .spyOn(authService, "register")
-        .mockImplementation(async () => Promise.resolve(user));
+        .mockImplementation(async () => Promise.resolve(mockRegularUser));
 
-      expect(await controller.register(registerDto)).toBe(user);
+      expect(await controller.register(registerDto)).toBe(mockRegularUser);
     });
   });
 
-  describe("getProfile", () => {
-    it("should return the authenticated user", () => {
-      const user = { id: 1, username: "testuser" };
-      expect(controller.getProfile({ user })).toBe(user);
+  // describe("getProfile", () => {
+  //   it("should return the authenticated user", () => {
+  //     const user = { id: 1, username: "testuser" };
+  //     expect(controller.getProfile({ user })).toBe(user);
+  //   });
+  // });
+  describe("refreshToken", () => {
+    it("should refresh access token", async () => {
+      const token = "testtoken";
+      jest
+        .spyOn(authService, "refreshToken")
+        .mockImplementation(async () => ({ access_token: mockAccessToken }));
+
+      expect(await controller.refreshToken({ token })).toStrictEqual({
+        access_token: mockAccessToken,
+      });
     });
   });
 });

@@ -16,7 +16,7 @@ import { DataTablePagination } from "../../tasks/components/data-table-paginatio
 export const GalleryList = ({
   initialData,
 }: {
-  initialData: {
+  initialData?: {
     list: Album[];
     totalCount: number;
   };

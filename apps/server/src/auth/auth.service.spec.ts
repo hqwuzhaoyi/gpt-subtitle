@@ -3,9 +3,18 @@ import { AuthService } from "./auth.service";
 import { UsersService } from "@/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { User } from "@/users/users.entity";
+import { OAuthUser, RegularUser } from "@/users/users.entity";
 import { UnauthorizedException } from "@nestjs/common";
 import { RegisterDto } from "./dto/register.dto";
+import { RefreshToken } from "@/users/refresh-token.entity";
+import {
+  mockAccessToken,
+  mockOAuthData,
+  mockOAuthUser,
+  mockRefreshToken,
+  mockRegularUser,
+} from "./testConstants";
+import { jwtConstants } from "./constants";
 
 describe("AuthService", () => {
   let authService: AuthService;
@@ -21,16 +30,29 @@ describe("AuthService", () => {
           useValue: {
             findOne: jest.fn(),
             register: jest.fn(),
+            verifyRefreshToken: jest.fn(),
+            storeRefreshToken: jest.fn(),
+            findOneByProviderId: jest.fn(),
+            createOAuthUser: jest.fn(),
           },
         },
         {
           provide: JwtService,
           useValue: {
             signAsync: jest.fn(),
+            verifyAsync: jest.fn(),
           },
         },
         {
-          provide: getRepositoryToken(User), // Replace 'VideoFileEntity' with your actual entity name
+          provide: getRepositoryToken(RegularUser), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(OAuthUser), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(RefreshToken), // Replace 'VideoFileEntity' with your actual entity name
           useValue: {}, // Mock the repository methods you need
         },
       ],
@@ -55,11 +77,9 @@ describe("AuthService", () => {
     });
 
     it("should throw UnauthorizedException if password is incorrect", async () => {
-      jest.spyOn(usersService, "findOne").mockResolvedValueOnce({
-        id: 1,
-        username: "username",
-        password: "password",
-      });
+      jest
+        .spyOn(usersService, "findOne")
+        .mockResolvedValueOnce(mockRegularUser);
 
       await expect(
         authService.signIn("username", "incorrect-password")
@@ -67,20 +87,31 @@ describe("AuthService", () => {
     });
 
     it("should return access token if user is found and password is correct", async () => {
-      const user = {
-        id: 1,
-        username: "username",
-        password: "password",
-      };
-      jest.spyOn(usersService, "findOne").mockResolvedValueOnce(user);
-      jest.spyOn(jwtService, "signAsync").mockResolvedValueOnce("access-token");
+      jest
+        .spyOn(usersService, "findOne")
+        .mockResolvedValueOnce(mockRegularUser);
+      jest
+        .spyOn(jwtService, "signAsync")
+        .mockResolvedValueOnce(mockRefreshToken)
+        .mockResolvedValueOnce(mockAccessToken);
 
-      const result = await authService.signIn("username", "password");
+      const result = await authService.signIn(
+        mockRegularUser.username,
+        mockRegularUser.password
+      );
 
-      expect(result).toEqual({ access_token: "access-token" });
+      expect(result).toEqual({
+        refresh_token: mockRefreshToken,
+        access_token: mockAccessToken,
+        expires_in: jwtConstants.expiresIn,
+        user: {
+          id: mockRegularUser.id,
+          username: mockRegularUser.username,
+        },
+      });
       expect(jwtService.signAsync).toHaveBeenCalledWith({
-        sub: user.id,
-        username: user.username,
+        sub: mockRegularUser.id,
+        username: mockRegularUser.username,
       });
     });
   });
@@ -101,8 +132,9 @@ describe("AuthService", () => {
     });
 
     it("should return the result of usersService.register", async () => {
-      const result = { id: 1, username: "username", password: "password" };
-      jest.spyOn(usersService, "register").mockResolvedValueOnce(result);
+      jest
+        .spyOn(usersService, "register")
+        .mockResolvedValueOnce(mockRegularUser);
 
       const registerDto: RegisterDto = {
         username: "username",
@@ -110,7 +142,131 @@ describe("AuthService", () => {
       };
       const response = await authService.register(registerDto);
 
-      expect(response).toEqual(result);
+      expect(response).toEqual(mockRegularUser);
+    });
+  });
+
+  describe("refreshToken", () => {
+    it("should return a new access token when given a valid refresh token", async () => {
+      // Arrange
+      const token = "validToken";
+      const payload = { id: 1, username: "testuser" };
+
+      jest.spyOn(jwtService, "verifyAsync").mockResolvedValueOnce(payload);
+      jest
+        .spyOn(jwtService, "signAsync")
+        .mockReturnValueOnce(Promise.resolve(mockAccessToken));
+
+      // Act
+      const result = await authService.refreshToken(token);
+
+      // Assert
+      expect(result).toEqual({ access_token: mockAccessToken });
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(token);
+      expect(jwtService.signAsync).toHaveBeenCalledWith({
+        sub: payload.id,
+        username: payload.username,
+      });
+    });
+
+    it("should throw an UnauthorizedException when given an invalid refresh token", async () => {
+      // Arrange
+      const token = "invalidToken";
+      const error = new Error("Invalid token");
+      jest.spyOn(jwtService, "verifyAsync").mockRejectedValueOnce(error);
+
+      // Act & Assert
+      await expect(authService.refreshToken(token)).rejects.toThrow(
+        UnauthorizedException
+      );
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(token);
+    });
+  });
+
+  describe("oauthSignIn", () => {
+    it("should create a new user if one does not exist", async () => {
+      // Arrange
+      jest
+        .spyOn(usersService, "findOneByProviderId")
+        .mockResolvedValueOnce(undefined);
+      const createOAuthUserSpy = jest
+        .spyOn(usersService, "createOAuthUser")
+        .mockResolvedValueOnce(mockOAuthUser);
+
+      // Act
+      await authService.oauthSignIn(mockOAuthData);
+
+      // Assert
+      expect(createOAuthUserSpy).toHaveBeenCalledWith(mockOAuthData);
+    });
+
+    it("should not create a new user if one already exists", async () => {
+      // Arrange
+      jest
+        .spyOn(usersService, "findOneByProviderId")
+        .mockResolvedValueOnce(mockOAuthUser);
+
+      // Act
+      await authService.oauthSignIn(mockOAuthData);
+
+      // Assert
+      expect(usersService.createOAuthUser).not.toHaveBeenCalled();
+    });
+
+    it("should create a new refresh token and store it for the user", async () => {
+      // Arrange
+      jest
+        .spyOn(usersService, "findOneByProviderId")
+        .mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(usersService, "createOAuthUser")
+        .mockResolvedValueOnce(mockOAuthUser);
+      const storeRefreshTokenSpy = jest.spyOn(
+        usersService,
+        "storeRefreshToken"
+      );
+      jest
+        .spyOn(jwtService, "signAsync")
+        .mockResolvedValueOnce(mockRefreshToken);
+
+      // Act
+      await authService.oauthSignIn(mockOAuthData);
+
+      // Assert
+      expect(storeRefreshTokenSpy).toHaveBeenCalledWith(
+        mockOAuthData.refreshToken,
+        mockOAuthUser.id
+      );
+    });
+
+    it("should return the access token, refresh token, and user information", async () => {
+      // Arrange
+      jest
+        .spyOn(usersService, "findOneByProviderId")
+        .mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(usersService, "createOAuthUser")
+        .mockResolvedValueOnce(mockOAuthUser);
+      jest
+        .spyOn(jwtService, "signAsync")
+        .mockResolvedValueOnce(mockRefreshToken)
+        .mockResolvedValueOnce(mockAccessToken);
+
+      // Act
+      const result = await authService.oauthSignIn(mockOAuthData);
+
+      // Assert
+      expect(result).toEqual({
+        access_token: mockAccessToken,
+        refresh_token: mockOAuthData.refreshToken,
+        expires_in: jwtConstants.expiresIn,
+        user: {
+          name: mockOAuthUser.username,
+          id: mockOAuthUser.id,
+          image: mockOAuthUser.image,
+          email: mockOAuthUser.email,
+        },
+      });
     });
   });
 });

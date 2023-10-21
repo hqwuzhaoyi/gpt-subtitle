@@ -1,8 +1,19 @@
-import { NextResponse } from "next/server";
-import { LanguageEnum } from "shared-types";
-import { outPutSrtList } from "../../tasks/api/osrt";
+import { request } from "@/lib/request";
+import { NextRequest, NextResponse } from "next/server";
+import { FileListResult, LanguageEnum } from "shared-types";
 
-export async function GET(request: Request) {
+const outPutSrtList = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}): Promise<FileListResult> => {
+  const response = await request.get(`/osrt/list?page=${page}&limit=${limit}`);
+  return response.data;
+};
+
+export async function GET(request: NextRequest, response: NextResponse) {
   try {
     let data;
     const { searchParams } = new URL(request?.url);
@@ -42,11 +53,16 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error(error.message);
-    return NextResponse.json({
-      data: {
-        list: [],
-        totalCount: 0,
-      },
-    });
+
+    if (error?.response?.status === 401) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    } else {
+      return NextResponse.json({
+        data: {
+          list: [],
+          totalCount: 0,
+        },
+      });
+    }
   }
 }

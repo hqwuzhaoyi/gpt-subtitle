@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 
 import { GalleryList } from "./components/gallery-list";
-import { queryGallery } from "./data/query";
+// import { queryGallery } from "./data/query";
 
 export const metadata: Metadata = {
   title: "Whisper Tasks",
@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 
 export default async function TaskPage() {
   try {
-    const data = await queryGallery({
-      pagination: {
-        pageIndex: 0,
-        pageSize: 50,
-      },
-    });
+    // const data = await queryGallery({
+    //   pagination: {
+    //     pageIndex: 0,
+    //     pageSize: 50,
+    //   },
+    // });
 
     return (
       <>
@@ -36,7 +36,7 @@ export default async function TaskPage() {
           <Separator className="my-4" />
 
           <div className="relative">
-            <GalleryList initialData={data} />
+            <GalleryList  />
           </div>
         </div>
       </>

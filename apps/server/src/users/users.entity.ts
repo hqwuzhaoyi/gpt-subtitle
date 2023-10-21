@@ -2,13 +2,37 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
-export class User {
+class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   username: string;
 
+  @Column({ nullable: true })
+  email: string;
+
+  @Column({ nullable: true })
+  image: string;
+
+  @Column({ nullable: true })
+  name: string;
+
+  @Column()
+  userType: "regular" | "oauth";
+}
+
+@Entity()
+export class RegularUser extends User {
   @Column()
   password: string;
+}
+
+@Entity()
+export class OAuthUser extends User {
+  @Column()
+  provider: string;
+
+  @Column()
+  providerId: string;
 }
