@@ -1,15 +1,12 @@
-'use client';
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
-// import { CommandMenu } from "@/components/command-menu"
+import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
-// import { MobileNav } from "@/components/mobile-nav"
 import { ModeToggle } from "@/components/mode-toggle";
-import { SigningButton } from "./login-button";
+import { UserSession } from "./user-session";
 
 export function SiteHeader() {
   return (
@@ -61,7 +58,7 @@ export function SiteHeader() {
             <ModeToggle />
             {/* TODO: when login show sign out button and username */}
             {/* <Link href="/login"> */}
-            <SigningButton />
+            <UserSession />
             {/* </Link> */}
           </nav>
         </div>

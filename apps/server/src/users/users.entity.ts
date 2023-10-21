@@ -1,6 +1,6 @@
 // user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-// TODO: 改成
+
 @Entity()
 class User {
   @PrimaryGeneratedColumn()
@@ -9,7 +9,7 @@ class User {
   @Column()
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })

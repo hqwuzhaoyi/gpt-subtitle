@@ -7,7 +7,7 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "../api/auth";
+import { login, signUp } from "../api/auth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signIn" | "signUp";
@@ -22,9 +22,15 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     try {
-      const data = await login(userName, password);
-      console.log(data);
-      window.location.href = "/";
+      if (type === "signUp") {
+        const data = await signUp(userName, password);
+        console.log(data);
+        window.location.href = "/";
+      } else {
+        const data = await login(userName, password);
+        console.log(data);
+        window.location.href = "/";
+      }
     } catch (error) {
       console.log(error);
     }
