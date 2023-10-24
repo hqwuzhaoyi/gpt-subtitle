@@ -34,7 +34,7 @@
   "dependencies": {
     "p-queue": "npm:@esm2cjs/p-queue@^7.3.0",
     "@google-cloud/translate": "^8.0.2",
-    "openai": "^4.11.1",
+    "openai": "^4.13.0",
     "subtitle": "^4.2.1"
   }
 }
