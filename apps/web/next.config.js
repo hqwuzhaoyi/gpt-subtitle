@@ -3,7 +3,6 @@ require("dotenv").config({ path: "../../.env" });
 const nextConfig = {
   output: "standalone",
   experimental: {
-    appDir: true,
     serverActions: true,
   },
   webpack: (config) => {
