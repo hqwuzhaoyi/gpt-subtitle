@@ -1,17 +1,17 @@
-import { Metadata } from "next";
-// import Link from "next/link";
-// import { ChevronRight } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { ProfileForm } from "./profile-form";
 
-export default function ExamplesLayout({ children }: ExamplesLayoutProps) {
+export default function SettingsProfilePage() {
   return (
-    <>
-      <div className="container relative p-10">
-        <section>
-          <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow-xl">
-            123
-          </div>
-        </section>
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">Profile</h3>
+        <p className="text-sm text-muted-foreground">
+          This is how others will see you on the site.
+        </p>
       </div>
-    </>
+      <Separator />
+      <ProfileForm />
+    </div>
   );
 }
