@@ -124,8 +124,8 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       openai:
-        specifier: ^4.13.0
-        version: 4.13.0
+        specifier: ^4.17.0
+        version: 4.17.0
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.13
@@ -497,8 +497,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2
       openai:
-        specifier: ^4.13.0
-        version: 4.13.0
+        specifier: ^4.17.0
+        version: 4.17.0
       p-queue:
         specifier: npm:@esm2cjs/p-queue@^7.3.0
         version: /@esm2cjs/p-queue@7.3.0
@@ -9432,8 +9432,8 @@ packages:
       is-wsl: 2.2.0
     dev: true
 
-  /openai@4.13.0:
-    resolution: {integrity: sha512-EPqHcB0got9cXDZmQae1KytgA4YWtTnUc7tV8hlahZtcO70DMa4kiaXoxnutj9lwmeKQO7ntG+6pmXtrCMejuQ==}
+  /openai@4.17.0:
+    resolution: {integrity: sha512-fJUdfOzKE49L2oitQ+L8oCYcTDI2oLOYmQvnPjklFrmH7M+8w65/8Ag9120ky1A3Xr3lCivALs2oBmNaZIvTgg==}
     hasBin: true
     dependencies:
       '@types/node': 18.17.14
