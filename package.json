@@ -39,7 +39,7 @@
     "eslint-config-custom": "workspace:^",
     "jest": "^29.7.0",
     "prettier": "^3.0.3",
-    "turbo": "^1.10.15"
+    "turbo": "^1.10.16"
   },
   "packageManager": "pnpm@8.8.0",
   "volta": {
