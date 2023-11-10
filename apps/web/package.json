@@ -55,7 +55,7 @@
     "shared-types": "workspace:*",
     "socket.io-client": "4.7.2",
     "swr": "^2.2.4",
-    "tailwind-merge": "^1.14.0",
+    "tailwind-merge": "^2.0.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.2.2",
