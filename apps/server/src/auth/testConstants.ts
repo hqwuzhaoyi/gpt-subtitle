@@ -4,7 +4,7 @@ export const mockRegularUser: RegularUser = {
   id: 1,
   username: "testuser",
   password: "testpassword",
-  userType: "regular",
+  userType: "RegularUser",
   email: null,
   image: null,
   name: null,
@@ -13,7 +13,7 @@ export const mockRegularUser: RegularUser = {
 export const mockOAuthUser: OAuthUser = {
   id: 1,
   username: "testuser",
-  userType: "oauth",
+  userType: "OAuthUser",
   email: "test_email",
   image: "test_image",
   name: "test_name",

@@ -4,12 +4,14 @@ import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "./dto/register.dto";
 import { jwtConstants } from "./constants";
 import { OAuthSignInDto } from "./dto/outhSignIn.dto";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private configService: CustomConfigService
   ) {}
 
   async signIn(username: string, pass: string): Promise<any> {
@@ -93,5 +95,25 @@ export class AuthService {
         email: user.email,
       },
     };
+  }
+
+  async getProfile(userId: number) {
+    const user = await this.usersService.findOneById(userId);
+    return {
+      id: user.id,
+      username: user.username,
+      userType: user.userType,
+    };
+  }
+
+  async updateProfile(user, { username, password, outputSrtThenTranslate }) {
+    if (outputSrtThenTranslate) {
+      this.configService.set("outputSrtThenTranslate", outputSrtThenTranslate);
+    }
+
+    return this.usersService.updateProfile(user.id, {
+      username,
+      password,
+    });
   }
 }

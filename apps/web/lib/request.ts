@@ -3,7 +3,12 @@ import { getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-const getToken = async () => {
+export const backendURL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.API_URL ||
+  `http://localhost:3001`;
+
+export const getToken = async () => {
   const session: any = await getServerSession(authOptions);
 
   return session;
@@ -11,7 +16,7 @@ const getToken = async () => {
 
 export const request = axios.create({
   // .. configure axios baseURL
-  baseURL: process.env.NEXT_PUBLIC_API_URL || `http://localhost:3001`,
+  baseURL: backendURL,
 });
 
 request.interceptors.request.use(async (request) => {

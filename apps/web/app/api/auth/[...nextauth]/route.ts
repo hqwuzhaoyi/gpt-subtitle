@@ -97,7 +97,7 @@ export const authOptions = {
   ].filter(Boolean) as NextAuthConfig["providers"],
 
   callbacks: {
-    jwt: async ({ token, user, account, profile }) => {
+    jwt: async ({ token, user, account, profile, trigger, session }) => {
       // if (user) {
       //   token.email = user.data.auth.email;
       //   token.username = user.data.auth.userName;
@@ -108,6 +108,11 @@ export const authOptions = {
       console.debug("jwt user: " + JSON.stringify(user));
       console.debug("jwt account: " + JSON.stringify(account));
       console.debug("jwt profile: " + JSON.stringify(profile));
+      if (trigger === "update") {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.user.username = session.user.username;
+        token.user.name = session.user.username;
+      }
 
       if (account && user) {
         if (account?.type === "credentials") {

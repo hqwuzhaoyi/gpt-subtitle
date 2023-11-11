@@ -5,9 +5,10 @@ import { RegisterDto } from "./dto/register.dto";
 import { UsersService } from "@/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { RegularUser, OAuthUser } from "@/users/users.entity";
+import { RegularUser, OAuthUser, User } from "@/users/users.entity";
 import { RefreshToken } from "@/users/refresh-token.entity";
 import { mockAccessToken, mockRegularUser } from "./testConstants";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -31,6 +32,20 @@ describe("AuthController", () => {
         {
           provide: getRepositoryToken(RefreshToken), // Replace 'VideoFileEntity' with your actual entity name
           useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(User), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+          }, // Mock the repository methods you need
+        },
+        {
+          provide: CustomConfigService,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();
