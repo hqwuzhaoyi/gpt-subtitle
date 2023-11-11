@@ -15,6 +15,7 @@ import { TranslateService } from "@/translate/translate.service";
 import { IEvent } from "./event.subject";
 import { Subject } from "rxjs";
 import { PaginationDto } from "./dto/pagination.dto";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 const autoTranslateLanguages = "ja";
@@ -29,7 +30,8 @@ export class OsrtService {
     private readonly filesService: FilesService,
     private readonly translateService: TranslateService,
     @Inject("STATIC_DIR") private staticDir: string,
-    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>
+    @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>,
+    private customConfigService: CustomConfigService
   ) {}
 
   private logger: Logger = new Logger("OsrtService");
@@ -284,7 +286,7 @@ export class OsrtService {
 
   async srtTranslate(videoDirPath, srtFile, targetSrtPath) {
     try {
-      if (process.env.OUTPUT_SRT_THEN_TRANSLATE === "true") {
+      if (this.customConfigService.get("OUTPUT_SRT_THEN_TRANSLATE")) {
         const relativePath = path.relative(this.staticDir, targetSrtPath);
         const translateSubtitle = await this.translateService.translateFile(
           srtFile,

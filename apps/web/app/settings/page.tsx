@@ -18,8 +18,8 @@ export default async function SettingsProfilePage() {
       <ProfileForm
         defaultValues={{
           username: profile.username,
-          outputSrtThenTranslate:
-            config.outputSrtThenTranslate === "1" ? true : false,
+          OUTPUT_SRT_THEN_TRANSLATE:
+            config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
         }}
       />
     </div>

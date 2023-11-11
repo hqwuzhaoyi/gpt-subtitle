@@ -106,9 +106,9 @@ export class AuthService {
     };
   }
 
-  async updateProfile(user, { username, password, outputSrtThenTranslate }) {
-    if (typeof outputSrtThenTranslate === "boolean") {
-      this.configService.set("outputSrtThenTranslate", outputSrtThenTranslate ? '1' : '0');
+  async updateProfile(user, { username, password, OUTPUT_SRT_THEN_TRANSLATE }) {
+    if (typeof OUTPUT_SRT_THEN_TRANSLATE === "boolean") {
+      this.configService.set("OUTPUT_SRT_THEN_TRANSLATE", OUTPUT_SRT_THEN_TRANSLATE ? '1' : '0');
     }
 
     return this.usersService.updateProfile(user.id, {

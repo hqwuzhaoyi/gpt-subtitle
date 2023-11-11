@@ -45,7 +45,7 @@ const profileFormSchema = z.object({
       message: "Password must be at least 8 characters.",
     })
     .optional(),
-  outputSrtThenTranslate: z.boolean().optional(),
+  OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -128,7 +128,7 @@ export function ProfileForm({
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="outputSrtThenTranslate"
+              name="OUTPUT_SRT_THEN_TRANSLATE"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
