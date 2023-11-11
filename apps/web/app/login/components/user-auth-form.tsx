@@ -12,6 +12,7 @@ import { signUp } from "../api/auth";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signIn" | "signUp";
   error?: string;
+  supportGithub?: boolean;
 }
 
 export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
@@ -118,7 +119,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button
+      {props.supportGithub && 
+        <Button
         variant="outline"
         type="button"
         disabled={isLoading}
@@ -136,6 +138,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         )}{" "}
         Github
       </Button>
+      }
     </div>
   );
 }
