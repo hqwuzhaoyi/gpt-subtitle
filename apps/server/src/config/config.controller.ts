@@ -18,6 +18,6 @@ export class ConfigController {
   @Public()
   @Get()
   findAll() {
-    return this.configService.get('WEB_URL');
+    return this.configService.getAll();
   }
 }

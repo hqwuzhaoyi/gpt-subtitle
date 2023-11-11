@@ -107,8 +107,8 @@ export class AuthService {
   }
 
   async updateProfile(user, { username, password, outputSrtThenTranslate }) {
-    if (outputSrtThenTranslate) {
-      this.configService.set("outputSrtThenTranslate", outputSrtThenTranslate);
+    if (typeof outputSrtThenTranslate === "boolean") {
+      this.configService.set("outputSrtThenTranslate", outputSrtThenTranslate ? '1' : '0');
     }
 
     return this.usersService.updateProfile(user.id, {

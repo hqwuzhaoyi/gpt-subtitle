@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./profile-form";
-import { getProfile } from "./api/profile";
+import { getConfig, getProfile } from "./api/profile";
 
 export default async function SettingsProfilePage() {
-  const data = await getProfile();
-  console.debug("getProfile", data);
+  const [profile, config] = await Promise.all([getProfile(), getConfig()]);
+  console.debug("getProfile", profile);
 
   return (
     <div className="space-y-6">
@@ -17,7 +17,9 @@ export default async function SettingsProfilePage() {
       <Separator />
       <ProfileForm
         defaultValues={{
-          username: data.username,
+          username: profile.username,
+          outputSrtThenTranslate:
+            config.outputSrtThenTranslate === "1" ? true : false,
         }}
       />
     </div>

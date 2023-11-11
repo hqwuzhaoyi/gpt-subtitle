@@ -23,7 +23,11 @@ export class CustomConfigService {
   }
 
   async set(key: string, value: string): Promise<void> {
-    if(!key || !value) return;
+    if (!key || !value) return;
     await this.configService.set(key, value);
+  }
+
+  async getAll(): Promise<Record<string, string>> {
+    return this.configService.getAll();
   }
 }
