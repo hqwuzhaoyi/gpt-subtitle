@@ -8,6 +8,7 @@ import { staticPath } from "utils";
 import { TranslateResult } from "shared-types";
 import { FilesService } from "@/files/files.service";
 import { CustomConfigService } from "@/config/custom-config.service";
+import { TranslateLanguage } from "shared-types";
 
 @Injectable()
 export class TranslateService {
@@ -42,10 +43,10 @@ export class TranslateService {
     }
   }
 
-  private translateFileName(fileName) {
+  private async translateFileName(fileName) {
     const fileObj = path.parse(fileName);
-    const translateName =
-      fileObj.name + "." + (process.env.LANGUAGE ?? "Chinese") + fileObj.ext;
+    const language = await this.getTranslateLanguage();
+    const translateName = fileObj.name + "." + language + fileObj.ext;
     return translateName;
   }
 
@@ -54,6 +55,14 @@ export class TranslateService {
       ((await this.customConfigService.get(
         "TranslateModel"
       )) as TranslateType) ?? TranslateType.GPT3;
+
+    return translateModel;
+  }
+  private async getTranslateLanguage() {
+    const translateModel =
+      ((await this.customConfigService.get(
+        "LANGUAGE"
+      )) as TranslateLanguage) ?? TranslateLanguage.SimplifiedChinese;
 
     return translateModel;
   }
@@ -67,8 +76,8 @@ export class TranslateService {
     path: string;
   }> {
     return new Promise(async (resolve, reject) => {
-      const translateName = this.translateFileName(filename);
-
+      const translateName = await this.translateFileName(filename);
+      const language = await this.getTranslateLanguage();
       // const existUrl = this.existFile(translateName, dir);
       // if (existUrl) {
       //   resolve({
@@ -89,7 +98,7 @@ export class TranslateService {
         .translateSrtStreamGroup(
           path.join(this.staticDir, dir, filename),
           path.join(this.staticDir, dir, translateName),
-          process.env.LANGUAGE ?? "zh-CN",
+          language,
           process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
           process.env.TRANSLATE_DELAY
             ? Number(process.env.TRANSLATE_DELAY)
@@ -121,7 +130,7 @@ export class TranslateService {
   ): Promise<TranslateResult> {
     return new Promise(async (resolve, reject) => {
       const subtitle = await this.filesService.findSubtitleFile(id);
-      const translateName = this.translateFileName(subtitle.fileName);
+      const translateName = await this.translateFileName(subtitle.fileName);
       const translatePath = this.translateFilePath(
         subtitle.filePath,
         translateName
@@ -130,7 +139,7 @@ export class TranslateService {
         path.relative(this.staticDir, translatePath)
       );
       console.debug("translatePath", translatePath);
-      console.debug("translateLanguage", process.env.LANGUAGE ?? "Chinese");
+
       // console.debug("relativePath", path.dirname(relativePath));
       const existUrl = fs.existsSync(translatePath);
       if (existUrl && !forceTranslate) {
@@ -144,6 +153,9 @@ export class TranslateService {
       }
 
       const translateModel = await this.getTranslateModel();
+      const language = await this.getTranslateLanguage();
+
+      console.debug("translateLanguage", language);
 
       const model = new TranslateModel(translateModel, {
         baseUrl: process.env.BASE_URL,
@@ -153,7 +165,7 @@ export class TranslateService {
         .translateSrtStreamGroup(
           subtitle.filePath,
           translatePath,
-          process.env.LANGUAGE ?? "zh-CN",
+          language,
           process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
           process.env.TRANSLATE_DELAY
             ? Number(process.env.TRANSLATE_DELAY)

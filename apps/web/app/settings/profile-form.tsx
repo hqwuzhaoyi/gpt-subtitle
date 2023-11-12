@@ -28,7 +28,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { TranslateType } from "shared-types";
+import { TranslateType, TranslateLanguage } from "shared-types";
 
 const profileFormSchema = z.object({
   username: z
@@ -47,6 +47,7 @@ const profileFormSchema = z.object({
     .optional(),
   OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
   TranslateModel: z.nativeEnum(TranslateType).optional(),
+  LANGUAGE: z.nativeEnum(TranslateLanguage).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -173,6 +174,39 @@ export function ProfileForm({
                       {Object.values(TranslateType).map((item) => (
                         <SelectItem key={item} value={item}>
                           {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="LANGUAGE"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      Translate Language
+                    </FormLabel>
+                    <FormDescription>
+                      Choose the translation language you need
+                    </FormDescription>
+                  </div>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a language" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(TranslateLanguage).map(([key, value]) => (
+                        <SelectItem key={value} value={value}>
+                          {key}
                         </SelectItem>
                       ))}
                     </SelectContent>

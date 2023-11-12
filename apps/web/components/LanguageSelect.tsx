@@ -25,7 +25,7 @@ export const LanguageSelect = ({
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
+        <SelectGroup className="max-h-[250px]">
           <SelectLabel>Language</SelectLabel>
           {languages?.map((option) => (
             <SelectItem value={option.value} key={option.value}>

@@ -72,8 +72,9 @@ export const priorities = [
   },
 ];
 
-export const languages = Object.keys(LanguageEnum).map((key) => ({
-  value: LanguageEnum[key as keyof typeof LanguageEnum],
-  label: key,
-  icon: Globe2,
-}));
+export const languages = Object.keys(LanguageEnum)
+  .map((key) => ({
+    value: LanguageEnum[key as keyof typeof LanguageEnum],
+    label: key,
+    icon: Globe2,
+  }));
