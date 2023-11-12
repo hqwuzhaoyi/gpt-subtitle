@@ -51,7 +51,6 @@ describe("Image Preview Hooks and Actions", () => {
       setImagePreview(newState);
     });
 
-    console.debug(result.current);
     expect(result.current).toEqual(newState);
   });
 });

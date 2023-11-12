@@ -47,8 +47,8 @@ export class AuthService {
 
       // Optional: Check if the refresh token is in the database and still valid
       // if not, throw an exception
-      console.debug("refreshToken payload: " + JSON.stringify(payload));
-      console.debug("refreshToken userExists: " + JSON.stringify(userExists));
+      // console.debug("refreshToken payload: " + JSON.stringify(payload));
+      // console.debug("refreshToken userExists: " + JSON.stringify(userExists));
 
       // Create a new access token
       const user = { sub: payload.id, username: payload.username }; // this is just a placeholder. Adjust according to your payload structure

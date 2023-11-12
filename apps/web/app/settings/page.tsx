@@ -4,7 +4,6 @@ import { getConfig, getProfile } from "./api/profile";
 
 export default async function SettingsProfilePage() {
   const [profile, config] = await Promise.all([getProfile(), getConfig()]);
-  console.debug("getProfile", profile);
 
   return (
     <div className="space-y-6">

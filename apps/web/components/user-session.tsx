@@ -7,8 +7,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export const UserSession = async () => {
   const session = await getServerSession(authOptions);
 
-  console.debug("UserSession session", session);
-
   if (session?.user) {
     return <UserNav user={session?.user as User}></UserNav>;
   }

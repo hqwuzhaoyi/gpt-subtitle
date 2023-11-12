@@ -76,7 +76,6 @@ export function DataTableToolbar<TData extends Task>({
                   id: row.original.id,
                 };
               });
-              console.debug(jobs);
               createJobs(jobs);
             }}
             className="h-8 px-2 lg:px-3"

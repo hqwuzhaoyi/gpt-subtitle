@@ -58,7 +58,6 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.debug("credentials: " + JSON.stringify(credentials));
         const credentialDetails = {
           username: credentials?.username,
           password: credentials?.password,
@@ -78,7 +77,6 @@ export const authOptions = {
           body: JSON.stringify(credentialDetails),
         });
         const data = await resp.json();
-        console.debug("user data: " + JSON.stringify(data));
         if (data.access_token) {
           return {
             ...data,
@@ -104,10 +102,10 @@ export const authOptions = {
       //   token.user_type = user.data.auth.userType;
       //   token.accessToken = user.data.auth.token;
       // }
-      console.debug("jwt token: " + JSON.stringify(token));
-      console.debug("jwt user: " + JSON.stringify(user));
-      console.debug("jwt account: " + JSON.stringify(account));
-      console.debug("jwt profile: " + JSON.stringify(profile));
+      // console.debug("jwt token: " + JSON.stringify(token));
+      // console.debug("jwt user: " + JSON.stringify(user));
+      // console.debug("jwt account: " + JSON.stringify(account));
+      // console.debug("jwt profile: " + JSON.stringify(profile));
       if (trigger === "update") {
         // Note, that `session` can be any arbitrary object, remember to validate it!
         token.user.username = session.user.username;
@@ -188,7 +186,6 @@ export const authOptions = {
       return { ...token, ...user };
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      console.debug("session session: " + JSON.stringify(session));
       if (token) {
         if (token.user) session.user = token.user;
         if (token.accessToken) session.accessToken = token.accessToken;
