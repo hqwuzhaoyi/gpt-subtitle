@@ -7,12 +7,14 @@ import { TranslateModel, TranslateType } from "translator";
 import { staticPath } from "utils";
 import { TranslateResult } from "shared-types";
 import { FilesService } from "@/files/files.service";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 @Injectable()
 export class TranslateService {
   constructor(
     @Inject("STATIC_DIR") private staticDir: string,
-    private readonly filesService: FilesService
+    private readonly filesService: FilesService,
+    private customConfigService: CustomConfigService
   ) {}
 
   async create(createTranslateDto: CreateTranslateDto) {}
@@ -47,6 +49,15 @@ export class TranslateService {
     return translateName;
   }
 
+  private async getTranslateModel() {
+    const translateModel =
+      ((await this.customConfigService.get(
+        "TranslateModel"
+      )) as TranslateType) ?? TranslateType.GPT3;
+
+    return translateModel;
+  }
+
   translateFile(
     filename,
     dir = ""
@@ -55,7 +66,7 @@ export class TranslateService {
     filename: string;
     path: string;
   }> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const translateName = this.translateFileName(filename);
 
       // const existUrl = this.existFile(translateName, dir);
@@ -68,14 +79,13 @@ export class TranslateService {
       //   return;
       // }
 
-      const model = new TranslateModel(
-        (process.env.TranslateModel as TranslateType) ?? TranslateType.GPT3,
-        {
-          baseUrl: process.env.BASE_URL,
-          gpt3Key: process.env.OPENAI_API_KEY,
-          googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
-        }
-      )
+      const translateModel = await this.getTranslateModel();
+
+      const model = new TranslateModel(translateModel, {
+        baseUrl: process.env.BASE_URL,
+        gpt3Key: process.env.OPENAI_API_KEY,
+        googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+      })
         .translateSrtStreamGroup(
           path.join(this.staticDir, dir, filename),
           path.join(this.staticDir, dir, translateName),
@@ -133,14 +143,13 @@ export class TranslateService {
         return;
       }
 
-      const model = new TranslateModel(
-        (process.env.TranslateModel as TranslateType) ?? TranslateType.GPT3,
-        {
-          baseUrl: process.env.BASE_URL,
-          gpt3Key: process.env.OPENAI_API_KEY,
-          googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
-        }
-      )
+      const translateModel = await this.getTranslateModel();
+
+      const model = new TranslateModel(translateModel, {
+        baseUrl: process.env.BASE_URL,
+        gpt3Key: process.env.OPENAI_API_KEY,
+        googleKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+      })
         .translateSrtStreamGroup(
           subtitle.filePath,
           translatePath,

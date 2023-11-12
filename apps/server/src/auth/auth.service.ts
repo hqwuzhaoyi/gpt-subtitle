@@ -106,9 +106,18 @@ export class AuthService {
     };
   }
 
-  async updateProfile(user, { username, password, OUTPUT_SRT_THEN_TRANSLATE }) {
+  async updateProfile(
+    user,
+    { username, password, OUTPUT_SRT_THEN_TRANSLATE, TranslateModel }
+  ) {
     if (typeof OUTPUT_SRT_THEN_TRANSLATE === "boolean") {
-      this.configService.set("OUTPUT_SRT_THEN_TRANSLATE", OUTPUT_SRT_THEN_TRANSLATE ? '1' : '0');
+      this.configService.set(
+        "OUTPUT_SRT_THEN_TRANSLATE",
+        OUTPUT_SRT_THEN_TRANSLATE ? "1" : "0"
+      );
+    }
+    if (TranslateModel) {
+      this.configService.set("TranslateModel", TranslateModel);
     }
 
     return this.usersService.updateProfile(user.id, {

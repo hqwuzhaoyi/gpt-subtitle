@@ -364,6 +364,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.3.3)
+      translator:
+        specifier: workspace:^
+        version: link:../../packages/translater
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -508,6 +511,9 @@ importers:
       p-queue:
         specifier: npm:@esm2cjs/p-queue@^7.3.0
         version: /@esm2cjs/p-queue@7.3.0
+      shared-types:
+        specifier: workspace:^
+        version: link:../shared-types
       subtitle:
         specifier: ^4.2.1
         version: 4.2.1

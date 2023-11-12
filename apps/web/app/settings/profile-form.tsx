@@ -24,11 +24,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { TranslateType } from "shared-types";
 
 const profileFormSchema = z.object({
   username: z
@@ -46,6 +46,7 @@ const profileFormSchema = z.object({
     })
     .optional(),
   OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
+  TranslateModel: z.nativeEnum(TranslateType).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -145,6 +146,37 @@ export function ProfileForm({
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="TranslateModel"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Translate Model</FormLabel>
+                    <FormDescription>
+                      Choose the translation model you need
+                    </FormDescription>
+                  </div>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a model" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(TranslateType).map((item) => (
+                        <SelectItem key={item} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />

@@ -56,3 +56,8 @@ export enum LanguageEnum {
   Chinese = "cn",
   Auto = "auto",
 }
+
+export enum TranslateType {
+  GOOGLE = "google",
+  GPT3 = "gpt3",
+}
