@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 export default function AuthenticationPage(props: {
   searchParams: { error: string | undefined };
 }) {
+  const { GITHUB_CLIENT_ID: id, GITHUB_CLIENT_SECRET: secret } = process.env;
+  const supportGithub = !!id && !!secret
   return (
     <>
       <div className="md:hidden">
@@ -41,7 +43,7 @@ export default function AuthenticationPage(props: {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <UserAuthForm type="signIn" error={props.searchParams?.error} />
+            <UserAuthForm supportGithub={supportGithub} type="signIn" error={props.searchParams?.error} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

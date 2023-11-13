@@ -6,7 +6,8 @@ import { GPTTranslator } from "./gpt3";
 import { GoogleTranslator } from "./google";
 import { Translator } from "./types";
 
-export { TranslateType } from "shared-types";
+import { TranslateType } from "shared-types";
+export { TranslateType };
 
 export type TranslateOptions = {
   gpt3Key?: string;
