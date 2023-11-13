@@ -12,6 +12,7 @@ on:
       - "!.github/workflows/build.yml"
       - "!.github/actions/build-rust/action.yml"
       - "!.github/actions/setup-node/action.yml"
+      - .changeset/**
   pull_request:
   merge_group:
     branches:
