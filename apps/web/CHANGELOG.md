@@ -1,5 +1,11 @@
 # web
 
+## 1.4.0
+
+### Minor Changes
+
+- 7e772a8: add settings page
+
 ## 1.3.0
 
 ### Minor Changes
