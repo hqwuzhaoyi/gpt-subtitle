@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
+    "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -51,6 +52,7 @@
     "ramda": "^0.29.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-wrap-balancer": "^1.1.0",
     "shared-types": "workspace:*",
     "socket.io-client": "4.7.2",
@@ -58,6 +60,7 @@
     "tailwind-merge": "^2.0.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "translator": "workspace:^",
     "typescript": "^5.2.2",
     "utils": "workspace:*",
     "zod": "^3.22.4"

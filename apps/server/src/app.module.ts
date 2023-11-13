@@ -21,6 +21,7 @@ import { UsersModule } from "./users/users.module";
 
 import * as fs from "fs-extra";
 import * as path from "path";
+import { CustomConfigModule } from "./config/config.module";
 
 const {
   REDIS_PORT = 6379,
@@ -71,6 +72,8 @@ const rootPath = path.join(__dirname, "..", "..", "..");
       rootPath: join(rootPath, "uploads"),
       serveRoot: "/static",
     }),
+
+    CustomConfigModule,
 
     TranslateModule,
 

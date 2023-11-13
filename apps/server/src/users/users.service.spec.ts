@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UsersService } from "./users.service";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { RegularUser, OAuthUser } from "./users.entity";
+import { RegularUser, OAuthUser, User } from "./users.entity";
 import { Repository } from "typeorm";
 import { RefreshToken } from "./refresh-token.entity";
 
@@ -35,6 +35,13 @@ describe("UsersService", () => {
             findOne: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
+          }, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(User), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
           }, // Mock the repository methods you need
         },
       ],

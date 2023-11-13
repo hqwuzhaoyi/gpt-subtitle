@@ -16,8 +16,6 @@ import { cn } from "@/lib/utils";
 
 export function ImagePreviewModal() {
   const imagePreview = useImagePreview();
-
-  console.debug("imagePreview", imagePreview);
   return (
     <Dialog open={imagePreview.visible} onOpenChange={setImagePreviewVisible}>
       <DialogContent className="box-content">

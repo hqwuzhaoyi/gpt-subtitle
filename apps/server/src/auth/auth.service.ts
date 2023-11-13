@@ -4,12 +4,14 @@ import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "./dto/register.dto";
 import { jwtConstants } from "./constants";
 import { OAuthSignInDto } from "./dto/outhSignIn.dto";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private configService: CustomConfigService
   ) {}
 
   async signIn(username: string, pass: string): Promise<any> {
@@ -45,8 +47,8 @@ export class AuthService {
 
       // Optional: Check if the refresh token is in the database and still valid
       // if not, throw an exception
-      console.debug("refreshToken payload: " + JSON.stringify(payload));
-      console.debug("refreshToken userExists: " + JSON.stringify(userExists));
+      // console.debug("refreshToken payload: " + JSON.stringify(payload));
+      // console.debug("refreshToken userExists: " + JSON.stringify(userExists));
 
       // Create a new access token
       const user = { sub: payload.id, username: payload.username }; // this is just a placeholder. Adjust according to your payload structure
@@ -93,5 +95,38 @@ export class AuthService {
         email: user.email,
       },
     };
+  }
+
+  async getProfile(userId: number) {
+    const user = await this.usersService.findOneById(userId);
+    return {
+      id: user.id,
+      username: user.username,
+      userType: user.userType,
+    };
+  }
+
+  async updateProfile(
+    user,
+    { username, password, OUTPUT_SRT_THEN_TRANSLATE, TranslateModel, LANGUAGE }
+  ) {
+    if (typeof OUTPUT_SRT_THEN_TRANSLATE === "boolean") {
+      this.configService.set(
+        "OUTPUT_SRT_THEN_TRANSLATE",
+        OUTPUT_SRT_THEN_TRANSLATE ? "1" : "0"
+      );
+    }
+    if (TranslateModel) {
+      this.configService.set("TranslateModel", TranslateModel);
+    }
+
+    if (LANGUAGE) {
+      this.configService.set("LANGUAGE", LANGUAGE);
+    }
+
+    return this.usersService.updateProfile(user.id, {
+      username,
+      password,
+    });
   }
 }

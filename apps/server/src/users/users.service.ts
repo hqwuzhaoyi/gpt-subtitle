@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { RegularUser, OAuthUser } from "./users.entity";
+import { RegularUser, OAuthUser, User } from "./users.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RefreshToken } from "./refresh-token.entity";
@@ -15,7 +15,10 @@ export class UsersService {
     @InjectRepository(OAuthUser)
     private readonly oauthUserRepository: Repository<OAuthUser>,
     @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>
   ) {}
 
   async findOne(username: string): Promise<RegularUser | undefined> {
@@ -24,7 +27,6 @@ export class UsersService {
 
   async register(username: string, password: string) {
     const user = new RegularUser();
-    user.userType = "regular";
     user.username = username;
     user.password = password; // 注意: 实际中，你需要加密密码，可以使用库如 bcrypt
     return await this.regularUserRepository.save(user);
@@ -58,12 +60,54 @@ export class UsersService {
 
   async createOAuthUser(oauthData: OAuthSignInDto): Promise<OAuthUser> {
     const user = new OAuthUser();
-    user.userType = "oauth";
     user.username = oauthData.user.name;
     user.email = oauthData.user.email;
     user.image = oauthData.user.image;
     user.providerId = oauthData.user.id; // 假设User实体有一个providerId字段来存储OAuth提供者的ID
     user.provider = oauthData.account.provider; // 假设User实体有一个provider字段来存储OAuth提供者的名称
     return this.oauthUserRepository.save(user);
+  }
+
+  async findOneById(id: number): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { id } });
+  }
+
+  async updateProfile(id, { username, password }) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.userType === "RegularUser") {
+      // 检查用户是否为 RegularUser 类型
+      const regularUser = await this.regularUserRepository.findOne({
+        where: { id },
+      });
+      if (regularUser) {
+        if (password) regularUser.password = password; // 更新密码
+        if (username) regularUser.username = username; // 更新密码
+        const user = await this.regularUserRepository.save(regularUser);
+        return {
+          id: user.id,
+          username: user.username,
+          userType: user.userType,
+        };
+      }
+    } else {
+      // 检查用户是否为 OAuthUser 类型
+      const oauthUser = await this.oauthUserRepository.findOne({
+        where: { id },
+      });
+      if (oauthUser) {
+        if (username) oauthUser.username = username; // 更新用户名
+        const user = await this.oauthUserRepository.save(oauthUser);
+        return {
+          id: user.id,
+          username: user.username,
+          userType: user.userType,
+        };
+      }
+    }
   }
 }

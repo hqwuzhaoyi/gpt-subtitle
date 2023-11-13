@@ -39,12 +39,6 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  // @UseGuards(AuthGuard)
-  // @Get("profile")
-  // getProfile(@Request() req) {
-  //   return req.user;
-  // }
-
   @Post("logout")
   async logout(@Request() req, @Response() res) {
     // If you're using a blacklist, add the token to it.
@@ -59,5 +53,16 @@ export class AuthController {
   @Post("oauthSignIn")
   async oauthSignIn(@Body() oauthSignInDto: OAuthSignInDto) {
     return this.authService.oauthSignIn(oauthSignInDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("profile")
+  async getProfile(@Request() req) {
+    return this.authService.getProfile(req.user.sub);
+  }
+
+  @Post("updateProfile")
+  async updateProfile(@Request() req, @Body() body) {
+    return this.authService.updateProfile(req.user.sub, body);
   }
 }

@@ -6,10 +6,8 @@ import { GPTTranslator } from "./gpt3";
 import { GoogleTranslator } from "./google";
 import { Translator } from "./types";
 
-export enum TranslateType {
-  GOOGLE = "google",
-  GPT3 = "gpt3",
-}
+import { TranslateType } from "shared-types";
+export { TranslateType };
 
 export type TranslateOptions = {
   gpt3Key?: string;

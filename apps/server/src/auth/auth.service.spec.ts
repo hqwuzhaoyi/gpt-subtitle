@@ -3,7 +3,7 @@ import { AuthService } from "./auth.service";
 import { UsersService } from "@/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { OAuthUser, RegularUser } from "@/users/users.entity";
+import { OAuthUser, RegularUser, User } from "@/users/users.entity";
 import { UnauthorizedException } from "@nestjs/common";
 import { RegisterDto } from "./dto/register.dto";
 import { RefreshToken } from "@/users/refresh-token.entity";
@@ -15,6 +15,7 @@ import {
   mockRegularUser,
 } from "./testConstants";
 import { jwtConstants } from "./constants";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 describe("AuthService", () => {
   let authService: AuthService;
@@ -44,6 +45,13 @@ describe("AuthService", () => {
           },
         },
         {
+          provide: CustomConfigService,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
+        },
+        {
           provide: getRepositoryToken(RegularUser), // Replace 'VideoFileEntity' with your actual entity name
           useValue: {}, // Mock the repository methods you need
         },
@@ -54,6 +62,13 @@ describe("AuthService", () => {
         {
           provide: getRepositoryToken(RefreshToken), // Replace 'VideoFileEntity' with your actual entity name
           useValue: {}, // Mock the repository methods you need
+        },
+        {
+          provide: getRepositoryToken(User), // Replace 'VideoFileEntity' with your actual entity name
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+          }, // Mock the repository methods you need
         },
       ],
     }).compile();

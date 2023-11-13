@@ -1,8 +1,15 @@
 // user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  TableInheritance,
+  ChildEntity,
+} from "typeorm";
 
+@TableInheritance({ column: { type: "varchar", name: "userType" } })
 @Entity()
-class User {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,16 +26,16 @@ class User {
   name: string;
 
   @Column()
-  userType: "regular" | "oauth";
+  userType: "RegularUser" | "OAuthUser";
 }
 
-@Entity()
+@ChildEntity()
 export class RegularUser extends User {
   @Column()
   password: string;
 }
 
-@Entity()
+@ChildEntity()
 export class OAuthUser extends User {
   @Column()
   provider: string;

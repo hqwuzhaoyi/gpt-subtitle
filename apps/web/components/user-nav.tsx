@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar";
 import { Button } from "components/ui/button";
 import {
@@ -13,6 +13,7 @@ import {
 } from "components/ui/dropdown-menu";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function UserNav({ user }: { user: User }) {
@@ -51,9 +52,9 @@ export function UserNav({ user }: { user: User }) {
             Billing
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem disabled>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          <DropdownMenuItem>
+            <Link href="/settings">Settings</Link>
+            {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem disabled>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
@@ -61,7 +62,7 @@ export function UserNav({ user }: { user: User }) {
         <DropdownMenuItem
           onClick={() => {
             signOut({ redirect: false }).then(() => {
-              router.refresh()
+              router.refresh();
               router.push("/login");
             });
           }}

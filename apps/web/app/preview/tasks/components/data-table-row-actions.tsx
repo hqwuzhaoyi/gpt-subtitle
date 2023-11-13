@@ -54,7 +54,6 @@ export function DataTableRowActions<TData extends Task>({
     mutate(`/osrt/list/${table.options.meta?.type}`);
   };
   const downLoad = async () => {
-    console.debug("downLoad", task.path);
     window.open(task.path);
   };
   return (

@@ -32,9 +32,10 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "p-queue": "npm:@esm2cjs/p-queue@^7.3.0",
     "@google-cloud/translate": "^8.0.2",
     "openai": "^4.17.0",
+    "p-queue": "npm:@esm2cjs/p-queue@^7.3.0",
+    "shared-types": "workspace:^",
     "subtitle": "^4.2.1"
   }
 }

@@ -9,6 +9,9 @@ import { TranslateService } from "@/translate/translate.service";
 import Bull, { JobStatusClean, Queue } from "bull";
 import { getQueueToken } from "@nestjs/bull";
 import { Subject } from "rxjs";
+import { CustomConfigService } from "@/config/custom-config.service";
+
+
 describe("OsrtService", () => {
   let processor: QueueProcessor;
   let osrtService: OsrtService;
@@ -73,6 +76,13 @@ describe("OsrtService", () => {
           useValue: "/static",
         },
         { provide: "EVENT_SUBJECT", useValue: mockSubject },
+        {
+          provide: CustomConfigService,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
