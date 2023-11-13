@@ -3,6 +3,7 @@ import { TranslateService } from "./translate.service";
 import { FilesService } from "@/files/files.service";
 import * as fs from "fs";
 import * as path from "path";
+import { CustomConfigService } from "@/config/custom-config.service";
 
 // Mocking fs and path modules
 
@@ -54,6 +55,13 @@ describe("TranslateService", () => {
         TranslateService,
         { provide: "STATIC_DIR", useValue: "/static" },
         { provide: FilesService, useValue: mockFilesService },
+        {
+          provide: CustomConfigService,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
