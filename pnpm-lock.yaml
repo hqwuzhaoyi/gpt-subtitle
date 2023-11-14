@@ -88,8 +88,8 @@ importers:
         specifier: ^10.2.8
         version: 10.2.8(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(@nestjs/platform-socket.io@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1
+        specifier: ^1.6.1
+        version: 1.6.1
       bull:
         specifier: ^4.11.4
         version: 4.11.4
@@ -296,8 +296,8 @@ importers:
         specifier: 10.4.15
         version: 10.4.15(postcss@8.4.31)
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1
+        specifier: ^1.6.1
+        version: 1.6.1
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -588,8 +588,8 @@ importers:
   packages/utils:
     dependencies:
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1
+        specifier: ^1.6.1
+        version: 1.6.1
     devDependencies:
       '@types/jest':
         specifier: ^29.5.6
@@ -4667,8 +4667,8 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /axios@1.5.1:
-    resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
+  /axios@1.6.1:
+    resolution: {integrity: sha512-vfBmhDpKafglh0EldBEbVuoe7DyAavGSLWhuSm5ZSEKQnHhBf0xAAwybbNH1IkrJNGnS/VG4I5yxig1pCEXE4g==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
