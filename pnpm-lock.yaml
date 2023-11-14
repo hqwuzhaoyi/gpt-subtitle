@@ -381,8 +381,8 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4(@types/jest@29.5.6)(jest@29.7.0)
       '@testing-library/react':
-        specifier: ^14.0.0
-        version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^14.1.0
+        version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       '@testing-library/react-hooks':
         specifier: ^8.0.1
         version: 8.0.1(@types/react@18.2.31)(react-dom@18.2.0)(react-test-renderer@18.2.0)(react@18.2.0)
@@ -3706,14 +3706,14 @@ packages:
       react-test-renderer: 18.2.0(react@18.2.0)
     dev: true
 
-  /@testing-library/react@14.0.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-S04gSNJbYE30TlIMLTzv6QCTzt9AqIF5y6s6SzVFILNcNvbV/jU96GeiTPillGQo+Ny64M/5PV7klNYYgv5Dfg==}
+  /@testing-library/react@14.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-hcvfZEEyO0xQoZeHmUbuMs7APJCGELpilL7bY+BaJaMP57aWc6q1etFwScnoZDheYjk4ESdlzPdQ33IbsKAK/A==}
     engines: {node: '>=14'}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
     dependencies:
-      '@babel/runtime': 7.22.15
+      '@babel/runtime': 7.23.2
       '@testing-library/dom': 9.3.1
       '@types/react-dom': 18.2.13
       react: 18.2.0
