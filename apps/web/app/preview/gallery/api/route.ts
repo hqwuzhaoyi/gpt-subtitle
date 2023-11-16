@@ -1,16 +1,35 @@
-import { request } from "@/lib/request";
 import { NextRequest, NextResponse } from "next/server";
 import { FileListResult, LanguageEnum } from "shared-types";
+import { backendURL, getToken } from "@/lib/request";
 
-const outPutSrtList = async ({
+const fetchGalleryList = async ({
   page,
   limit,
 }: {
   page: number;
   limit: number;
 }): Promise<FileListResult> => {
-  const response = await request.get(`/osrt/list?page=${page}&limit=${limit}`);
-  return response.data;
+  const token = await getToken();
+  const res = await fetch(
+    backendURL + `/osrt/list?page=${page}&limit=${limit}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token && `Bearer ${token.accessToken}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.error("setProfile error", res);
+    throw new Error("Failed to fetch data");
+  }
+
+  const data = await res.json();
+
+  return data;
 };
 
 export async function GET(request: NextRequest, response: NextResponse) {
@@ -18,7 +37,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
     let data;
     const { searchParams } = new URL(request?.url);
 
-    const { list, totalCount, page, limit } = await outPutSrtList({
+    const { list, totalCount, page, limit } = await fetchGalleryList({
       page: Number(searchParams.get("page")) || 1,
       limit: Number(searchParams.get("limit")) || 10,
     });
