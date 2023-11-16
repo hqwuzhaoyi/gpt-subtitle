@@ -17,8 +17,18 @@ import {
 } from "../entities/file.entity";
 import * as fg from "fast-glob";
 import * as cheerio from "cheerio";
+
+export interface VideoDirFileGroup {
+  videoFile: string;
+  audioFiles: string[];
+  subtitleFiles: string[];
+}
+
 @Injectable()
 export class WatchService {
+  // 表示是否正在初始化
+  private isInitializing: boolean = true;
+
   constructor(
     @InjectRepository(VideoFileEntity)
     private videoFilesRepository: Repository<VideoFileEntity>,
@@ -26,7 +36,7 @@ export class WatchService {
     private audioFilesRepository: Repository<AudioFileEntity>,
     @InjectRepository(SubtitleFileEntity)
     private subtitleFilesRepository: Repository<SubtitleFileEntity>,
-    @InjectQueue("audio") private readonly audioQueue: Queue
+    @InjectQueue("watchFiles") private fileProcessingQueue: Queue
   ) {}
 
   private readonly staticDir = path.join(
@@ -45,42 +55,20 @@ export class WatchService {
   private subtitleExtensions = ["srt", "ass"];
 
   async onModuleInit() {
+    this.enqueueFileProcessingJob();
     this.watchFiles();
-
-    let { videoFiles, audioFiles, subtitleFiles } =
-      await this.findAndClassifyFiles();
-    this.saveFilesToDB({ videoFiles, audioFiles, subtitleFiles });
-    videoFiles.forEach((videoFile) => {
-      // console.debug("checkNfoFile", this.checkNfoFile(videoFile), videoFile);
-      if (this.checkNfoFile(videoFile)) {
-        this.updateVideoImage(videoFile);
-      }
-    });
   }
 
-  private async saveOrUpdateVideoFile(
-    file: VideoFileEntity,
-    repo: Repository<VideoFileEntity>,
-    status: string = "todo"
-  ) {
-    //... function body
+  handleInitializeFinished() {
+    this.isInitializing = false;
   }
 
-  private async saveOrUpdateAudioFile(
-    file: AudioFileEntity,
-    repo: Repository<AudioFileEntity>,
-    status: string = "todo"
-  ) {
-    //... function body
+  async enqueueFileProcessingJob() {
+    // 将任务加入队列
+    await this.fileProcessingQueue.add("findAndClassifyFiles", {});
   }
 
-  private async saveOrUpdateSubtitleFile(
-    file: SubtitleFileEntity,
-    repo: Repository<SubtitleFileEntity>,
-    status: string = "todo"
-  ) {
-    //... function body
-  }
+  // async enqueueFileGroupProcessingJob
 
   private async saveOrUpdateFile(
     filePath: string,
@@ -291,6 +279,10 @@ export class WatchService {
     });
 
     watcher.on("add", async (filePath, stats) => {
+      if (this.isInitializing) {
+        return;
+      }
+
       await this.addFileToDB([filePath]);
       if (this.checkNfoFile(filePath)) {
         this.updateVideoImage(filePath);
@@ -349,29 +341,167 @@ export class WatchService {
     return result;
   }
 
-  // 查找并分类文件
-  async findAndClassifyFiles() {
-    const videoFiles = [];
-    const audioFiles = [];
-    const subtitleFiles = [];
+  async findAndClassifyFilesWithDir(): Promise<VideoDirFileGroup[]> {
+    const groupedFiles = [];
 
-    const stream = fg.stream(path.join(this.videoDir, "**/*.*"), { dot: true });
+    try {
+      const videoFiles = await fg.stream(
+        path.join(
+          this.videoDir,
+          "**/*.{" + this.videoExtensions.join(",") + "}"
+        ),
+        { dot: true }
+      );
 
-    for await (const entry of stream) {
-      // 获取文件扩展名
-      const ext = path.extname(entry as string).slice(1);
+      for await (const videoFile of videoFiles) {
+        let videoFileStr: string;
 
-      // 检查文件扩展名并分类
-      if (this.videoExtensions.includes(ext)) {
-        videoFiles.push(entry);
-      } else if (this.audioExtensions.includes(ext)) {
-        audioFiles.push(entry);
-      } else if (this.subtitleExtensions.includes(ext)) {
-        subtitleFiles.push(entry);
+        if (Buffer.isBuffer(videoFile)) {
+          videoFileStr = videoFile.toString();
+        } else {
+          videoFileStr = videoFile;
+        }
+        const directory = path.dirname(videoFileStr);
+        const baseName = path
+          .basename(videoFileStr, path.extname(videoFileStr))
+          .replace(/'/g, "\\'");
+
+        // 查找同一目录下的音频文件和字幕文件
+        const audioFilesPromise = fg.async(
+          path.join(
+            directory,
+            baseName + ".{" + this.audioExtensions.join(",") + "}"
+          )
+        );
+
+        const subtitleFilesPromise = fg.async(
+          path.join(
+            directory,
+            `${baseName}*.{${this.subtitleExtensions.join(",")}}`
+          )
+        );
+
+        const [audioFiles, subtitleFiles] = await Promise.all([
+          audioFilesPromise,
+          subtitleFilesPromise,
+        ]);
+
+        fg.globSync(
+          path.join(
+            directory,
+            baseName + ".{" + this.audioExtensions.join(",") + "}"
+          )
+        );
+
+        groupedFiles.push({
+          videoFile,
+          audioFiles,
+          subtitleFiles,
+        });
+      }
+    } catch (error) {
+      console.error("Error during file classification:", error);
+      // Handle the error appropriately
+    }
+
+    return groupedFiles;
+  }
+
+  async saveVideoFileGroup(videoFileGroup: VideoDirFileGroup) {
+    const { videoFile, audioFiles, subtitleFiles } = videoFileGroup;
+
+    const videoFilePath = videoFile.toString();
+    const videoFileName = path.basename(videoFilePath);
+    const videoBaseName = path.basename(
+      videoFilePath,
+      path.extname(videoFilePath)
+    );
+    const videoExtName = path.extname(videoFilePath);
+
+    let videoFileEntity = await this.videoFilesRepository.findOne({
+      where: { fileName: videoFileName },
+    });
+
+    if (videoFileEntity) {
+      videoFileEntity.status = "done";
+      await this.videoFilesRepository.save(videoFileEntity);
+    } else {
+      const newVideoFileEntity = this.videoFilesRepository.create({
+        filePath: videoFilePath,
+        fileName: videoFileName,
+        baseName: videoBaseName,
+        extName: videoExtName,
+        status: "done",
+      });
+      videoFileEntity =
+        await this.videoFilesRepository.save(newVideoFileEntity);
+    }
+
+    // 假定每个视频文件只有一个音频文件
+    let audioFileEntity: AudioFileEntity;
+    for (const audioFile of audioFiles) {
+      const audioFilePath = audioFile.toString();
+      const audioFileName = path.basename(audioFilePath);
+      const audioBaseName = path.basename(
+        audioFilePath,
+        path.extname(audioFilePath)
+      );
+      const audioExtName = path.extname(audioFilePath);
+
+      audioFileEntity = await this.audioFilesRepository.findOne({
+        where: { fileName: audioFileName },
+      });
+
+      if (audioFileEntity) {
+        audioFileEntity.status = "done";
+        audioFileEntity.videoFile = videoFileEntity;
+        await this.audioFilesRepository.save(audioFileEntity);
+      } else {
+        const newAudioFileEntity = this.audioFilesRepository.create({
+          filePath: audioFilePath,
+          fileName: audioFileName,
+          baseName: audioBaseName,
+          extName: audioExtName,
+          status: "done",
+          videoFile: videoFileEntity,
+        });
+        audioFileEntity =
+          await this.audioFilesRepository.save(newAudioFileEntity);
       }
     }
 
-    return { videoFiles, audioFiles, subtitleFiles };
+    for (const subtitleFile of subtitleFiles) {
+      const subtitleFilePath = subtitleFile.toString();
+      const subtitle = path.basename(subtitleFilePath);
+      const subtitleBaseName = path.basename(
+        subtitleFilePath,
+        path.extname(subtitleFilePath)
+      );
+      const subtitleExtName = path.extname(subtitleFilePath);
+
+      const subtitleFileEntity = await this.subtitleFilesRepository.findOne({
+        where: { fileName: subtitle },
+      });
+
+      if (subtitleFileEntity) {
+        subtitleFileEntity.status = "done";
+        subtitleFileEntity.audioFile = audioFileEntity;
+        subtitleFileEntity.videoFile = videoFileEntity;
+
+        await this.subtitleFilesRepository.save(subtitleFileEntity);
+      } else {
+        const newSubtitleFileEntity = this.subtitleFilesRepository.create({
+          filePath: subtitleFilePath,
+          fileName: subtitle,
+          baseName: subtitleBaseName,
+          extName: subtitleExtName,
+          status: "done",
+          audioFile: audioFileEntity,
+          videoFile: videoFileEntity,
+        });
+        await this.subtitleFilesRepository.save(newSubtitleFileEntity);
+      }
+    }
   }
 
   create(createWatchDto: CreateWatchDto) {

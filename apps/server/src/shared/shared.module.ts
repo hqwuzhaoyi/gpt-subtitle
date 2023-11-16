@@ -20,13 +20,24 @@ const EventSubjectProvider = {
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: "audio",
-    }),
-    BullBoardModule.forFeature({
-      name: "audio",
-      adapter: BullMQAdapter, //or use BullAdapter if you're using bull instead of bullMQ
-    }),
+    BullModule.registerQueue(...[
+      {
+        name: "audio",
+      },
+      {
+        name: "watchFiles",
+      },
+    ]),
+    BullBoardModule.forFeature(...[
+      {
+        name: "audio",
+        adapter: BullMQAdapter,
+      },
+      {
+        name: "watchFiles",
+        adapter: BullMQAdapter,
+      },
+    ]),
     TypeOrmModule.forFeature([
       VideoFileEntity,
       AudioFileEntity,

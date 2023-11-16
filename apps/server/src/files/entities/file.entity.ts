@@ -42,6 +42,9 @@ export class VideoFileEntity extends FileEntity {
   fanart: string;
   @Column({ length: 500, nullable: true })
   poster: string;
+
+  @OneToMany(() => SubtitleFileEntity, (subtitleFile) => subtitleFile.audioFile)
+  subtitleFiles: SubtitleFileEntity[];
 }
 
 @Entity()
@@ -58,4 +61,7 @@ export class AudioFileEntity extends FileEntity {
 export class SubtitleFileEntity extends FileEntity {
   @ManyToOne(() => AudioFileEntity, (audioFile) => audioFile.subtitleFiles)
   audioFile: AudioFileEntity;
+
+  @ManyToOne(() => VideoFileEntity, (videoFile) => videoFile.subtitleFiles)
+  videoFile: VideoFileEntity;
 }
