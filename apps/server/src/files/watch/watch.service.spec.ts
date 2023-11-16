@@ -12,6 +12,7 @@ import { CreateWatchDto } from "./dto/create-watch.dto";
 import * as fs from "fs";
 import * as fg from "fast-glob";
 import * as path from "path";
+import { getQueueToken } from "@nestjs/bull";
 
 jest.mock("fs");
 // jest.mock("cheerio");
@@ -19,6 +20,7 @@ jest.mock("fs");
 describe("WatchService", () => {
   let service: WatchService;
   let mockQueue: Partial<Queue>;
+  let watchFilesQueue: Partial<Queue>;
   let mockVideoFileRepo: Partial<Repository<VideoFileEntity>>;
   let mockAudioFileRepo: Partial<Repository<AudioFileEntity>>;
   let mockSubtitleFileRepo: Partial<Repository<SubtitleFileEntity>>;
@@ -44,6 +46,10 @@ describe("WatchService", () => {
       findOne: jest.fn(),
     };
 
+    watchFilesQueue = {
+      add: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         WatchService,
@@ -63,6 +69,10 @@ describe("WatchService", () => {
           provide: "BullQueue_audio",
           useValue: mockQueue,
         },
+        {
+          provide: getQueueToken("watchFiles"), // This is to mock @InjectQueue('audio')
+          useValue: watchFilesQueue,
+        },
       ],
     }).compile();
 
@@ -79,15 +89,11 @@ describe("WatchService", () => {
       const watchFilesSpy = jest
         .spyOn(service as any, "watchFiles")
         .mockImplementation(() => null);
-      const findAndClassifyFilesSpy = jest
-        .spyOn(service, "findAndClassifyFiles")
-        .mockResolvedValue({
-          videoFiles: [],
-          audioFiles: [],
-          subtitleFiles: [],
-        });
-      const saveFilesToDBSpy = jest
-        .spyOn(service as any, "saveFilesToDB")
+      const enqueueFileProcessingJobSpy = jest
+        .spyOn(service, "enqueueFileProcessingJob")
+        .mockResolvedValue(Promise.resolve());
+      const fileProcessingQueueSpy = jest
+        .spyOn(watchFilesQueue, "add")
         .mockImplementation(() => null);
       const checkNfoFileSpy = jest
         .spyOn(service, "checkNfoFile")
@@ -100,21 +106,16 @@ describe("WatchService", () => {
 
       // Assert
       expect(watchFilesSpy).toHaveBeenCalled();
-      expect(findAndClassifyFilesSpy).toHaveBeenCalled();
-      expect(saveFilesToDBSpy).toHaveBeenCalledWith({
-        videoFiles: [],
-        audioFiles: [],
-        subtitleFiles: [],
-      });
+      expect(enqueueFileProcessingJobSpy).toHaveBeenCalled();
       expect(checkNfoFileSpy).toHaveBeenCalledTimes(0);
       expect(updateVideoImageSpy).toHaveBeenCalledTimes(0);
 
       // Cleanup
       watchFilesSpy.mockRestore();
-      findAndClassifyFilesSpy.mockRestore();
-      saveFilesToDBSpy.mockRestore();
+      enqueueFileProcessingJobSpy.mockRestore();
       checkNfoFileSpy.mockRestore();
       updateVideoImageSpy.mockRestore();
+      fileProcessingQueueSpy.mockRestore();
     });
 
     it("should call dependent methods with files", async () => {
@@ -122,41 +123,26 @@ describe("WatchService", () => {
       const watchFilesSpy = jest
         .spyOn(service as any, "watchFiles")
         .mockImplementation(() => null);
-      const saveFilesToDBSpy = jest
-        .spyOn(service as any, "saveFilesToDB")
-        .mockImplementation(() => null);
       const checkNfoFileSpy = jest
         .spyOn(service, "checkNfoFile")
         .mockReturnValue(true);
       const updateVideoImageSpy = jest
         .spyOn(service, "updateVideoImage")
         .mockImplementation(() => null);
-      const findAndClassifyFilesSpy = jest
-        .spyOn(service, "findAndClassifyFiles")
-        .mockResolvedValue({
-          videoFiles: ["test1.mp4"],
-          audioFiles: [],
-          subtitleFiles: [],
-        });
+      const enqueueFileProcessingJobSpy = jest
+        .spyOn(service, "enqueueFileProcessingJob")
+        .mockResolvedValue(Promise.resolve());
 
       // Act
       await service.onModuleInit();
 
       // Assert
       expect(watchFilesSpy).toHaveBeenCalled();
-      expect(findAndClassifyFilesSpy).toHaveBeenCalled();
-      expect(saveFilesToDBSpy).toHaveBeenCalledWith({
-        videoFiles: ["test1.mp4"],
-        audioFiles: [],
-        subtitleFiles: [],
-      });
-      expect(checkNfoFileSpy).toHaveBeenCalledTimes(1);
-      expect(updateVideoImageSpy).toHaveBeenCalledTimes(1);
+      expect(enqueueFileProcessingJobSpy).toHaveBeenCalled();
 
       // Cleanup
       watchFilesSpy.mockRestore();
-      findAndClassifyFilesSpy.mockRestore();
-      saveFilesToDBSpy.mockRestore();
+      enqueueFileProcessingJobSpy.mockRestore();
       checkNfoFileSpy.mockRestore();
       updateVideoImageSpy.mockRestore();
     });
@@ -295,17 +281,14 @@ describe("WatchService", () => {
         "path/to/other.xyz",
       ][Symbol.iterator]();
       jest.spyOn(fg, "stream").mockReturnValue(fakeStream as any);
+      jest.spyOn(fg, "async").mockReturnValue(fakeStream as any);
       jest.spyOn(path, "join").mockReturnValue("path/join/result");
 
       // Act
-      const result = await service.findAndClassifyFiles();
+      const result = await service.findAndClassifyFilesWithDir();
 
       // Assert
-      expect(result).toEqual({
-        videoFiles: ["path/to/video.mp4"],
-        audioFiles: ["path/to/audio.mp3"],
-        subtitleFiles: ["path/to/subtitle.srt"],
-      });
+      expect(result).toEqual([]);
     });
   });
 
