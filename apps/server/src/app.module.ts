@@ -72,15 +72,15 @@ const rootPath = path.join(__dirname, "..", "..", "..");
       rootPath: join(rootPath, "uploads"),
       serveRoot: "/static",
     }),
-
     CustomConfigModule,
+    SharedModule,
 
     TranslateModule,
 
     UploadModule,
     OsrtModule,
     FilesModule,
-    SharedModule,
+
     StaticDirModule,
     SubtitleModule,
     AuthModule,

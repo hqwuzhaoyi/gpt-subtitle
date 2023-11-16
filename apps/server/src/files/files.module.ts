@@ -5,7 +5,7 @@ import { WatchModule } from "./watch/watch.module";
 import { SharedModule } from "@/shared/shared.module";
 
 @Module({
-  imports: [WatchModule, SharedModule],
+  imports: [SharedModule, WatchModule],
   controllers: [FilesController],
   providers: [FilesService],
   exports: [FilesService],
