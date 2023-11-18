@@ -7,6 +7,13 @@
   "files": [
     "dist/**"
   ],
+  "description": "A simple NFO parser",
+  "keywords": [
+    "nfo"
+  ],
+  "bin": {
+    "nfo-parser": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist && rm -rf tsconfig.tsbuildinfo",
