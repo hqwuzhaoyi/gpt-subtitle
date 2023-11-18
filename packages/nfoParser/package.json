@@ -15,7 +15,9 @@
     "nfo-parser": "./dist/cli.js"
   },
   "scripts": {
+    "start": "node ./dist/cli.js",
     "build": "tsc",
+    "prepublish": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "dev": "tsc -w",
     "lint": "eslint \"src/**/*.ts*\"",
@@ -23,6 +25,19 @@
     "test:watch": "jest --passWithNoTests --watch",
     "test:coverage": "jest --passWithNoTests --coverage"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hqwuzhaoyi/gpt-subtitle"
+  },
+  "author": "hqwuzhaoyi <hqwuzhaoyi@gmail.com>",
+  "contributors": [
+    "hqwuzhaoyi <hqwuzhaoyi@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hqwuzhaoyi/gpt-subtitle/issues"
+  },
+  "homepage": "https://github.com/hqwuzhaoyi/gpt-subtitle#readme",
   "jest": {
     "preset": "jest-presets/jest/node"
   },
@@ -40,5 +55,8 @@
   "dependencies": {
     "execa": "^8.0.1",
     "xml2js": "^0.6.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
