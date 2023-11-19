@@ -6,6 +6,7 @@ import {
   VideoFileEntity,
   AudioFileEntity,
   SubtitleFileEntity,
+  NfoFileEntity,
 } from "@/files/entities/file.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SharedGateway } from "./shared.gateway";
@@ -20,28 +21,33 @@ const EventSubjectProvider = {
 
 @Module({
   imports: [
-    BullModule.registerQueue(...[
-      {
-        name: "audio",
-      },
-      {
-        name: "watchFiles",
-      },
-    ]),
-    BullBoardModule.forFeature(...[
-      {
-        name: "audio",
-        adapter: BullMQAdapter,
-      },
-      {
-        name: "watchFiles",
-        adapter: BullMQAdapter,
-      },
-    ]),
+    BullModule.registerQueue(
+      ...[
+        {
+          name: "audio",
+        },
+        {
+          name: "watchFiles",
+        },
+      ]
+    ),
+    BullBoardModule.forFeature(
+      ...[
+        {
+          name: "audio",
+          adapter: BullMQAdapter,
+        },
+        {
+          name: "watchFiles",
+          adapter: BullMQAdapter,
+        },
+      ]
+    ),
     TypeOrmModule.forFeature([
       VideoFileEntity,
       AudioFileEntity,
       SubtitleFileEntity,
+      NfoFileEntity,
     ]),
   ],
   exports: [BullModule, TypeOrmModule, SharedGateway, EventSubjectProvider], // 将 BullModule 导出以供其他模块使用

@@ -1,6 +1,6 @@
 import { CreateWatchDto } from "./dto/create-watch.dto";
 import { UpdateWatchDto } from "./dto/update-watch.dto";
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { basename } from "path";
@@ -13,15 +13,17 @@ import {
   VideoFileEntity,
   AudioFileEntity,
   SubtitleFileEntity,
-  FileEntity,
+  NfoFileEntity,
 } from "../entities/file.entity";
 import * as fg from "fast-glob";
 import * as cheerio from "cheerio";
+import { extractMediaInfo } from "nfo-parser";
 
 export interface VideoDirFileGroup {
   videoFile: string;
   audioFiles: string[];
   subtitleFiles: string[];
+  nfoFiles: string[];
 }
 
 @Injectable()
@@ -36,8 +38,12 @@ export class WatchService {
     private audioFilesRepository: Repository<AudioFileEntity>,
     @InjectRepository(SubtitleFileEntity)
     private subtitleFilesRepository: Repository<SubtitleFileEntity>,
+    @InjectRepository(NfoFileEntity)
+    private nfoRepository: Repository<NfoFileEntity>,
     @InjectQueue("watchFiles") private fileProcessingQueue: Queue
   ) {}
+
+  private logger: Logger = new Logger("WatchService");
 
   private readonly staticDir = path.join(
     __dirname,
@@ -53,6 +59,7 @@ export class WatchService {
   private videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
   private audioExtensions = ["mp3", "wav", "ogg", "flac"];
   private subtitleExtensions = ["srt", "ass"];
+  private nfoExtensions = ["nfo"];
 
   async onModuleInit() {
     this.enqueueFileProcessingJob();
@@ -285,7 +292,7 @@ export class WatchService {
 
       await this.addFileToDB([filePath]);
       if (this.checkNfoFile(filePath)) {
-        this.updateVideoImage(filePath);
+        // this.updateVideoImage(filePath);
       }
     });
   }
@@ -330,15 +337,48 @@ export class WatchService {
     };
   }
 
-  async updateVideoImage(filePath: string) {
-    const { poster, fanart } = this.getNfoImage(filePath);
+  async saveNfoToDB(filePath: string, videoFileEntity: VideoFileEntity) {
+    try {
+      // 提取 NFO 文件信息
+      const { title, originaltitle, plot, poster, fanart, actors, dateadded } =
+        await extractMediaInfo(filePath);
 
-    const result = await this.videoFilesRepository.update(
-      { filePath },
-      { poster, fanart }
-    );
+      // 检查数据库中是否已存在该记录
+      let nfoFileEntity = await this.nfoRepository.findOne({
+        where: { filePath: filePath },
+      });
 
-    return result;
+      // 如果记录不存在，则创建新记录
+      if (!nfoFileEntity) {
+        nfoFileEntity = this.nfoRepository.create({ filePath: filePath });
+      }
+
+      const resultPath = (picPath) => {
+        if (picPath) {
+          return path.join(path.dirname(filePath), path.basename(picPath));
+        } else {
+          return null;
+        }
+      };
+
+      // 更新或设置字段
+      nfoFileEntity.title = title;
+      nfoFileEntity.originaltitle = originaltitle;
+      nfoFileEntity.plot = plot;
+      nfoFileEntity.poster = poster ? resultPath(poster) : null;
+      nfoFileEntity.fanart = fanart ? resultPath(fanart) : null;
+      nfoFileEntity.actors = actors;
+      nfoFileEntity.dateadded = dateadded;
+      nfoFileEntity.videoFile = videoFileEntity;
+
+      // 保存到数据库
+      await this.nfoRepository.save(nfoFileEntity);
+      this.logger.log(
+        `NFO file info saved/updated in DB for file: ${filePath}`
+      );
+    } catch (error) {
+      console.error(`Error saving/updating NFO file info to DB: ${error}`);
+    }
   }
 
   async findAndClassifyFilesWithDir(): Promise<VideoDirFileGroup[]> {
@@ -380,23 +420,28 @@ export class WatchService {
             `${baseName}*.{${this.subtitleExtensions.join(",")}}`
           )
         );
-
-        const [audioFiles, subtitleFiles] = await Promise.all([
-          audioFilesPromise,
-          subtitleFilesPromise,
-        ]);
-
-        fg.globSync(
+        const nfoFilesPromise = fg.async(
           path.join(
             directory,
-            baseName + ".{" + this.audioExtensions.join(",") + "}"
+            `${baseName}*.${
+              this.nfoExtensions.length === 1
+                ? this.nfoExtensions[0]
+                : `{${this.nfoExtensions.join(",")}}`
+            }`
           )
         );
+
+        const [audioFiles, subtitleFiles, nfoFiles] = await Promise.all([
+          audioFilesPromise,
+          subtitleFilesPromise,
+          nfoFilesPromise,
+        ]);
 
         groupedFiles.push({
           videoFile,
           audioFiles,
           subtitleFiles,
+          nfoFiles,
         });
       }
     } catch (error) {
@@ -408,7 +453,7 @@ export class WatchService {
   }
 
   async saveVideoFileGroup(videoFileGroup: VideoDirFileGroup) {
-    const { videoFile, audioFiles, subtitleFiles } = videoFileGroup;
+    const { videoFile, audioFiles, subtitleFiles, nfoFiles } = videoFileGroup;
 
     const videoFilePath = videoFile.toString();
     const videoFileName = path.basename(videoFilePath);
@@ -501,6 +546,10 @@ export class WatchService {
         });
         await this.subtitleFilesRepository.save(newSubtitleFileEntity);
       }
+    }
+
+    for (const nfoFile of nfoFiles) {
+      this.saveNfoToDB(nfoFile, videoFileEntity);
     }
   }
 

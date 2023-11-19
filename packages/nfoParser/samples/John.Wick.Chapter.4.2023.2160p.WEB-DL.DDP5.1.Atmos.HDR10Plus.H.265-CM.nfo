@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<movie>
+  <plot>约翰纽约躲避高桌会的追杀，展开对高桌会的复仇大计。高桌会的掌控者被约翰在摩洛哥击杀后，侯爵召见纽约大陆饭店经理温斯顿和接待员沙隆，褫夺温斯顿职务，炸毁大陆饭店，处决沙隆。
+ 侯爵委托凯恩暗杀约翰。约翰在大阪大陆饭店逃难，岛津明下令清空饭店与约翰对抗刺客。约翰回到纽约，温斯顿建议和侯爵决斗。约翰需要重修和吉普赛人的关系，杀死高桌会德国分会高级干部基拉。卡蒂雅委任约翰为家族代理人，约翰让温斯顿代为向侯爵发起挑战。侯爵悬赏2600万美元通缉约翰。约翰击退刺客的袭击，去圣心圣殿和凯恩交锋。</plot>
+  <lockdata>false</lockdata>
+  <dateadded>2023-05-22 20:00:44</dateadded>
+  <title>疾速追杀4</title>
+  <originaltitle>John Wick: Chapter 4</originaltitle>
+  <director>Chad Stahelski</director>
+  <writer>Michael Finch</writer>
+  <writer>Derek Kolstad</writer>
+  <writer>Shay Hatten</writer>
+  <credits>Michael Finch</credits>
+  <credits>Derek Kolstad</credits>
+  <credits>Shay Hatten</credits>
+  <trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=IM4pGVSPf58</trailer>
+  <rating>7.9</rating>
+  <year>2023</year>
+  <mpaa>R</mpaa>
+  <collectionnumber>404609</collectionnumber>
+  <imdbid>tt10366206</imdbid>
+  <tmdbid>603692</tmdbid>
+  <premiered>2023-03-22</premiered>
+  <releasedate>2023-03-22</releasedate>
+  <criticrating>94</criticrating>
+  <runtime>169</runtime>
+  <country>United States of America</country>
+  <genre>动作</genre>
+  <genre>惊悚</genre>
+  <genre>犯罪</genre>
+  <studio>Thunder Road</studio>
+  <studio>87Eleven</studio>
+  <studio>Summit Entertainment</studio>
+  <studio>Studio Babelsberg</studio>
+  <studio>Lionsgate</studio>
+  <tag>new york city</tag>
+  <tag>martial arts</tag>
+  <tag>hitman</tag>
+  <tag>sequel</tag>
+  <tag>organized crime</tag>
+  <tag>osaka, japan</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>hunted</tag>
+  <tag>professional assassin</tag>
+  <tag>neo-noir</tag>
+  <tag>berlin</tag>
+  <art>
+    <poster>/media/movie/John Wick Chapter 4 (2023)/folder.jpg</poster>
+    <fanart>/media/movie/John Wick Chapter 4 (2023)/backdrop.jpg</fanart>
+  </art>
+  <actor>
+    <name>Keanu Reeves</name>
+    <role>John Wick</role>
+    <type>Actor</type>
+    <sortorder>0</sortorder>
+    <thumb>/config/data/metadata/People/K/Keanu Reeves/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Donnie Yen</name>
+    <role>Caine</role>
+    <type>Actor</type>
+    <sortorder>1</sortorder>
+    <thumb>/config/data/metadata/People/D/Donnie Yen/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Bill Skarsgård</name>
+    <role>Marquis de Gramont</role>
+    <type>Actor</type>
+    <sortorder>2</sortorder>
+    <thumb>/config/data/metadata/People/B/Bill Skarsgård/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Ian McShane</name>
+    <role>Winston</role>
+    <type>Actor</type>
+    <sortorder>3</sortorder>
+    <thumb>/config/data/metadata/People/I/Ian McShane/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Laurence Fishburne</name>
+    <role>Bowery King</role>
+    <type>Actor</type>
+    <sortorder>4</sortorder>
+    <thumb>/config/data/metadata/People/L/Laurence Fishburne/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Lance Reddick</name>
+    <role>Charon</role>
+    <type>Actor</type>
+    <sortorder>5</sortorder>
+    <thumb>/config/data/metadata/People/L/Lance Reddick/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Clancy Brown</name>
+    <role>The Harbinger</role>
+    <type>Actor</type>
+    <sortorder>6</sortorder>
+    <thumb>/config/data/metadata/People/C/Clancy Brown/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Hiroyuki Sanada</name>
+    <role>Shimazu</role>
+    <type>Actor</type>
+    <sortorder>7</sortorder>
+    <thumb>/config/data/metadata/People/H/Hiroyuki Sanada/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Shamier Anderson</name>
+    <role>Mr Nobody</role>
+    <type>Actor</type>
+    <sortorder>8</sortorder>
+    <thumb>/config/data/metadata/People/S/Shamier Anderson/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Rina Sawayama</name>
+    <role>Akira</role>
+    <type>Actor</type>
+    <sortorder>9</sortorder>
+    <thumb>/config/data/metadata/People/R/Rina Sawayama/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Scott Adkins</name>
+    <role>Killa</role>
+    <type>Actor</type>
+    <sortorder>10</sortorder>
+    <thumb>/config/data/metadata/People/S/Scott Adkins/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Aimée Kwan</name>
+    <role>Mia</role>
+    <type>Actor</type>
+    <sortorder>11</sortorder>
+    <thumb>/config/data/metadata/People/A/Aimée Kwan/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Marko Zaror</name>
+    <role>Chidi</role>
+    <type>Actor</type>
+    <sortorder>12</sortorder>
+    <thumb>/config/data/metadata/People/M/Marko Zaror/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Natalia Tena</name>
+    <role>Katia</role>
+    <type>Actor</type>
+    <sortorder>13</sortorder>
+    <thumb>/config/data/metadata/People/N/Natalia Tena/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>George Georgiou</name>
+    <role>The Elder</role>
+    <type>Actor</type>
+    <sortorder>14</sortorder>
+    <thumb>/config/data/metadata/People/G/George Georgiou/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Keanu Reeves</name>
+    <role>Executive Producer</role>
+    <type>Producer</type>
+    <thumb>/config/data/metadata/People/K/Keanu Reeves/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Henning Molfenter</name>
+    <role>Co-Producer</role>
+    <type>Producer</type>
+    <thumb>/config/data/metadata/People/H/Henning Molfenter/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Charlie Woebcken</name>
+    <role>Co-Producer</role>
+    <type>Producer</type>
+  </actor>
+  <actor>
+    <name>Chad Stahelski</name>
+    <role>Producer</role>
+    <type>Producer</type>
+    <thumb>/config/data/metadata/People/C/Chad Stahelski/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>David Leitch</name>
+    <role>Executive Producer</role>
+    <type>Producer</type>
+    <thumb>/config/data/metadata/People/D/David Leitch/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Michael Paseornek</name>
+    <role>Executive Producer</role>
+    <type>Producer</type>
+  </actor>
+  <actor>
+    <name>Louise Rosner-Meyer</name>
+    <role>Executive Producer</role>
+    <type>Producer</type>
+  </actor>
+  <actor>
+    <name>Basil Iwanyk</name>
+    <role>Producer</role>
+    <type>Producer</type>
+    <thumb>/config/data/metadata/People/B/Basil Iwanyk/folder.jpg</thumb>
+  </actor>
+  <actor>
+    <name>Erica Lee</name>
+    <role>Producer</role>
+    <type>Producer</type>
+  </actor>
+  <id>tt10366206</id>
+  <set>疾速追杀（系列）</set>
+  <fileinfo>
+    <streamdetails>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <language>chi</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <scantype>progressive</scantype>
+        <default>True</default>
+        <forced>False</forced>
+      </subtitle>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <language>chi</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+      <video>
+        <codec>hevc</codec>
+        <micodec>hevc</micodec>
+        <bitrate>25006138</bitrate>
+        <width>3828</width>
+        <height>1592</height>
+        <aspect>2.40:1</aspect>
+        <aspectratio>2.40:1</aspectratio>
+        <framerate>23.976025</framerate>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <default>True</default>
+        <forced>False</forced>
+        <duration>169</duration>
+        <durationinseconds>10157</durationinseconds>
+      </video>
+      <audio>
+        <codec>eac3</codec>
+        <micodec>eac3</micodec>
+        <bitrate>768000</bitrate>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <channels>6</channels>
+        <samplingrate>48000</samplingrate>
+        <default>True</default>
+        <forced>False</forced>
+      </audio>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <language>fre</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+    </streamdetails>
+  </fileinfo>
+</movie>

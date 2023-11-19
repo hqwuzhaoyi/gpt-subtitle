@@ -7,6 +7,7 @@ import {
   VideoFileEntity,
   AudioFileEntity,
   SubtitleFileEntity,
+  NfoFileEntity,
 } from "../entities/file.entity";
 import { CreateWatchDto } from "./dto/create-watch.dto";
 import * as fs from "fs";
@@ -24,6 +25,7 @@ describe("WatchService", () => {
   let mockVideoFileRepo: Partial<Repository<VideoFileEntity>>;
   let mockAudioFileRepo: Partial<Repository<AudioFileEntity>>;
   let mockSubtitleFileRepo: Partial<Repository<SubtitleFileEntity>>;
+  let mockNfoFileRepo: Partial<Repository<NfoFileEntity>>;
 
   beforeEach(async () => {
     mockQueue = {
@@ -66,6 +68,10 @@ describe("WatchService", () => {
           useValue: mockSubtitleFileRepo,
         },
         {
+          provide: getRepositoryToken(NfoFileEntity),
+          useValue: mockNfoFileRepo,
+        },
+        {
           provide: "BullQueue_audio",
           useValue: mockQueue,
         },
@@ -98,9 +104,7 @@ describe("WatchService", () => {
       const checkNfoFileSpy = jest
         .spyOn(service, "checkNfoFile")
         .mockReturnValue(true);
-      const updateVideoImageSpy = jest
-        .spyOn(service, "updateVideoImage")
-        .mockImplementation(() => null);
+
       // Act
       await service.onModuleInit();
 
@@ -108,13 +112,11 @@ describe("WatchService", () => {
       expect(watchFilesSpy).toHaveBeenCalled();
       expect(enqueueFileProcessingJobSpy).toHaveBeenCalled();
       expect(checkNfoFileSpy).toHaveBeenCalledTimes(0);
-      expect(updateVideoImageSpy).toHaveBeenCalledTimes(0);
 
       // Cleanup
       watchFilesSpy.mockRestore();
       enqueueFileProcessingJobSpy.mockRestore();
       checkNfoFileSpy.mockRestore();
-      updateVideoImageSpy.mockRestore();
       fileProcessingQueueSpy.mockRestore();
     });
 
@@ -126,9 +128,6 @@ describe("WatchService", () => {
       const checkNfoFileSpy = jest
         .spyOn(service, "checkNfoFile")
         .mockReturnValue(true);
-      const updateVideoImageSpy = jest
-        .spyOn(service, "updateVideoImage")
-        .mockImplementation(() => null);
       const enqueueFileProcessingJobSpy = jest
         .spyOn(service, "enqueueFileProcessingJob")
         .mockResolvedValue(Promise.resolve());
@@ -144,7 +143,6 @@ describe("WatchService", () => {
       watchFilesSpy.mockRestore();
       enqueueFileProcessingJobSpy.mockRestore();
       checkNfoFileSpy.mockRestore();
-      updateVideoImageSpy.mockRestore();
     });
   });
 
@@ -200,95 +198,6 @@ describe("WatchService", () => {
       // Assert
       expect(fs.existsSync).toHaveBeenCalledWith(nfoPath);
       expect(result).toBe(false);
-    });
-  });
-
-  describe("getNfoImage", () => {
-    it("should return image paths if nfo file contains them", () => {
-      // Arrange
-      const filePath = "path/to/video.mp4";
-      const nfoPath = "path/to/video.nfo";
-      const mockNfoContent =
-        "<poster>poster.jpg</poster><fanart>fanart.jpg</fanart>";
-      (fs.readFileSync as jest.Mock).mockReturnValue(mockNfoContent);
-      (fs.existsSync as jest.Mock).mockReturnValue(true);
-
-      // Act
-      const result = service.getNfoImage(filePath);
-
-      // Assert
-      expect(fs.readFileSync).toHaveBeenCalledWith(nfoPath, "utf-8");
-      expect(fs.existsSync).toBeCalled(); // Or the exact number of times it should be called
-      expect(result).toEqual({
-        poster: "poster.jpg",
-        fanart: "fanart.jpg",
-      });
-    });
-
-    it("should return null if nfo file does not contain image paths", () => {
-      // Arrange
-      const filePath = "path/to/video.mp4";
-      const nfoPath = "path/to/video.nfo";
-      const mockNfoContent = "<noimage></noimage>";
-      (fs.readFileSync as jest.Mock).mockReturnValue(mockNfoContent);
-      // Act
-      const result = service.getNfoImage(filePath);
-
-      // Assert
-      expect(fs.readFileSync).toHaveBeenCalledWith(nfoPath, "utf-8");
-      expect(result).toEqual({
-        poster: null,
-        fanart: null,
-      });
-    });
-
-    // Add more test cases for different scenarios
-  });
-
-  describe("updateVideoImage", () => {
-    beforeEach(() => {
-      jest
-        .spyOn(service, "getNfoImage")
-        .mockReturnValue({ poster: "poster.jpg", fanart: "fanart.jpg" });
-    });
-
-    it("should update video image if file exists", async () => {
-      // Arrange
-      const filePath = "path/to/video.mp4";
-      const poster = "path/to/poster.jpg";
-      const fanart = "path/to/fanart.jpg";
-      jest.spyOn(service, "getNfoImage").mockReturnValue({ poster, fanart });
-
-      // Act
-      const result = await service.updateVideoImage(filePath);
-
-      // Assert
-      expect(service.getNfoImage).toHaveBeenCalledWith(filePath);
-      expect(mockVideoFileRepo.update).toHaveBeenCalledWith(
-        { filePath },
-        { poster, fanart }
-      );
-    });
-  });
-
-  describe("findAndClassifyFiles", () => {
-    it("should classify files correctly", async () => {
-      // Arrange
-      const fakeStream = [
-        "path/to/video.mp4",
-        "path/to/audio.mp3",
-        "path/to/subtitle.srt",
-        "path/to/other.xyz",
-      ][Symbol.iterator]();
-      jest.spyOn(fg, "stream").mockReturnValue(fakeStream as any);
-      jest.spyOn(fg, "async").mockReturnValue(fakeStream as any);
-      jest.spyOn(path, "join").mockReturnValue("path/join/result");
-
-      // Act
-      const result = await service.findAndClassifyFilesWithDir();
-
-      // Assert
-      expect(result).toEqual([]);
     });
   });
 

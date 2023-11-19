@@ -123,6 +123,9 @@ importers:
       mysql2:
         specifier: ^3.6.2
         version: 3.6.2
+      nfo-parser:
+        specifier: workspace:^
+        version: link:../../packages/nfoParser
       openai:
         specifier: ^4.17.0
         version: 4.17.0

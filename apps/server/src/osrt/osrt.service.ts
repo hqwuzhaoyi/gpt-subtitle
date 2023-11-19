@@ -129,6 +129,7 @@ export class OsrtService {
       const result = await Promise.all(
         videos.map(async (videoFileEntity) => {
           const audioFile = await videoFileEntity.audioFile;
+          const nfoFile = await videoFileEntity.nfoFile;
           return {
             ...videoFileEntity,
             path: this.filePathToUrl(videoFileEntity.filePath),
@@ -141,12 +142,8 @@ export class OsrtService {
             isProcessing: currentJobsFiles.includes(videoFileEntity.id),
             processingJobId: currentJobsIdMap[videoFileEntity.id],
             status: videoFileEntity.status,
-            poster:
-              videoFileEntity.poster &&
-              this.filePathToUrl(videoFileEntity.poster),
-            fanart:
-              videoFileEntity.fanart &&
-              this.filePathToUrl(videoFileEntity.fanart),
+            poster: nfoFile.poster && this.filePathToUrl(nfoFile.poster),
+            fanart: nfoFile.fanart && this.filePathToUrl(nfoFile.fanart),
           };
         })
       );

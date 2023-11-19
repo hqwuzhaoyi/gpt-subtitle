@@ -15,18 +15,18 @@ export class FileEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   fileName: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   baseName: string;
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   extName: string;
 
-  @Column("text")
+  @Column({ length: 500 })
   filePath: string;
 
-  @Column()
+  @Column({ nullable: true })
   status: string;
 }
 
@@ -38,13 +38,11 @@ export class VideoFileEntity extends FileEntity {
   )
   audioFile: Promise<AudioFileEntity>;
 
-  @Column({ length: 500, nullable: true })
-  fanart: string;
-  @Column({ length: 500, nullable: true })
-  poster: string;
-
   @OneToMany(() => SubtitleFileEntity, (subtitleFile) => subtitleFile.audioFile)
   subtitleFiles: SubtitleFileEntity[];
+
+  @OneToOne("NfoFileEntity", (nfoFile: NfoFileEntity) => nfoFile.videoFile)
+  nfoFile: Promise<NfoFileEntity>;
 }
 
 @Entity()
@@ -63,5 +61,37 @@ export class SubtitleFileEntity extends FileEntity {
   audioFile: AudioFileEntity;
 
   @ManyToOne(() => VideoFileEntity, (videoFile) => videoFile.subtitleFiles)
+  videoFile: VideoFileEntity;
+}
+
+@Entity()
+export class NfoFileEntity extends FileEntity {
+  @Column({ length: 500, nullable: true })
+  title: string;
+
+  @Column({ length: 500, nullable: true })
+  originaltitle: string;
+
+  @Column("text", { nullable: true })
+  plot: string;
+
+  @Column({ length: 500, nullable: true })
+  poster: string;
+
+  @Column({ length: 500, nullable: true })
+  fanart: string;
+
+  @Column("json", { nullable: true })
+  actors: {
+    name: string;
+    role: string;
+    thumb: string;
+  }[];
+
+  @Column({nullable: true})
+  dateadded: string;
+
+  @OneToOne(() => VideoFileEntity)
+  @JoinColumn()
   videoFile: VideoFileEntity;
 }
