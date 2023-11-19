@@ -25,6 +25,14 @@ import { toast } from "@/components/ui/use-toast";
 import { Terminal } from "@/components/Terminal";
 import { useSWRConfig } from "swr";
 import { PaginationState } from "@tanstack/react-table";
+import { PreviewModal } from "./preview-modal";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "components/ui/tooltip";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
@@ -70,7 +78,16 @@ export function AlbumArtwork({
             )}
             <div className="absolute right-1 top-1 flex gap-2">
               {album.path && (
-                <CheckCircle2 className="  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <CheckCircle2 className="  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Status: Finished</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
               {album.processingJobId && (
                 <HoverCard>
@@ -82,6 +99,18 @@ export function AlbumArtwork({
                   </HoverCardContent>
                 </HoverCard>
               )}
+            </div>
+            <div className="absolute right-1 bottom-1 flex gap-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <PreviewModal />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Preview Information</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </ContextMenuTrigger>
