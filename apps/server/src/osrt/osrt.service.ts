@@ -144,6 +144,11 @@ export class OsrtService {
             status: videoFileEntity.status,
             poster: nfoFile.poster && this.filePathToUrl(nfoFile.poster),
             fanart: nfoFile.fanart && this.filePathToUrl(nfoFile.fanart),
+            title: nfoFile.title,
+            originaltitle: nfoFile.originaltitle,
+            plot: nfoFile.plot,
+            actors: nfoFile.actors,
+            dateadded: nfoFile.dateadded,
           };
         })
       );

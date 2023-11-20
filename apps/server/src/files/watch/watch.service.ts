@@ -258,8 +258,6 @@ export class WatchService {
       subtitleFiles = [];
 
     filePaths.forEach((filePath) => {
-      const fileName = basename(filePath);
-      // console.log(`File ${filePath} has been added, ${fileName}`);
       const ext = path.extname(filePath).slice(1);
 
       // 当发现新文件，执行保存到数据库的操作
@@ -291,9 +289,6 @@ export class WatchService {
       }
 
       await this.addFileToDB([filePath]);
-      if (this.checkNfoFile(filePath)) {
-        // this.updateVideoImage(filePath);
-      }
     });
   }
 

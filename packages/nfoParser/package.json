@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "execa": "^8.0.1",
+    "shared-types": "workspace:^",
     "xml2js": "^0.6.2"
   },
   "engines": {

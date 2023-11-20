@@ -24,7 +24,10 @@ const fetchGalleryList = async ({
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     console.error("setProfile error", res);
-    throw new Error("Failed to fetch data");
+    if (res.status === 401) {
+      throw new Error("Unauthorized");
+    }
+    throw new Error("Network response was not ok");
   }
 
   const data = await res.json();
@@ -46,8 +49,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
       const status = task.isProcessing
         ? "in progress"
         : task.subtitle?.length
-        ? "done"
-        : "todo";
+          ? "done"
+          : "todo";
 
       return {
         ...task,
@@ -73,7 +76,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
   } catch (error: any) {
     console.error(error.message);
 
-    if (error?.response?.status === 401) {
+    if (error?.message === "Unauthorized") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     } else {
       return NextResponse.json({

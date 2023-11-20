@@ -1,6 +1,7 @@
 import { FileList } from "shared-types";
 import { isNil, ifElse } from "ramda";
 import { Album, AlbumSchema } from "./schema";
+import { signOut } from "next-auth/react";
 
 export const queryGallery: ({
   pagination,
@@ -23,10 +24,9 @@ export const queryGallery: ({
 
     if (!response.ok) {
       if (response.status === 401) {
-        const window = globalThis.window;
-        if (window) {
+        signOut({ redirect: false }).then(() => {
           window.location.href = "/login";
-        }
+        });
       }
       throw new Error("Network response was not ok");
     }
@@ -48,6 +48,13 @@ export const queryGallery: ({
           )(item.fanart),
           path: item.subtitle?.[0]?.path,
           status: item.status,
+          title: item.title,
+          originaltitle: item.originaltitle,
+          plot: item.plot,
+          actors: item.actors,
+          dateadded: item.dateadded,
+          poster: item.poster,
+          fanart: item.fanart,
         });
       }),
       totalCount,

@@ -104,7 +104,7 @@ export function AlbumArtwork({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <PreviewModal />
+                    <PreviewModal album={album} />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Preview Information</p>

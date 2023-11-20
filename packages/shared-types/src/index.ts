@@ -1,3 +1,5 @@
+import { type } from "os";
+
 type FileItem = {
   id: number;
   fileName: string;
@@ -17,9 +19,7 @@ type VideoFileItem = FileItem & {
   subtitle: FileItem[];
   isProcessing: boolean;
   processingJobId?: string;
-  poster?: string;
-  fanart?: string;
-};
+} & MediaInfo;
 
 type AudioListItem = FileItem & {
   subtitle: FileItem[];
@@ -172,4 +172,19 @@ export enum TranslateLanguage {
   Russian = "ru",
   Arabic = "ar",
   Indonesian = "id",
+}
+
+export interface MediaInfo {
+  title?: string;
+  originaltitle?: string;
+  plot?: string;
+  poster?: string;
+  fanart?: string;
+  actors?: {
+    name?: string;
+    role?: string;
+    thumb?: string;
+    type?: string;
+  }[];
+  dateadded?: string;
 }

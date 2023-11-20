@@ -484,6 +484,9 @@ importers:
       execa:
         specifier: ^8.0.1
         version: 8.0.1
+      shared-types:
+        specifier: workspace:^
+        version: link:../shared-types
       xml2js:
         specifier: ^0.6.2
         version: 0.6.2

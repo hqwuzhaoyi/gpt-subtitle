@@ -1,25 +1,12 @@
 import fs from "fs";
 import { parseStringPromise } from "xml2js";
+import { MediaInfo } from "shared-types";
 
 export async function parser(filePath: string): Promise<Record<any, any>> {
   const nfoContent = fs.readFileSync(filePath, "utf8");
   const data = await parseStringPromise(nfoContent);
 
   return Object.values(data)?.[0];
-}
-
-export interface MediaInfo {
-  title: string;
-  originaltitle: string;
-  plot: string;
-  poster: string;
-  fanart: string;
-  actors: {
-    name: string;
-    role: string;
-    thumb: string;
-  }[];
-  dateadded: string;
 }
 
 export async function extractMediaInfo(filePath: string): Promise<MediaInfo> {
@@ -37,6 +24,7 @@ export async function extractMediaInfo(filePath: string): Promise<MediaInfo> {
         name: actor?.name?.[0],
         role: actor?.role?.[0],
         thumb: actor?.thumb?.[0],
+        type: actor?.type?.[0],
       })),
       dateadded: parsedData?.dateadded?.[0],
     };
