@@ -45,7 +45,7 @@
     "glob": "^10.3.10",
     "global-agent": "^3.0.0",
     "multer": "1.4.5-lts.1",
-    "mysql2": "^3.6.2",
+    "mysql2": "^3.6.3",
     "nfo-parser": "workspace:^",
     "openai": "^4.17.0",
     "reflect-metadata": "^0.1.13",

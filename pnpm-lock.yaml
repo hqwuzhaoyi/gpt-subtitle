@@ -121,8 +121,8 @@ importers:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
       mysql2:
-        specifier: ^3.6.2
-        version: 3.6.2
+        specifier: ^3.6.3
+        version: 3.6.3
       nfo-parser:
         specifier: workspace:^
         version: link:../../packages/nfoParser
@@ -146,7 +146,7 @@ importers:
         version: link:../../packages/translater
       typeorm:
         specifier: ^0.3.17
-        version: 0.3.17(mysql2@3.6.2)(ts-node@10.9.1)
+        version: 0.3.17(mysql2@3.6.3)(ts-node@10.9.1)
       utils:
         specifier: workspace:*
         version: link:../../packages/utils
@@ -2309,7 +2309,7 @@ packages:
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.8)(@nestjs/platform-express@10.2.7)(@nestjs/websockets@10.2.8)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
-      typeorm: 0.3.17(mysql2@3.6.2)(ts-node@10.9.1)
+      typeorm: 0.3.17(mysql2@3.6.3)(ts-node@10.9.1)
       uuid: 9.0.1
     dev: false
 
@@ -9203,8 +9203,8 @@ packages:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
 
-  /mysql2@3.6.2:
-    resolution: {integrity: sha512-m5erE6bMoWfPXW1D5UrVwlT8PowAoSX69KcZzPuARQ3wY1RJ52NW9PdvdPo076XiSIkQ5IBTis7hxdlrQTlyug==}
+  /mysql2@3.6.3:
+    resolution: {integrity: sha512-qYd/1CDuW1KYZjD4tzg2O8YS3X/UWuGH8ZMHyMeggMTXL3yOdMisbwZ5SNkHzDGlZXKYLAvV8tMrEH+NUMz3fw==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0
@@ -11683,7 +11683,7 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  /typeorm@0.3.17(mysql2@3.6.2)(ts-node@10.9.1):
+  /typeorm@0.3.17(mysql2@3.6.3)(ts-node@10.9.1):
     resolution: {integrity: sha512-UDjUEwIQalO9tWw9O2A4GU+sT3oyoUXheHJy4ft+RFdnRdQctdQ34L9SqE2p7LdwzafHx1maxT+bqXON+Qnmig==}
     engines: {node: '>= 12.9.0'}
     hasBin: true
@@ -11751,7 +11751,7 @@ packages:
       dotenv: 16.3.1
       glob: 8.1.0
       mkdirp: 2.1.6
-      mysql2: 3.6.2
+      mysql2: 3.6.3
       reflect-metadata: 0.1.13
       sha.js: 2.4.11
       ts-node: 10.9.1(@types/node@20.9.0)(typescript@5.2.2)
