@@ -17,6 +17,7 @@ import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { Observable, Subject, filter, interval, map, tap } from "rxjs";
 import { IEvent } from "./event.subject";
 import { PaginationDto } from "./dto/pagination.dto";
+import { Public } from "@/auth/decorators/public.decorator";
 
 @Controller("osrt")
 export class OsrtController {
@@ -109,6 +110,7 @@ export class OsrtController {
   }
 
   @Sse("stream")
+  @Public()
   streamEvents(@Query("jobId") jobId: string): Observable<any> {
     return this.eventSubject.asObservable().pipe(
       filter((event) => event.jobId === jobId),

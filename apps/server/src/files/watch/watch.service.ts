@@ -463,7 +463,11 @@ export class WatchService {
     });
 
     if (videoFileEntity) {
-      videoFileEntity.status = "done";
+      videoFileEntity.filePath = videoFilePath;
+      videoFileEntity.fileName = videoFileName;
+      videoFileEntity.baseName = videoBaseName;
+      videoFileEntity.extName = videoExtName;
+      videoFileEntity.status = audioFiles.length > 0 ? "done" : "todo";
       await this.videoFilesRepository.save(videoFileEntity);
     } else {
       const newVideoFileEntity = this.videoFilesRepository.create({
@@ -471,7 +475,7 @@ export class WatchService {
         fileName: videoFileName,
         baseName: videoBaseName,
         extName: videoExtName,
-        status: "done",
+        status: audioFiles.length > 0 ? "done" : "todo",
       });
       videoFileEntity =
         await this.videoFilesRepository.save(newVideoFileEntity);
@@ -493,8 +497,12 @@ export class WatchService {
       });
 
       if (audioFileEntity) {
-        audioFileEntity.status = "done";
+        audioFileEntity.status = subtitleFiles.length > 0 ? "done" : "todo";
         audioFileEntity.videoFile = videoFileEntity;
+        audioFileEntity.filePath = audioFilePath;
+        audioFileEntity.fileName = audioFileName;
+        audioFileEntity.baseName = audioBaseName;
+        audioFileEntity.extName = audioExtName;
         await this.audioFilesRepository.save(audioFileEntity);
       } else {
         const newAudioFileEntity = this.audioFilesRepository.create({
@@ -502,7 +510,7 @@ export class WatchService {
           fileName: audioFileName,
           baseName: audioBaseName,
           extName: audioExtName,
-          status: "done",
+          status: subtitleFiles.length > 0 ? "done" : "todo",
           videoFile: videoFileEntity,
         });
         audioFileEntity =
@@ -524,9 +532,13 @@ export class WatchService {
       });
 
       if (subtitleFileEntity) {
-        subtitleFileEntity.status = "done";
+        subtitleFileEntity.status = subtitleFiles.length > 1 ? "done" : "todo";
         subtitleFileEntity.audioFile = audioFileEntity;
         subtitleFileEntity.videoFile = videoFileEntity;
+        subtitleFileEntity.filePath = subtitleFilePath;
+        subtitleFileEntity.fileName = subtitle;
+        subtitleFileEntity.baseName = subtitleBaseName;
+        subtitleFileEntity.extName = subtitleExtName;
 
         await this.subtitleFilesRepository.save(subtitleFileEntity);
       } else {
@@ -535,7 +547,7 @@ export class WatchService {
           fileName: subtitle,
           baseName: subtitleBaseName,
           extName: subtitleExtName,
-          status: "done",
+          status: subtitleFiles.length > 1 ? "done" : "todo",
           audioFile: audioFileEntity,
           videoFile: videoFileEntity,
         });

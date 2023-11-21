@@ -17,7 +17,7 @@ export function Terminal({ jobId }: TerminalProps) {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://localhost:3001/osrt/stream?jobId=" + jobId
+      process.env.NEXT_PUBLIC_API_URL + "/osrt/stream?jobId=" + jobId
     ); // 创建一个新的EventSource实例，指向后端的SSE流
 
     eventSource.onmessage = ({ data }) => {
