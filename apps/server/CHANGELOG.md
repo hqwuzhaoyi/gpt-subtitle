@@ -1,5 +1,22 @@
 # server
 
+## 1.5.0
+
+### Minor Changes
+
+- f4ac7a3: add gallery preview modal
+- 92d060a: add gallery preview modal
+
+### Patch Changes
+
+- Updated dependencies [f4ac7a3]
+- Updated dependencies [92d060a]
+  - nfo-parser@0.1.0
+  - shared-types@2.2.0
+  - translator@0.3.0
+  - utils@0.3.0
+  - whisper@0.4.0
+
 ## 1.4.0
 
 ### Minor Changes
