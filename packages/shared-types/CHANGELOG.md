@@ -1,5 +1,11 @@
 # shared-types
 
+## 2.2.0
+
+### Minor Changes
+
+- f4ac7a3: add gallery preview modal
+
 ## 2.1.0
 
 ### Minor Changes
