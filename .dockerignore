@@ -5,3 +5,7 @@ uploads/*
 
 node_modules
 npm-debug.log
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

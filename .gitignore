@@ -29,3 +29,7 @@ whisper
 .npmrc
 
 coverage/
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

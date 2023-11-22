@@ -24,7 +24,9 @@
     "test": "pnpm with-env turbo run test --no-cache --continue -- --testLocationInResults --passWithNoTests",
     "test:coverage": "pnpm with-env turbo run test:coverage --no-cache --continue -- --passWithNoTests",
     "test:watch": "pnpm with-env turbo run test:watch --no-cache --continue",
-    "with-env": "dotenv -e .env.local --"
+    "with-env": "dotenv -e .env.local --",
+    "env:push": "npx dotenv-vault@latest push",
+    "env:pull": "npx dotenv-vault@latest pull"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
