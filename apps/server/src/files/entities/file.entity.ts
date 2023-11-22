@@ -83,9 +83,9 @@ export class NfoFileEntity extends FileEntity {
 
   @Column("json", { nullable: true })
   actors: {
-    name: string;
-    role: string;
-    thumb: string;
+    name?: string;
+    role?: string;
+    thumb?: string;
   }[];
 
   @Column({nullable: true})
