@@ -42,7 +42,7 @@ function ShowCard({
 
       <div className="p-6 ">
         <div className="flex gap-6">
-          {album.poster && (
+          {album.poster && album.fanart && (
             <img
               src={album.poster}
               alt={album.title ?? ""}
