@@ -55,6 +55,9 @@ export const queryGallery: ({
           dateadded: item.dateadded,
           poster: item.poster,
           fanart: item.fanart,
+          audio: item.audio,
+          subtitle: item.subtitle,
+          videoPath: item.path,
         });
       }),
       totalCount,
