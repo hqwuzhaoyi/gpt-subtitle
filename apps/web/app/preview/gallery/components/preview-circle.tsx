@@ -5,22 +5,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "components/ui/tooltip";
-import { Check } from "lucide-react";
+import { Eye, View } from "lucide-react";
 
-export const FinishedCircle = ({ className }: { className?: string }) => {
+export const PreviewCircle = ({
+  className,
+  url,
+}: {
+  className?: string;
+  url: string;
+}) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <Check
-            className={cn(
-              "",
-              className
-            )}
-          ></Check>
+          <Eye
+            className={cn("", className)}
+            onClick={() => {
+              window.open(url);
+            }}
+          ></Eye>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Status: Finished</p>
+          <p>Preview</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

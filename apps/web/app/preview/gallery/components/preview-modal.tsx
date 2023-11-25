@@ -16,6 +16,13 @@ import { outPutSrtStop } from "../../tasks/api/osrt";
 import { toast } from "@/components/ui/use-toast";
 import React from "react";
 import { Terminal } from "@/components/Terminal";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { PreviewCircle } from "./preview-circle";
 
 function ShowCard({
   album,
@@ -24,8 +31,6 @@ function ShowCard({
   album: Album;
   handleStart: () => void;
 }) {
-  const [open, setOpen] = React.useState(false);
-
   return (
     <div>
       <div className="h-64 w-full relative">
@@ -52,13 +57,19 @@ function ShowCard({
           <div>
             <h3 className="text-lg leading-6 font-medium ">{album.title}</h3>
             <p className="mt-1 text-sm text-gray-500">{album.originaltitle}</p>
-            {/* 播放按钮等控件 */}
+
             <div className="flex items-center  mt-4">
-              <Button type="button" onClick={handleStart}>
+              <Button type="button" variant="secondary" onClick={handleStart}>
                 {album.path ? "Restart" : "Start"}
               </Button>
               {album.path && (
                 <FinishedCircle className="ml-[0.5em] w-[32px] h-[32px]" />
+              )}
+              {album.videoPath && (
+                <PreviewCircle
+                  className="ml-[0.5em] w-[32px] h-[32px]"
+                  url={album.videoPath}
+                />
               )}
               {album.processingJobId && (
                 <Ban
@@ -74,16 +85,6 @@ function ShowCard({
                   Stop
                 </Ban>
               )}
-              {/* {album.processingJobId && (
-            <HoverCard>
-              <HoverCardTrigger>
-                <TerminalSquare className=" opacity-80 rounded-full shadow-md text-gray-400"></TerminalSquare>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-[36rem] p-0 border-none bg-transparent">
-                <Terminal jobId={album.processingJobId}></Terminal>
-              </HoverCardContent>
-            </HoverCard>
-          )} */}
             </div>
             <p className="text-sm text-gray-500 mt-4">{album.plot}</p>
 
@@ -119,20 +120,77 @@ function ShowCard({
             )}
           </div>
         </div>
+
+        <PreviewAccordion audio={album.audio} subtitle={album.subtitle} />
       </div>
     </div>
   );
 }
 
-const video = {
-  id: 1,
-  title: "视频标题",
-  description: "这里是视频描述...",
-  image: "path/to/image.jpg",
-  releaseDate: "2023-01-01",
-  rating: "PG-13",
-  actors: ["演员1", "演员2", "演员3"],
-  // ...其他数据
+const PreviewAccordion: React.FC<{
+  audio: Album["audio"];
+  subtitle: Album["subtitle"];
+}> = ({ audio, subtitle }) => {
+  return (
+    <Accordion
+      type="single"
+      collapsible
+      className="w-full"
+      onValueChange={(value) => {
+        console.log(value);
+      }}
+    >
+      <AccordionItem value="audio">
+        <AccordionTrigger>Audio Files</AccordionTrigger>
+        <AccordionContent>
+          <div className="grid gap-6">
+            <div className="flex items-center justify-between space-x-4">
+              <div className="text-sm font-medium leading-none">
+                {audio?.fileName}
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    window.open(audio?.path);
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="subtitle">
+        <AccordionTrigger>Subtitle Files</AccordionTrigger>
+        <AccordionContent>
+          <div className="grid gap-6">
+            {subtitle?.map((sub, index) => (
+              <div
+                className="flex items-center justify-between space-x-4"
+                key={sub.id}
+              >
+                <div className="text-sm font-medium leading-none">
+                  {sub?.fileName}
+                </div>
+                <div>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      window.open(sub?.path);
+                    }}
+                  >
+                    <Download className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
 };
 
 export function PreviewModal({
@@ -149,6 +207,7 @@ export function PreviewModal({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px] p-0 max-h-[80vh] overflow-auto">
         <ShowCard album={album} handleStart={handleStart} />
+
         {album.processingJobId && (
           <div className="grid gap-4 p-4">
             <Terminal jobId={album.processingJobId}></Terminal>

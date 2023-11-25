@@ -58,10 +58,12 @@ export async function GET(request: NextRequest, response: NextResponse) {
         id: task.id + "",
         label: task.fileName,
         status,
-        path: task.subtitle?.[0]?.path,
+        path: task.path,
         priority: 1,
         language: LanguageEnum.Auto,
         processingJobId: task.processingJobId,
+        subtitle: task.subtitle,
+        audio: task.audio,
       };
     });
 
