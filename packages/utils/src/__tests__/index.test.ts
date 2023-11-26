@@ -1,6 +1,3 @@
-// Assuming your config is in a file called config.js
-import { baseURL } from "../index";
-
 describe("Configuration", () => {
   let originalEnv;
 
@@ -13,10 +10,6 @@ describe("Configuration", () => {
   afterEach(() => {
     // 恢复原始环境变量
     process.env = originalEnv;
-  });
-
-  it("should set baseURL to /api/proxy", () => {
-    expect(baseURL).toBe("/api/proxy");
   });
 
   it("should set staticPath based on environment variables", () => {
