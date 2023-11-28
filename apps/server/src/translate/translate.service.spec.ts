@@ -81,7 +81,7 @@ describe("TranslateService", () => {
       const result = service.existFile(fileName, existDir);
 
       expect(result).toBe(
-        process.env.API_URL + "/static/exist-dir/some-file.txt"
+        process.env.NEXT_PUBLIC_API_URL + "/static/exist-dir/some-file.txt"
       );
     });
 

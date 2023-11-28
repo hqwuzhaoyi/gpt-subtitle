@@ -72,7 +72,6 @@ BASE_URL= # OpenAI API URL
 WEB_PORT=3000 # Front-end port
 SERVER_PORT=3001  # Backend port
 
-STATIC_PATH=/static # Static file path
 OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
 LANGUAGE=zh-CN # Output SRT file and then translate the language
 TRANSLATE_DELAY=1500 # Delay between calling translation interface
@@ -87,10 +86,7 @@ MYSQL_USER=root # MySQL user
 MYSQL_PASSWORD=123456 # MySQL password
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
-API_URL=http://localhost:3001 # Backend API address
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
-WEB_URL=http://localhost:3000 # Web address
-NEXT_PUBLIC_WEB_URL=http://localhost:3000 # Same as above. WEB address
 ```
 
 Replace `your_api_key` with your own API key.
@@ -113,8 +109,7 @@ npm run deploy:prod
    args:
         - WEB_PORT=3000
         - SERVER_PORT=3001
-        - API_URL=http://localhost:3001
-        - STATIC_PATH=/static
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
    ```
 
 2. Run the command

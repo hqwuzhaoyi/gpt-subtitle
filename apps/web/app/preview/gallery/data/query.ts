@@ -13,7 +13,7 @@ export const queryGallery: ({
 }> = async ({ pagination: { pageIndex = 1, pageSize = 10 } = {} }) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_WEB_URL}/preview/gallery/api?page=${pageIndex}&limit=${pageSize}`,
+      `${window.location.origin}/preview/gallery/api?page=${pageIndex}&limit=${pageSize}`,
       {
         method: "GET",
         headers: {

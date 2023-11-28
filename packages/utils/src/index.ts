@@ -1,6 +1,2 @@
-export const staticPath = `${process.env.API_URL}${
-  process.env.STATIC_PATH || "/static"
-}/`;
-export const videoDirPath = `${process.env.API_URL}${
-  process.env.STATIC_PATH || "/static"
-}/video/`;
+export const staticPath = `${process.env.NEXT_PUBLIC_API_URL}/static/`;
+export const videoDirPath = `${process.env.NEXT_PUBLIC_API_URL}/static/video/`;

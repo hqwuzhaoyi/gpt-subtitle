@@ -27,8 +27,7 @@ services:
       args:
         - WEB_PORT=3000
         - SERVER_PORT=3001
-        - API_URL=http://localhost:3001
-        - STATIC_PATH=/static
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
     restart: always
     ports:
       - 3000:3000

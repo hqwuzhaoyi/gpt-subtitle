@@ -14,7 +14,6 @@
 
 GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain:，为你提供音频和视频的本地翻译功能。不仅能够将字幕转换成对话并进行翻译，而且支持多种语言的翻译，并能方便地将字幕翻译成其他语言。 :artificial_satellite:
 
-
 ## :sparkles: 主要特性:
 
 通过接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在你可以:
@@ -73,7 +72,6 @@ BASE_URL= # OpenAI API URL
 WEB_PORT=3000 # Front-end port
 SERVER_PORT=3001  # Backend port
 
-STATIC_PATH=/static # Static file path
 OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
 LANGUAGE=zh-CN # Output SRT file and then translate the language
 TRANSLATE_DELAY=1500 # Delay between calling translation interface
@@ -88,12 +86,7 @@ MYSQL_USER=root # MySQL user
 MYSQL_PASSWORD=123456 # MySQL password
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
-API_URL=http://localhost:3001 # Backend API address
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
-
-WEB_URL=http://localhost:3000 # Web address
-NEXT_PUBLIC_WEB_URL=http://localhost:3000 # Same as above. WEB address
-
 ```
 
 ### 运行程序
@@ -114,8 +107,7 @@ npm run deploy:prod
    args:
         - WEB_PORT=3000
         - SERVER_PORT=3001
-        - API_URL=http://localhost:3001
-        - STATIC_PATH=/static
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
    ```
 
 2. run command
