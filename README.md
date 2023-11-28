@@ -66,27 +66,40 @@ brew install mysql
 Before using the translation feature, you need to register an account on the [OpenAI official website](https://beta.openai.com/signup/) and apply for an API KEY. After obtaining the API KEY, you can copy a `.env` file from `.env.template` in the root directory and add the following configuration:
 
 ```sh
-OPENAI_API_KEY= # OpenAI API KEY
+OPEN_AUTH=true            # Whether to enable authentication
+OPENAI_API_KEY=           # OpenAI API KEY
 GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
-BASE_URL= # OpenAI API URL
-WEB_PORT=3000 # Front-end port
-SERVER_PORT=3001  # Backend port
+BASE_URL=                 # OpenAI API URL
 
-OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
-LANGUAGE=zh-CN # Output SRT file and then translate the language
+# Translate Setting
 TRANSLATE_DELAY=1500 # Delay between calling translation interface
-TRANSLATE_GROUP=4 # Translate sentences for grouping translation, how many sentences can be translated at most at a time
-TranslateModel=google # google or gpt3
+TRANSLATE_GROUP=4    # Translate sentences for grouping translation, how many sentences can be translated at most at a time
 
-REDIS_PORT=6379 # Redis port
-REDIS_HOST=subtitle_redis # Redis address
-MYSQL_HOST=subtitle_mysql # MySQL address
-MYSQL_PORT=3306 # MySQL port
-MYSQL_USER=root # MySQL user
-MYSQL_PASSWORD=123456 # MySQL password
+# Database Setting
+REDIS_PORT=6379             # Redis port
+REDIS_HOST=subtitle_redis   # Redis address
+MYSQL_HOST=subtitle_mysql   # MySQL address
+MYSQL_PORT=3306             # MySQL port
+MYSQL_USER=root             # MySQL user
+MYSQL_PASSWORD=123456       # MySQL passowrd
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
+# Server Address Setting
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+WEB_PORT=3000                             # Front-end port
+SERVER_PORT=3001                          # Backend port
+
+# GitHub Auth Setting
+GITHUB_CLIENT_ID=           # GitHub client ID
+GITHUB_CLIENT_SECRET=       # GitHub client secret
+AUTH_SECRET = YOUR_KEY_HERE # JWT secret you can run `openssl rand -base64 32` to generate a secret
+
+# System Setting
+# You can edit in Setting
+OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
+TranslateModel=google          # google or gpt3
+LANGUAGE=zh-CN                 # Output SRT file and then translate the language
+
 ```
 
 Replace `your_api_key` with your own API key.
