@@ -20,6 +20,8 @@ export default async function SettingsProfilePage() {
           OUTPUT_SRT_THEN_TRANSLATE:
             config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
           TranslateModel: config.TranslateModel,
+          TRANSLATE_GROUP: config.TRANSLATE_GROUP,
+          TRANSLATE_DELAY: config.TRANSLATE_DELAY,
         }}
       />
     </div>

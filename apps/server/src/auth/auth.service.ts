@@ -108,7 +108,15 @@ export class AuthService {
 
   async updateProfile(
     user,
-    { username, password, OUTPUT_SRT_THEN_TRANSLATE, TranslateModel, LANGUAGE }
+    {
+      username,
+      password,
+      OUTPUT_SRT_THEN_TRANSLATE,
+      TranslateModel,
+      LANGUAGE,
+      TRANSLATE_GROUP,
+      TRANSLATE_DELAY,
+    }
   ) {
     if (typeof OUTPUT_SRT_THEN_TRANSLATE === "boolean") {
       this.configService.set(
@@ -122,6 +130,14 @@ export class AuthService {
 
     if (LANGUAGE) {
       this.configService.set("LANGUAGE", LANGUAGE);
+    }
+
+    if (TRANSLATE_GROUP) {
+      this.configService.set("TRANSLATE_GROUP", TRANSLATE_GROUP);
+    }
+
+    if (TRANSLATE_DELAY) {
+      this.configService.set("TRANSLATE_DELAY", TRANSLATE_DELAY);
     }
 
     return this.usersService.updateProfile(user.id, {

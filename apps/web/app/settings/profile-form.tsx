@@ -29,6 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { TranslateType, TranslateLanguage } from "shared-types";
+import { Slider } from "@/components/ui/slider";
 
 const profileFormSchema = z.object({
   username: z
@@ -48,6 +49,8 @@ const profileFormSchema = z.object({
   OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
   TranslateModel: z.nativeEnum(TranslateType).optional(),
   LANGUAGE: z.nativeEnum(TranslateLanguage).optional(),
+  TRANSLATE_GROUP: z.number().optional(),
+  TRANSLATE_DELAY: z.number().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -211,6 +214,59 @@ export function ProfileForm({
                       ))}
                     </SelectContent>
                   </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="TRANSLATE_GROUP"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Translate Group</FormLabel>
+                    <FormDescription>
+                      Number of dialogue lines translated at once
+                    </FormDescription>
+                  </div>
+                  <Slider
+                    defaultValue={[field.value ?? 4]}
+                    max={10}
+                    step={1}
+                    onValueChange={(value) => field.onChange(value[0])}
+                  />
+                  {
+                    <div className="flex justify-between">
+                      <span>0</span>
+                      <span>10</span>
+                    </div>
+                  }
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="TRANSLATE_DELAY"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Translate Delay</FormLabel>
+                    <FormDescription>
+                      The interval between translation interfaces, in
+                      milliseconds
+                    </FormDescription>
+                  </div>
+                  <Slider
+                    defaultValue={[field.value ?? 1500]}
+                    max={5000}
+                    step={100}
+                    onValueChange={(value) => field.onChange(value[0])}
+                  />
+                  {
+                    <div className="flex justify-between">
+                      <span>0</span>
+                      <span>5000</span>
+                    </div>
+                  }
                 </FormItem>
               )}
             />

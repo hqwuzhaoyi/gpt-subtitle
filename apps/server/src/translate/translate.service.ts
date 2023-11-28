@@ -58,11 +58,27 @@ export class TranslateService {
 
     return translateModel;
   }
+
+  private async getTranslateGroup() {
+    const translateGroup =
+      (await this.customConfigService.get("TRANSLATE_GROUP")) ?? 4;
+
+    if (typeof translateGroup === "string") return Number(translateGroup);
+
+    return translateGroup;
+  }
+  private async getTranslateDelay() {
+    const translateDelay =
+      (await this.customConfigService.get("TRANSLATE_DELAY")) ?? 1500;
+
+    if (typeof translateDelay === "string") return Number(translateDelay);
+
+    return translateDelay;
+  }
   private async getTranslateLanguage() {
     const translateModel =
-      ((await this.customConfigService.get(
-        "LANGUAGE"
-      )) as TranslateLanguage) ?? TranslateLanguage.SimplifiedChinese;
+      ((await this.customConfigService.get("LANGUAGE")) as TranslateLanguage) ??
+      TranslateLanguage.SimplifiedChinese;
 
     return translateModel;
   }
@@ -89,6 +105,8 @@ export class TranslateService {
       // }
 
       const translateModel = await this.getTranslateModel();
+      const translateGroup = await this.getTranslateGroup();
+      const translateDelay = await this.getTranslateDelay();
 
       const model = new TranslateModel(translateModel, {
         baseUrl: process.env.BASE_URL,
@@ -99,10 +117,8 @@ export class TranslateService {
           path.join(this.staticDir, dir, filename),
           path.join(this.staticDir, dir, translateName),
           language,
-          process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
-          process.env.TRANSLATE_DELAY
-            ? Number(process.env.TRANSLATE_DELAY)
-            : 500
+          translateGroup,
+          translateDelay
         )
         .then(() => {
           resolve({
@@ -154,6 +170,8 @@ export class TranslateService {
 
       const translateModel = await this.getTranslateModel();
       const language = await this.getTranslateLanguage();
+      const translateGroup = await this.getTranslateGroup();
+      const translateDelay = await this.getTranslateDelay();
 
       console.debug("translateLanguage", language);
 
@@ -166,10 +184,8 @@ export class TranslateService {
           subtitle.filePath,
           translatePath,
           language,
-          process.env.TRANSLATE_GROUP ? Number(process.env.TRANSLATE_GROUP) : 4,
-          process.env.TRANSLATE_DELAY
-            ? Number(process.env.TRANSLATE_DELAY)
-            : 500
+          translateGroup,
+          translateDelay
         )
         .then(() => {
           resolve({

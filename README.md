@@ -71,10 +71,6 @@ OPENAI_API_KEY=           # OpenAI API KEY
 GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
 BASE_URL=                 # OpenAI API URL
 
-# Translate Setting
-TRANSLATE_DELAY=1500 # Delay between calling translation interface
-TRANSLATE_GROUP=4    # Translate sentences for grouping translation, how many sentences can be translated at most at a time
-
 # Database Setting
 REDIS_PORT=6379             # Redis port
 REDIS_HOST=subtitle_redis   # Redis address
@@ -99,7 +95,8 @@ AUTH_SECRET = YOUR_KEY_HERE # JWT secret you can run `openssl rand -base64 32` t
 OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
 TranslateModel=google          # google or gpt3
 LANGUAGE=zh-CN                 # Output SRT file and then translate the language
-
+TRANSLATE_DELAY=1500 # Delay between calling translation interface
+TRANSLATE_GROUP=4    # Translate sentences for grouping translation, how many sentences can be translated at most at a time
 ```
 
 Replace `your_api_key` with your own API key.
