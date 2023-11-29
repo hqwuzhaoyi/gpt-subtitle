@@ -66,12 +66,17 @@ brew install mysql
 在使用翻译功能之前，你需要先在 [OpenAI 官网](https://beta.openai.com/signup/) 注册账户，然后申请 API KEY。在获得 API KEY 后，可以在根目录下从`.env.template`拷贝一个名为 `.env` 的文件，并在其中添加如下配置：
 
 ```sh
+# Frontend Setting
+NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+WEB_PORT=3000                             # Frontend start port
+
+# Backend Setting
 OPEN_AUTH=true            # Whether to enable authentication
 OPENAI_API_KEY=           # OpenAI API KEY
 GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
 BASE_URL=                 # OpenAI API URL
 
-# Database Setting
+## Database Setting
 REDIS_PORT=6379             # Redis port
 REDIS_HOST=subtitle_redis   # Redis address
 MYSQL_HOST=subtitle_mysql   # MySQL address
@@ -80,23 +85,22 @@ MYSQL_USER=root             # MySQL user
 MYSQL_PASSWORD=123456       # MySQL passowrd
 MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
-# Server Address Setting
-NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
-WEB_PORT=3000                             # Front-end start port
-SERVER_PORT=3001                          # Backend start port
+## Server Address Setting
+SERVER_PORT=3001 # Backend start port
 
-# GitHub Auth Setting
+## Auth Setting
+### GitHub Auth
 GITHUB_CLIENT_ID=           # GitHub client ID
 GITHUB_CLIENT_SECRET=       # GitHub client secret
 AUTH_SECRET = YOUR_KEY_HERE # JWT secret you can run `openssl rand -base64 32` to generate a secret
 
-# System Setting
-# You can edit in Setting
+## System Setting. You can edit in Setting
 OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
 TranslateModel=google          # google or gpt3
 LANGUAGE=zh-CN                 # Output SRT file and then translate the language
-TRANSLATE_DELAY=1500 # Delay between calling translation interface
-TRANSLATE_GROUP=4    # Translate sentences for grouping translation, how many sentences can be translated at most at a time
+TRANSLATE_DELAY=1500           # Delay between calling translation interface
+TRANSLATE_GROUP=4              # Translate sentences for grouping translation, how many sentences can be translated at most at a time
+
 ```
 
 ### 运行程序
