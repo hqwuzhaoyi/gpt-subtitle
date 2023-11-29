@@ -82,8 +82,8 @@ MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 
 # Server Address Setting
 NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
-WEB_PORT=3000                             # Front-end port
-SERVER_PORT=3001                          # Backend port
+WEB_PORT=3000                             # Front-end start port
+SERVER_PORT=3001                          # Backend start port
 
 # GitHub Auth Setting
 GITHUB_CLIENT_ID=           # GitHub client ID
