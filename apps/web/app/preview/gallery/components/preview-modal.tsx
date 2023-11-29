@@ -196,14 +196,17 @@ const PreviewAccordion: React.FC<{
 export function PreviewModal({
   album,
   handleStart,
+  children,
 }: {
   album: Album;
   handleStart: () => void;
+  children: React.ReactNode;
 }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <ChevronDownCircle className="opacity-80 rounded-full shadow-md text-gray-400" />
+        {/* <ChevronDownCircle className="opacity-80 rounded-full shadow-md text-gray-400" /> */}
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px] p-0 max-h-[80vh] overflow-auto">
         <ShowCard album={album} handleStart={handleStart} />

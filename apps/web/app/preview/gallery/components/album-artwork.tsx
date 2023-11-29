@@ -64,18 +64,37 @@ export function AlbumArtwork({
       <ContextMenu>
         <ContextMenuTrigger>
           <div className="overflow-hidden rounded-md relative">
-            {album.cover && (
-              <Image
-                src={album.cover}
-                alt={album.name}
-                width={width}
-                height={height}
-                className={cn(
-                  "h-auto w-auto object-cover transition-all hover:scale-105",
-                  "aspect-video"
-                )}
-              />
-            )}
+            <PreviewModal
+              album={album}
+              handleStart={() => {
+                setOpen(true);
+              }}
+            >
+              {album.cover ? (
+                <Image
+                  src={album.cover}
+                  alt={album.name}
+                  width={width}
+                  height={height}
+                  className={cn(
+                    "h-auto w-auto object-cover transition-all hover:scale-105 cursor-pointer",
+                    "aspect-video"
+                  )}
+                />
+              ) : (
+                <div
+                  className=" bg-gray-200 h-auto w-auto"
+                  style={{
+                    width: width,
+                    height: height,
+                  }}
+                >
+                  <div className="absolute bottom-0 left-0 right-0 p-2 text-white text-sm bg-black bg-opacity-50">
+                    {album.name}
+                  </div>
+                </div>
+              )}
+            </PreviewModal>
             <div className="absolute right-1 top-1 flex gap-2">
               {album.path && (
                 <TooltipProvider>
@@ -99,23 +118,6 @@ export function AlbumArtwork({
                   </HoverCardContent>
                 </HoverCard>
               )}
-            </div>
-            <div className="absolute right-1 bottom-1 flex gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <PreviewModal
-                      album={album}
-                      handleStart={() => {
-                        setOpen(true);
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Preview Information</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
           </div>
         </ContextMenuTrigger>
