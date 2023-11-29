@@ -1,7 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["PORT", "NEXT_PUBLIC_API_URL", "WEB_PORT"],
+  "globalEnv": [
+    "PORT",
+    "NEXT_PUBLIC_API_URL",
+    "WEB_PORT",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET",
+    "AUTH_SECRET"
+  ],
   "globalDotEnv": [".env"],
   "pipeline": {
     "build": {
