@@ -396,10 +396,16 @@ export class WatchService {
         } else {
           videoFileStr = videoFile;
         }
-        const directory = path.dirname(videoFileStr);
+        const directory = path
+          .dirname(videoFileStr)
+          .replace(/'/g, "\\'")
+          .replace(/\(/g, "\\(")
+          .replace(/\)/g, "\\)");
         const baseName = path
           .basename(videoFileStr, path.extname(videoFileStr))
-          .replace(/'/g, "\\'");
+          .replace(/'/g, "\\'")
+          .replace(/\(/g, "\\(")
+          .replace(/\)/g, "\\)");
 
         // 查找同一目录下的音频文件和字幕文件
         const audioFilesPromise = fg.async(

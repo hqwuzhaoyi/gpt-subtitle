@@ -130,6 +130,7 @@ export class OsrtService {
         videos.map(async (videoFileEntity) => {
           const audioFile = await videoFileEntity.audioFile;
           const nfoFile = await videoFileEntity.nfoFile;
+          // this.logger.debug("nfoFile", JSON.stringify(nfoFile));
           return {
             ...videoFileEntity,
             path: this.filePathToUrl(videoFileEntity.filePath),
@@ -142,13 +143,13 @@ export class OsrtService {
             isProcessing: currentJobsFiles.includes(videoFileEntity.id),
             processingJobId: currentJobsIdMap[videoFileEntity.id],
             status: videoFileEntity.status,
-            poster: nfoFile.poster && this.filePathToUrl(nfoFile.poster),
-            fanart: nfoFile.fanart && this.filePathToUrl(nfoFile.fanart),
-            title: nfoFile.title,
-            originaltitle: nfoFile.originaltitle,
-            plot: nfoFile.plot,
-            actors: nfoFile.actors,
-            dateadded: nfoFile.dateadded,
+            poster: nfoFile?.poster && this.filePathToUrl(nfoFile?.poster),
+            fanart: nfoFile?.fanart && this.filePathToUrl(nfoFile?.fanart),
+            title: nfoFile?.title,
+            originaltitle: nfoFile?.originaltitle,
+            plot: nfoFile?.plot,
+            actors: nfoFile?.actors,
+            dateadded: nfoFile?.dateadded,
           };
         })
       );
