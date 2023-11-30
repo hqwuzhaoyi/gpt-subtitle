@@ -278,6 +278,7 @@ export function DataTable<TData extends Task, TValue>({
         table={table}
         rowSelection={rowSelection}
         model={model}
+        fileType={type}
       />
       <div className="rounded-md border">
         <Table>

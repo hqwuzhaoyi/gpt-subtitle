@@ -18,12 +18,14 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   rowSelection: Record<string, boolean>;
   model?: ModelType;
+  fileType: string;
 }
 
 export function DataTableToolbar<TData extends Task>({
   table,
   rowSelection,
   model,
+  fileType,
 }: DataTableToolbarProps<TData>) {
   const isFiltered =
     table.getPreFilteredRowModel().rows.length >
@@ -74,6 +76,7 @@ export function DataTableToolbar<TData extends Task>({
                   model: model ?? "",
                   priority: row.original.priority,
                   id: row.original.id,
+                  fileType,
                 };
               });
               createJobs(jobs);
