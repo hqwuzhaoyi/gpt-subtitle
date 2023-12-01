@@ -35,7 +35,7 @@
     "@nestjs/typeorm": "^10.0.1",
     "@nestjs/websockets": "^10.2.10",
     "axios": "^1.6.2",
-    "bull": "^4.11.4",
+    "bull": "^4.11.5",
     "cheerio": "1.0.0-rc.12",
     "chokidar": "^3.5.3",
     "class-transformer": "^0.5.1",
