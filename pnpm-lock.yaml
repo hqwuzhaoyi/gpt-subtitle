@@ -49,11 +49,11 @@ importers:
         specifier: ^5.8.4
         version: 5.8.4(@bull-board/ui@5.8.4)
       '@bull-board/express':
-        specifier: ^5.8.4
-        version: 5.8.4
+        specifier: ^5.10.1
+        version: 5.10.1
       '@bull-board/nestjs':
         specifier: ^5.8.4
-        version: 5.8.4(@bull-board/api@5.8.4)(@bull-board/express@5.8.4)(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+        version: 5.8.4(@bull-board/api@5.8.4)(@bull-board/express@5.10.1)(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/bull':
         specifier: ^10.0.1
         version: 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(bull@4.11.5)
@@ -1101,6 +1101,15 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
+  /@bull-board/api@5.10.1(@bull-board/ui@5.10.1):
+    resolution: {integrity: sha512-IBsMtB1xBz+bhIYt3aAXHu9LghTjJ8zKOxJdn7K+z0ZpD0hBF4xWSan5dEhQumk69qO9xq+2EX4wgwrc1mPUxw==}
+    peerDependencies:
+      '@bull-board/ui': 5.10.1
+    dependencies:
+      '@bull-board/ui': 5.10.1
+      redis-info: 3.1.0
+    dev: false
+
   /@bull-board/api@5.8.4(@bull-board/ui@5.8.4):
     resolution: {integrity: sha512-uuB2ziEpMc6FrkqqRAqyqSh+yKx1ukTvxlgDenOimuLAiHlcPfhNLgYuYv3qzqWVaZdvUCLhiNqAvOdURoKT5A==}
     peerDependencies:
@@ -1110,18 +1119,18 @@ packages:
       redis-info: 3.1.0
     dev: false
 
-  /@bull-board/express@5.8.4:
-    resolution: {integrity: sha512-eYmgC/u/zYs8Uhr3MFRsxWLH7f89ext5c6J/73GIQaEo+/j3j3cFngvXn+SR+7yB1/j+waOt/4mjlnLUWg9uZQ==}
+  /@bull-board/express@5.10.1:
+    resolution: {integrity: sha512-3w3ZQfmq+lQPHU2TFx7so3Gen6sNt56sDVH59EebaZHTIYxHu5dLeVlb8w1+SAmXYrTnhMaRmU01pV9CXzGXog==}
     dependencies:
-      '@bull-board/api': 5.8.4(@bull-board/ui@5.8.4)
-      '@bull-board/ui': 5.8.4
+      '@bull-board/api': 5.10.1(@bull-board/ui@5.10.1)
+      '@bull-board/ui': 5.10.1
       ejs: 3.1.7
       express: 4.17.3
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@bull-board/nestjs@5.8.4(@bull-board/api@5.8.4)(@bull-board/express@5.8.4)(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+  /@bull-board/nestjs@5.8.4(@bull-board/api@5.8.4)(@bull-board/express@5.10.1)(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1):
     resolution: {integrity: sha512-j2R4PUYO0PPpbffBISxLN5u8yqtyDqxVMLigApRxYEMl8h0msP32QyOObojSLPFLzabWanpgzsVyBzAO8I7k3A==}
     peerDependencies:
       '@bull-board/api': ^5.8.4
@@ -1132,12 +1141,18 @@ packages:
       rxjs: ^7.8.1
     dependencies:
       '@bull-board/api': 5.8.4(@bull-board/ui@5.8.4)
-      '@bull-board/express': 5.8.4
+      '@bull-board/express': 5.10.1
       '@nestjs/bull-shared': 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)
       '@nestjs/common': 10.2.8(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.8)(@nestjs/platform-express@10.2.7)(@nestjs/websockets@10.2.10)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
+    dev: false
+
+  /@bull-board/ui@5.10.1:
+    resolution: {integrity: sha512-8jpNh5XM9mzBd/2PTXqqIzF5S6fau+GyAjiN8LCgpW+ralQZ9QtJ8B00srp/2x1cQro9BVV3g9dXt1nWmkz6yw==}
+    dependencies:
+      '@bull-board/api': 5.10.1(@bull-board/ui@5.10.1)
     dev: false
 
   /@bull-board/ui@5.8.4:
