@@ -56,8 +56,13 @@ export const authOptions = {
           type: "username",
         },
         password: { label: "Password", type: "password" },
+        proxyUrl: {
+          label: "Proxy URL",
+          type: "text",
+          placeholder: "http://localhost:3001",
+        },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         const credentialDetails = {
           username: credentials?.username,
           password: credentials?.password,
@@ -67,8 +72,10 @@ export const authOptions = {
           return;
         }
 
+        const proxyUrl = credentials?.proxyUrl;
+
         // TODO: return user object
-        const resp = await fetch(backendURL + "/auth/login", {
+        const resp = await fetch(proxyUrl + "/auth/login", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -84,6 +91,7 @@ export const authOptions = {
               ...data.user,
               name: data.user.username,
             },
+            proxyUrl,
           };
         } else {
           console.log("check your credentials");

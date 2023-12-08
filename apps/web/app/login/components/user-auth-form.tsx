@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
 import { signUp } from "../api/auth";
+import { useProxyUrlAtom } from "@/atoms/proxyUrl";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signIn" | "signUp";
   error?: string;
@@ -19,6 +20,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, setUserName] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const proxyUrl = useProxyUrlAtom();
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -33,6 +35,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         password,
         redirect: true,
         callbackUrl: "/",
+        proxyUrl,
       });
     } catch (error) {
       console.log(error);
@@ -119,26 +122,26 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      {props.supportGithub && 
+      {props.supportGithub && (
         <Button
-        variant="outline"
-        type="button"
-        disabled={isLoading}
-        onClick={() => {
-          signIn("github", {
-            redirect: true,
-            callbackUrl: "/",
-          });
-        }}
-      >
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
-      </Button>
-      }
+          variant="outline"
+          type="button"
+          disabled={!process.env.NEXT_PUBLIC_API_URL && isLoading}
+          onClick={() => {
+            signIn("github", {
+              redirect: true,
+              callbackUrl: "/",
+            });
+          }}
+        >
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.gitHub className="mr-2 h-4 w-4" />
+          )}{" "}
+          Github
+        </Button>
+      )}
     </div>
   );
 }
