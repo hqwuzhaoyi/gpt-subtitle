@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FileListResult, LanguageEnum } from "shared-types";
-import { backendURL, getToken } from "@/lib/request";
+import { getToken } from "@/lib/request";
+import { originProxy } from "@/lib/origin";
 
 const fetchGalleryList = async ({
   page,
@@ -10,16 +11,14 @@ const fetchGalleryList = async ({
   limit: number;
 }): Promise<FileListResult> => {
   const token = await getToken();
-  const res = await fetch(
-    backendURL + `/osrt/list?page=${page}&limit=${limit}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token && `Bearer ${token.accessToken}`,
-      },
-    }
-  );
+
+  const res = await fetch(originProxy() + `/osrt/list?page=${page}&limit=${limit}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token && `Bearer ${token.accessToken}`,
+    },
+  });
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

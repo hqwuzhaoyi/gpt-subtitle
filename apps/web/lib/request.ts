@@ -3,9 +3,7 @@ import { getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export const backendURL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  `http://localhost:3001`;
+export const backendURL = "/api/proxy/";
 
 export const getToken = async () => {
   const session: any = await getServerSession(authOptions);

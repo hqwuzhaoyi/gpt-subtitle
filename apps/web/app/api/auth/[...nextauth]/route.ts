@@ -5,7 +5,7 @@ import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-const backendURL = process.env.NEXT_PUBLIC_API_URL;
+const backendURL = '/api/proxy';
 
 async function refreshAccessToken(token: string) {
   const resp = await fetch(backendURL + "/auth/refreshToken", {
