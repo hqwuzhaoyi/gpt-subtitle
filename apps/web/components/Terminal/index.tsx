@@ -5,6 +5,7 @@ import styles from "./index.module.css";
 import clsx from "clsx";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { useProxyUrlAtom } from "@/atoms/proxyUrl";
 
 interface TerminalProps {
   jobId: string;
@@ -15,9 +16,11 @@ export function Terminal({ jobId }: TerminalProps) {
   const [refresh, setRefresh] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  const proxyUrl = useProxyUrlAtom();
+
   useEffect(() => {
     const eventSource = new EventSource(
-      process.env.NEXT_PUBLIC_API_URL + "/osrt/stream?jobId=" + jobId
+      proxyUrl + "/osrt/stream?jobId=" + jobId
     ); // 创建一个新的EventSource实例，指向后端的SSE流
 
     eventSource.onmessage = ({ data }) => {

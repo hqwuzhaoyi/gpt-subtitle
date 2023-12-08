@@ -7,9 +7,12 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
+import { useProxyUrlAtom } from "@/atoms/proxyUrl";
 
 export function MainNav() {
   const pathname = usePathname();
+  const proxyUrl = useProxyUrlAtom();
+
 
   return (
     <div className="mr-4 hidden md:flex">
@@ -54,7 +57,7 @@ export function MainNav() {
           Subtitle Translate
         </Link>
         <Link
-          href={process.env.NEXT_PUBLIC_API_URL + "/queues"}
+          href={proxyUrl + "/queues"}
           className={cn(
             "transition-colors hover:text-foreground/80",
             pathname?.includes("/queues")

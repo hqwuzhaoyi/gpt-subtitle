@@ -38,12 +38,7 @@ import { Task, taskSchema } from "../data/schema";
 import { ImagePreviewModal } from "./ImagePreviewModal";
 import { LanguageEnum } from "shared-types";
 import { useWhisperModel } from "@/atoms/whisperModel";
-
-const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000");
-
-socket.on("connection", (message) => {
-  console.debug("ws connection", message);
-});
+import { useProxyUrlAtom } from "@/atoms/proxyUrl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,8 +64,8 @@ const queryList: (
       const status = task.isProcessing
         ? "in progress"
         : task.subtitle?.length
-        ? "done"
-        : "todo";
+          ? "done"
+          : "todo";
       return {
         ...task,
         title: task.fileName,
@@ -91,8 +86,8 @@ const queryList: (
       const status = task.isProcessing
         ? "in progress"
         : task.subtitle
-        ? "done"
-        : "todo";
+          ? "done"
+          : "todo";
       return {
         title: task.fileName,
         id: task.id + "",
@@ -137,6 +132,16 @@ export function DataTable<TData extends Task, TValue>({
   data: initData = [],
   type,
 }: DataTableProps<TData, TValue>) {
+  const proxyUrl = useProxyUrlAtom();
+
+  const socketRef = React.useRef(
+    io(proxyUrl ? proxyUrl : "http://localhost:3001")
+  );
+
+  socketRef.current.on("connection", (message) => {
+    console.debug("ws connection", message);
+  });
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -169,7 +174,7 @@ export function DataTable<TData extends Task, TValue>({
     setData((list ?? []) as TData[]);
   }, [list]);
 
-  socket.on("jobUpdate", ({ status, data }) => {
+  socketRef.current.on("jobUpdate", ({ status, data }) => {
     // 处理任务更新
     // console.log(jobId, status, data);
     if (status === "start") {
