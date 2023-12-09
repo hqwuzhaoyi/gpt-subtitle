@@ -1,5 +1,5 @@
 // 在一个单独的文件中，例如 atoms.js
-import { useLocalStorageState } from "ahooks";
+import { useCookieState, useLocalStorageState } from "ahooks";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
 import { jotaiStore } from "lib/store";
@@ -7,15 +7,19 @@ import { jotaiStore } from "lib/store";
 const PROXY_URL_KEY = "proxyUrl";
 
 export const useLocalProxyUrl = () => {
-  const [localProxyUrl, setLocalProxyUrl] = useLocalStorageState<string>(
-    PROXY_URL_KEY,
-    {
-      defaultValue: "http://localhost:3001",
-    }
-  );
+  const [local, setLocal] = useLocalStorageState<string>(PROXY_URL_KEY, {
+    defaultValue: "http://localhost:3001",
+  });
+  const [cookieState, setCookieState] = useCookieState(PROXY_URL_KEY, {
+    defaultValue: "http://localhost:3001",
+  });
+
   return {
-    localProxyUrl,
-    setLocalProxyUrl,
+    localProxyUrl: local || cookieState,
+    setLocalProxyUrl: (proxyUrl: string) => {
+      setLocal(proxyUrl);
+      setCookieState(proxyUrl);
+    },
   };
 };
 
