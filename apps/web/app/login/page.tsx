@@ -13,25 +13,9 @@ export default function AuthenticationPage(props: {
   searchParams: { error: string | undefined };
 }) {
   const { GITHUB_CLIENT_ID: id, GITHUB_CLIENT_SECRET: secret } = process.env;
-  const supportGithub = !!id && !!secret
+  const supportGithub = !!id && !!secret;
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/authentication-light.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/authentication-dark.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0">
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -43,7 +27,11 @@ export default function AuthenticationPage(props: {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <UserAuthForm supportGithub={supportGithub} type="signIn" error={props.searchParams?.error} />
+            <UserAuthForm
+              supportGithub={supportGithub}
+              type="signIn"
+              error={props.searchParams?.error}
+            />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
