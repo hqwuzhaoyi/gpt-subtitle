@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FileListResult, LanguageEnum } from "shared-types";
-import { getToken } from "@/lib/request";
+import { getToken } from "@/lib/getToken";
 import { originProxy } from "@/lib/origin";
 
 const fetchGalleryList = async ({

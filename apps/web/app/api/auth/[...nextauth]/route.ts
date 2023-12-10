@@ -4,11 +4,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
-
-const backendURL = '/api/proxy';
+import { originProxy } from "@/lib/origin";
 
 async function refreshAccessToken(token: string) {
-  const resp = await fetch(backendURL + "/auth/refreshToken", {
+  const resp = await fetch(originProxy() + "/auth/refreshToken", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -21,7 +20,7 @@ async function refreshAccessToken(token: string) {
 }
 
 async function oauthSignIn({ user, account }: any) {
-  const resp = await fetch(backendURL + "/auth/oauthSignIn", {
+  const resp = await fetch(originProxy() + "/auth/oauthSignIn", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -56,11 +55,6 @@ export const authOptions = {
           type: "username",
         },
         password: { label: "Password", type: "password" },
-        proxyUrl: {
-          label: "Proxy URL",
-          type: "text",
-          placeholder: "http://localhost:3001",
-        },
       },
       async authorize(credentials, req) {
         const credentialDetails = {
@@ -72,10 +66,8 @@ export const authOptions = {
           return;
         }
 
-        const proxyUrl = credentials?.proxyUrl;
-
         // TODO: return user object
-        const resp = await fetch(proxyUrl + "/auth/login", {
+        const resp = await fetch(originProxy() + "/auth/login", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -91,7 +83,6 @@ export const authOptions = {
               ...data.user,
               name: data.user.username,
             },
-            proxyUrl,
           };
         } else {
           console.log("check your credentials");

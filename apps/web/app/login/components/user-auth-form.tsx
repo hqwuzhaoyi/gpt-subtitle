@@ -16,7 +16,12 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   supportGithub?: boolean;
 }
 
-export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
+export function UserAuthForm({
+  className,
+  type,
+  supportGithub,
+  ...props
+}: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [username, setUserName] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -122,7 +127,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      {props.supportGithub && (
+      {supportGithub && (
         <Button
           variant="outline"
           type="button"

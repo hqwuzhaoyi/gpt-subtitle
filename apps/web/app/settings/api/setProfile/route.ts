@@ -1,4 +1,5 @@
-import { backendURL, getToken } from "@/lib/request";
+import { backendURL } from "@/lib/request";
+import { getToken } from "@/lib/getToken";
 
 export async function POST(request: Request) {
   const token = await getToken();

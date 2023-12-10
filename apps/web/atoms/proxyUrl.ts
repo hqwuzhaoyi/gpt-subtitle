@@ -9,6 +9,8 @@ const PROXY_URL_KEY = "proxyUrl";
 export const useLocalProxyUrl = () => {
   const [local, setLocal] = useLocalStorageState<string>(PROXY_URL_KEY, {
     defaultValue: "http://localhost:3001",
+    serializer: (v) => v ?? "",
+    deserializer: (v) => v,
   });
   const [cookieState, setCookieState] = useCookieState(PROXY_URL_KEY, {
     defaultValue: "http://localhost:3001",

@@ -1,15 +1,7 @@
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const backendURL = "/api/proxy/";
-
-export const getToken = async () => {
-  const session: any = await getServerSession(authOptions);
-
-  return session;
-};
 
 export const request = axios.create({
   // .. configure axios baseURL
@@ -17,9 +9,7 @@ export const request = axios.create({
 });
 
 request.interceptors.request.use(async (request) => {
-  const window = globalThis.window;
-
-  const session = window ? await getSession() : await getToken();
+  const session = await getSession();
   if (session) {
     request.headers.Authorization = `Bearer ${session.accessToken}`;
   }
@@ -35,10 +25,8 @@ request.interceptors.response.use(
     if (error.response.status === 401) {
       // redirect to login page
       // 這裡可以用next/router
-      const window = globalThis.window;
-      if (window) {
-        window.location.href = "/login";
-      }
+
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
