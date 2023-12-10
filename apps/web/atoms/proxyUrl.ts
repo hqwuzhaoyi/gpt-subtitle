@@ -5,6 +5,7 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import { jotaiStore } from "lib/store";
 
 const PROXY_URL_KEY = "proxyUrl";
+const PROXY_URL_HAS_BEEN_SET_KEY = "proxyUrlHasBeenSet";
 
 export const useLocalProxyUrl = () => {
   const [local, setLocal] = useLocalStorageState<string>(PROXY_URL_KEY, {
@@ -12,6 +13,9 @@ export const useLocalProxyUrl = () => {
     serializer: (v) => v ?? "",
     deserializer: (v) => v,
   });
+  const [proxyUrlHasBeenSet, setProxyUrlHasBeenSet] = useCookieState(
+    PROXY_URL_HAS_BEEN_SET_KEY
+  );
   const [cookieState, setCookieState] = useCookieState(PROXY_URL_KEY, {
     defaultValue: "http://localhost:3001",
   });
@@ -21,6 +25,7 @@ export const useLocalProxyUrl = () => {
     setLocalProxyUrl: (proxyUrl: string) => {
       setLocal(proxyUrl);
       setCookieState(proxyUrl);
+      setProxyUrlHasBeenSet(true);
     },
   };
 };
