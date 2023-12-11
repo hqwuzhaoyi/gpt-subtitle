@@ -6,13 +6,8 @@ import {
   CardContent,
   Card,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useProxyUrlAtom, useSetProxyUrlAtom } from "@/atoms/proxyUrl";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -23,28 +18,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-
-const initialSetupSchema = z.object({
-  localProxyUrl: z
-    .string()
-    .startsWith("http", { message: "Must provide correct URL" }),
-});
-
-type InitialSetupValues = z.infer<typeof initialSetupSchema>;
+import { InitialSetupValues, useSeverSetting } from "@/hooks/useSeverSetting";
 
 export default function Component() {
-  const localProxyUrl = useProxyUrlAtom();
-  const setLocalProxyUrl = useSetProxyUrlAtom();
   const { replace } = useRouter();
 
-  const form = useForm<InitialSetupValues>({
-    resolver: zodResolver(initialSetupSchema),
-    defaultValues: { localProxyUrl },
-    mode: "onChange",
-  });
+  const { form, onSubmit } = useSeverSetting();
 
-  const onSubmit = (data: InitialSetupValues) => {
-    setLocalProxyUrl(data.localProxyUrl);
+  const handleSubmit = (data: InitialSetupValues) => {
+    onSubmit(data);
     replace("/");
   };
 
@@ -59,7 +41,10 @@ export default function Component() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <form
+              className="space-y-4"
+              onSubmit={form.handleSubmit(handleSubmit)}
+            >
               <div className="flex flex-col space-y-1.5">
                 <FormField
                   control={form.control}

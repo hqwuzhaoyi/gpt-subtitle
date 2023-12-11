@@ -1,8 +1,9 @@
 // 在一个单独的文件中，例如 atoms.js
-import { useCookieState, useLocalStorageState } from "ahooks";
+import { useCookieState, useLocalStorageState, useMount } from "ahooks";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
 import { jotaiStore } from "lib/store";
+import { useRef } from "react";
 
 const PROXY_URL_KEY = "proxyUrl";
 const PROXY_URL_HAS_BEEN_SET_KEY = "proxyUrlHasBeenSet";
@@ -47,6 +48,17 @@ export const useSetProxyUrlAtom = () => {
 };
 
 export const useProxyUrlAtom = () => {
+  const ref = useRef(false);
+  if (!ref.current) {
+    const proxyUrl = localStorage.getItem(PROXY_URL_KEY);
+    if (proxyUrl) {
+      jotaiStore.set(proxyUrlAtom, proxyUrl);
+    }
+    ref.current = true;
+  }
+
+  const proxyUrl = useAtomValue(proxyUrlAtom);
+
   const { localProxyUrl } = useLocalProxyUrl();
-  return useAtomValue(proxyUrlAtom) || localProxyUrl;
+  return proxyUrl || localProxyUrl;
 };

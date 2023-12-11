@@ -14,6 +14,12 @@ const sidebarNavItems = [
     title: "General",
     href: "/settings",
   },
+
+  {
+    title: "Server",
+    href: "/settings/server",
+  },
+
   {
     title: "Account",
     href: "/examples/forms/account",
