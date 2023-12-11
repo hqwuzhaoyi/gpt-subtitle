@@ -4,30 +4,24 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { originProxy } from "@/lib/origin";
+import { postFetch } from "@/lib/fetch";
 
 async function refreshAccessToken(token: string) {
-  const resp = await fetch(originProxy() + "/auth/refreshToken", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token }),
-  });
+  const resp = await postFetch(
+    "/auth/refreshToken",
+    JSON.stringify({ token }),
+    {}
+  );
   return await resp.json();
   // TODO: 失败处理
 }
 
 async function oauthSignIn({ user, account }: any) {
-  const resp = await fetch(originProxy() + "/auth/oauthSignIn", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ user, account }),
-  });
+  const resp = await postFetch(
+    "/auth/oauthSignIn",
+    JSON.stringify({ user, account }),
+    {}
+  );
   return await resp.json();
   // TODO: 失败处理
 }
@@ -67,14 +61,13 @@ export const authOptions = {
         }
 
         // TODO: return user object
-        const resp = await fetch(originProxy() + "/auth/login", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentialDetails),
-        });
+        const resp = await postFetch(
+          "/auth/login",
+          JSON.stringify(credentialDetails),
+          {
+            headerCookies: req.headers?.cookie,
+          }
+        );
         const data = await resp.json();
         if (data.access_token) {
           return {

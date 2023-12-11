@@ -9,12 +9,17 @@ export const config = {
   },
 };
 
-export default (req, res) =>
-  new Promise((resolve, reject) => {
+export default (req, res) => {
+  req.url = req.url.replace(/^\/api\/proxy/, "");
+  return new Promise((resolve, reject) => {
     const proxy: httpProxy = httpProxy.createProxy();
-    req.url = req.url.replace(/^\/api\/proxy/, "");
-    proxy.once("proxyRes", resolve).once("error", reject).web(req, res, {
-      changeOrigin: true,
-      target: process.env.NEXT_PUBLIC_API_URL,
-    });
+
+    proxy
+      .once("proxyRes", resolve)
+      .once("error", reject)
+      .web(req, res, {
+        changeOrigin: true,
+        target: req.cookies?.proxyUrl || process.env.NEXT_PUBLIC_API_URL,
+      });
   });
+};

@@ -1,23 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FileListResult, LanguageEnum } from "shared-types";
-import { getToken } from "@/lib/getToken";
-import { originProxy } from "@/lib/origin";
-
+import { getFetch } from "@/lib/fetch";
 const fetchGalleryList = async ({
   page,
   limit,
+  request,
+  response,
 }: {
   page: number;
   limit: number;
+  request: NextRequest;
+  response: NextResponse;
 }): Promise<FileListResult> => {
-  const token = await getToken();
-
-  const res = await fetch(originProxy() + `/osrt/list?page=${page}&limit=${limit}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token && `Bearer ${token.accessToken}`,
-    },
+  const res = await getFetch(`/osrt/list?page=${page}&limit=${limit}`, {
+    req: request,
+    res: response,
   });
 
   if (!res.ok) {
@@ -42,6 +39,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const { list, totalCount, page, limit } = await fetchGalleryList({
       page: Number(searchParams.get("page")) || 1,
       limit: Number(searchParams.get("limit")) || 10,
+      request,
+      response,
     });
 
     data = list.map((task) => {

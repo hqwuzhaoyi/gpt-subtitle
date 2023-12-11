@@ -1,17 +1,12 @@
-import { backendURL } from "@/lib/request";
-import { getToken } from "@/lib/getToken";
+import { postFetch } from "@/lib/fetch";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-  const token = await getToken();
+export async function POST(request: NextRequest, response: NextResponse) {
   const body = await request.json();
   console.log(body);
-  const res = await fetch(backendURL + "/auth/updateProfile", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.accessToken}`,
-    },
-    body: JSON.stringify(body),
+  const res = await postFetch("/auth/updateProfile", JSON.stringify(body), {
+    req: request,
+    res: response,
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
