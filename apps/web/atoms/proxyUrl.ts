@@ -26,7 +26,7 @@ export const useLocalProxyUrl = () => {
     setLocalProxyUrl: (proxyUrl: string) => {
       setLocal(proxyUrl);
       setCookieState(proxyUrl);
-      setProxyUrlHasBeenSet(true);
+      setProxyUrlHasBeenSet("true");
     },
   };
 };
@@ -50,7 +50,7 @@ export const useSetProxyUrlAtom = () => {
 export const useProxyUrlAtom = () => {
   const ref = useRef(false);
   if (!ref.current) {
-    const proxyUrl = localStorage.getItem(PROXY_URL_KEY);
+    const proxyUrl = typeof window !== "undefined" ? window.localStorage.getItem(PROXY_URL_KEY) : undefined;
     if (proxyUrl) {
       jotaiStore.set(proxyUrlAtom, proxyUrl);
     }

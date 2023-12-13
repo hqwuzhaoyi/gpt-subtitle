@@ -9,7 +9,7 @@ export const config = {
   },
 };
 
-export default (req, res) => {
+export default (req: any, res: any) => {
   req.url = req.url.replace(/^\/api\/proxy/, "");
   return new Promise((resolve, reject) => {
     const proxy: httpProxy = httpProxy.createProxy();
