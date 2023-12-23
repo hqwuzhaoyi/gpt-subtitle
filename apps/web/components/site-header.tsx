@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ModeToggle } from "@/components/mode-toggle";
-import { UserSession } from "./user-session";
+import { SettingButton } from "./setting-button";
 
 export function SiteHeader() {
   return (
@@ -58,7 +58,7 @@ export function SiteHeader() {
             <ModeToggle />
             {/* TODO: when login show sign out button and username */}
             {/* <Link href="/login"> */}
-            <UserSession />
+            <SettingButton />
             {/* </Link> */}
           </nav>
         </div>

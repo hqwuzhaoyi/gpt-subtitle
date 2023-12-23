@@ -1,11 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,9 +11,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -32,20 +27,6 @@ import { TranslateType, TranslateLanguage } from "shared-types";
 import { Slider } from "@/components/ui/slider";
 
 const profileFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
-    }),
-  password: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters.",
-    })
-    .optional(),
   OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
   TranslateModel: z.nativeEnum(TranslateType).optional(),
   LANGUAGE: z.nativeEnum(TranslateLanguage).optional(),
@@ -81,7 +62,6 @@ export function ProfileForm({
       ...session,
       user: {
         ...session?.user,
-        username: data.username,
       },
     });
 
@@ -95,39 +75,6 @@ export function ProfileForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="********" {...field} />
-              </FormControl>
-              <FormDescription>
-                Changing your password will log you out of all other sessions.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div>
           <h3 className="mb-4 text-lg font-medium">System Settings</h3>
           <div className="space-y-4">

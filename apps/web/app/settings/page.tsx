@@ -3,7 +3,7 @@ import { ProfileForm } from "./profile-form";
 import { getConfig, getProfile } from "./api/profile";
 
 export default async function SettingsProfilePage() {
-  const [profile, config] = await Promise.all([getProfile(), getConfig()]);
+  const [config] = await Promise.all([getConfig()]);
 
   return (
     <div className="space-y-6">
@@ -16,7 +16,6 @@ export default async function SettingsProfilePage() {
       <Separator />
       <ProfileForm
         defaultValues={{
-          username: profile.username,
           OUTPUT_SRT_THEN_TRANSLATE:
             config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
           TranslateModel: config.TranslateModel,
