@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    // return true;
+    return true;
     if (isPublic || process.env.OPEN_AUTH !== "false") {
       // 💡 See this condition
       return true;
