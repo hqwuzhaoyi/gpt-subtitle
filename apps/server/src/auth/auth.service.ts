@@ -140,9 +140,19 @@ export class AuthService {
       this.configService.set("TRANSLATE_DELAY", TRANSLATE_DELAY);
     }
 
-    return this.usersService.updateProfile(user.id, {
-      username,
-      password,
-    });
+    return {
+      OUTPUT_SRT_THEN_TRANSLATE: this.configService.get(
+        "OUTPUT_SRT_THEN_TRANSLATE"
+      ),
+      TranslateModel: this.configService.get("TranslateModel"),
+      LANGUAGE: this.configService.get("LANGUAGE"),
+      TRANSLATE_GROUP: this.configService.get("TRANSLATE_GROUP"),
+      TRANSLATE_DELAY: this.configService.get("TRANSLATE_DELAY"),
+    };
+
+    // return this.usersService.updateProfile(user.id, {
+    //   username,
+    //   password,
+    // });
   }
 }

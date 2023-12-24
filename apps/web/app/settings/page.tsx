@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./profile-form";
-import { getConfig, getProfile } from "./api/profile";
+import { getConfig } from "./api/profile";
 
 export default async function SettingsProfilePage() {
   const [config] = await Promise.all([getConfig()]);
@@ -19,8 +19,9 @@ export default async function SettingsProfilePage() {
           OUTPUT_SRT_THEN_TRANSLATE:
             config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
           TranslateModel: config.TranslateModel,
-          TRANSLATE_GROUP: config.TRANSLATE_GROUP,
-          TRANSLATE_DELAY: config.TRANSLATE_DELAY,
+          TRANSLATE_GROUP: +config.TRANSLATE_GROUP,
+          TRANSLATE_DELAY: +config.TRANSLATE_DELAY,
+          LANGUAGE: config.LANGUAGE,
         }}
       />
     </div>

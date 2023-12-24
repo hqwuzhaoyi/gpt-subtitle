@@ -63,6 +63,6 @@ export class AuthController {
 
   @Post("updateProfile")
   async updateProfile(@Request() req, @Body() body) {
-    return this.authService.updateProfile(req.user.sub, body);
+    return this.authService.updateProfile(req.user?.sub, body);
   }
 }

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,20 +21,32 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { TranslateType, TranslateLanguage } from "shared-types";
+
 import { Slider } from "@/components/ui/slider";
 
-const profileFormSchema = z.object({
-  OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
-  TranslateModel: z.nativeEnum(TranslateType).optional(),
-  LANGUAGE: z.nativeEnum(TranslateLanguage).optional(),
-  TRANSLATE_GROUP: z.number().optional(),
-  TRANSLATE_DELAY: z.number().optional(),
-});
+import { ProfileFormValues, profileFormSchema } from "./data/schema";
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+import { customFetch } from "@/lib/clientFetch";
+import { TranslateLanguage, TranslateType } from "shared-types";
+export async function setProfile(data: ProfileFormValues) {
+  const res = await customFetch("/auth/updateProfile", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.error("getProfile error", res);
+    throw new Error("Failed to fetch data");
+  }
+}
 
 export function ProfileForm({
   defaultValues,
@@ -46,24 +58,10 @@ export function ProfileForm({
     defaultValues,
     mode: "onChange",
   });
-
-  const { data: session, update } = useSession();
   const { refresh } = useRouter();
 
   async function onSubmit(data: ProfileFormValues) {
-    const res = await fetch("/settings/api/setProfile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    await update({
-      ...session,
-      user: {
-        ...session?.user,
-      },
-    });
+    setProfile(data);
 
     toast({
       title: "Update Success",
