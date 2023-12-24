@@ -53,6 +53,16 @@
         ".env"
       ]
     },
+    "dev:tauri": {
+      "cache": false,
+      "persistent": true,
+      "dotEnv": [
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
+    },
     "clean": {
       "cache": false
     }
