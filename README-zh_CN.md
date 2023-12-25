@@ -67,7 +67,6 @@ brew install mysql
 
 ```sh
 # Frontend Setting
-NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
 WEB_PORT=3000                             # Frontend start port
 
 # Backend Setting
