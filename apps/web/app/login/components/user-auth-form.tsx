@@ -131,7 +131,7 @@ export function UserAuthForm({
         <Button
           variant="outline"
           type="button"
-          disabled={!process.env.NEXT_PUBLIC_API_URL && isLoading}
+          // disabled={!process.env.NEXT_PUBLIC_API_URL && isLoading}
           onClick={() => {
             signIn("github", {
               redirect: true,

@@ -1,11 +1,10 @@
 import axios from "axios";
 import { getSession } from "next-auth/react";
-
-export const backendURL = "/api/proxy/";
+import { getProxyUrl } from "./clientFetch";
 
 export const request = axios.create({
   // .. configure axios baseURL
-  baseURL: backendURL,
+  baseURL: getProxyUrl(),
 });
 
 request.interceptors.request.use(async (request) => {

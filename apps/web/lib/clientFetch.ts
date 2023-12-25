@@ -1,13 +1,16 @@
-export function customFetch(url: string, options = {}) {
+export const getProxyUrl = () => {
   const proxyUrl = localStorage.getItem("proxyUrl") || "";
 
   if (!proxyUrl) {
     console.error("proxyUrl not found");
     throw new Error("proxyUrl not found");
   }
+  return proxyUrl;
+};
 
+export function customFetch(url: string, options = {}) {
   // 获取proxyUrl
-
+  const proxyUrl = getProxyUrl();
   // 将proxyUrl与原始URL结合
   const fullUrl = proxyUrl ? `${proxyUrl}${url}` : url;
 

@@ -14,15 +14,11 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["avatars.githubusercontent.com", "images.unsplash.com", "localhost"],
-  },
-  async rewrites() {
-    return [
-      // {
-      //   source: "/api/proxy/:path*",
-      //   destination: process.env.NEXT_PUBLIC_API_URL + "/:path*",
-      // },
-    ];
+    domains: [
+      "avatars.githubusercontent.com",
+      "images.unsplash.com",
+      "localhost",
+    ],
   },
 };
 
