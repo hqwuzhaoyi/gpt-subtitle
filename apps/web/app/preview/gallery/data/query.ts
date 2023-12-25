@@ -1,7 +1,6 @@
 import { FileList } from "shared-types";
 import { isNil, ifElse } from "ramda";
 import { Album, AlbumSchema } from "./schema";
-import { signOut } from "next-auth/react";
 import { customGet } from "@/lib/clientFetch";
 
 export const queryGallery: ({
@@ -22,9 +21,9 @@ export const queryGallery: ({
 
     if (!response.ok) {
       if (response.status === 401) {
-        signOut({ redirect: false }).then(() => {
-          window.location.href = "/login";
-        });
+        // signOut({ redirect: false }).then(() => {
+        //   window.location.href = "/login";
+        // });
       }
       throw new Error("Network response was not ok");
     }

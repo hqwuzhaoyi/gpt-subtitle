@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getSession } from "next-auth/react";
 import { getProxyUrl } from "./clientFetch";
 
 export const request = axios.create({
@@ -8,10 +7,6 @@ export const request = axios.create({
 });
 
 request.interceptors.request.use(async (request) => {
-  const session = await getSession();
-  if (session) {
-    request.headers.Authorization = `Bearer ${session.accessToken}`;
-  }
   return request;
 });
 
