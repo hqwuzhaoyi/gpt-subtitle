@@ -88,12 +88,6 @@ MYSQL_DATABASE=gpt_subtitle # MySQL Database name
 ## Server Address Setting
 SERVER_PORT=3001 # Backend start port
 
-## Auth Setting
-### GitHub Auth
-GITHUB_CLIENT_ID=           # GitHub client ID
-GITHUB_CLIENT_SECRET=       # GitHub client secret
-AUTH_SECRET = YOUR_KEY_HERE # JWT secret you can run `openssl rand -base64 32` to generate a secret
-
 ## System Setting. You can edit in Setting
 OUTPUT_SRT_THEN_TRANSLATE=true # Whether to output the SRT file first and then translate it
 TranslateModel=google          # google or gpt3
