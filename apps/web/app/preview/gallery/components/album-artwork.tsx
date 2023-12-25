@@ -80,6 +80,9 @@ export function AlbumArtwork({
                     "h-auto w-auto object-cover transition-all hover:scale-105 cursor-pointer",
                     "aspect-video"
                   )}
+                  loader={({ src }) => {
+                    return src;
+                  }}
                 />
               ) : (
                 <div
