@@ -22,6 +22,8 @@ import { UsersModule } from "./users/users.module";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { CustomConfigModule } from "./config/config.module";
+import { APP_FILTER } from "@nestjs/core";
+import { HttpExceptionFilter } from "./all-exceptions.filter";
 
 const {
   REDIS_PORT = 6379,
@@ -87,7 +89,13 @@ const rootPath = path.join(__dirname, "..", "..", "..");
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule implements OnModuleInit {
   async onModuleInit() {
