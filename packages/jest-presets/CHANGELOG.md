@@ -1,5 +1,11 @@
 # jest-presets
 
+## 0.4.0
+
+### Minor Changes
+
+- e7bdda7: Reconstructed the interface request to support separate deployment of web.
+
 ## 0.3.0
 
 ### Minor Changes
