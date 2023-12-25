@@ -1,11 +1,15 @@
 export const getProxyUrl = () => {
-  const proxyUrl = localStorage.getItem("proxyUrl") || "";
+  if (typeof window !== "undefined") {
+    const proxyUrl = localStorage.getItem("proxyUrl") || "";
 
-  if (!proxyUrl) {
-    console.error("proxyUrl not found");
-    throw new Error("proxyUrl not found");
+    if (!proxyUrl) {
+      console.error("proxyUrl not found");
+      throw new Error("proxyUrl not found");
+    }
+    return proxyUrl;
+  } else {
+    console.error("getProxyUrl should not be called on client side");
   }
-  return proxyUrl;
 };
 
 export function customFetch(url: string, options = {}) {
