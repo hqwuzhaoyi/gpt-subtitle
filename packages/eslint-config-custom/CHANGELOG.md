@@ -1,5 +1,11 @@
 # eslint-config-custom
 
+## 1.2.0
+
+### Minor Changes
+
+- e7bdda7: Reconstructed the interface request to support separate deployment of web.
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,20 @@
 # server
 
+## 1.6.0
+
+### Minor Changes
+
+- e7bdda7: Reconstructed the interface request to support separate deployment of web.
+
+### Patch Changes
+
+- Updated dependencies [e7bdda7]
+  - nfo-parser@0.2.0
+  - shared-types@2.3.0
+  - translator@0.4.0
+  - utils@0.4.0
+  - whisper@0.5.0
+
 ## 1.5.0
 
 ### Minor Changes

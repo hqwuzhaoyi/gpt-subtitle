@@ -1,5 +1,16 @@
 # nfo-parser
 
+## 0.2.0
+
+### Minor Changes
+
+- e7bdda7: Reconstructed the interface request to support separate deployment of web.
+
+### Patch Changes
+
+- Updated dependencies [e7bdda7]
+  - shared-types@2.3.0
+
 ## 0.1.0
 
 ### Minor Changes
