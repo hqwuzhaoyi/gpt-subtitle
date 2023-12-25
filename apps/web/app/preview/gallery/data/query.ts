@@ -2,6 +2,7 @@ import { FileList } from "shared-types";
 import { isNil, ifElse } from "ramda";
 import { Album, AlbumSchema } from "./schema";
 import { signOut } from "next-auth/react";
+import { customGet } from "@/lib/clientFetch";
 
 export const queryGallery: ({
   pagination,
@@ -12,13 +13,10 @@ export const queryGallery: ({
   totalCount: number;
 }> = async ({ pagination: { pageIndex = 1, pageSize = 10 } = {} }) => {
   try {
-    const response = await fetch(
-      `${window.location.origin}/preview/gallery/api?page=${pageIndex}&limit=${pageSize}`,
+    const response = await customGet(
+      `/osrt/list?page=${pageIndex}&limit=${pageSize}`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
 
@@ -32,9 +30,7 @@ export const queryGallery: ({
     }
 
     const jsonResponse = await response.json(); // 等待JSON解析
-    const {
-      data: { list: data, totalCount },
-    } = jsonResponse; // 从解析后的JSON中解构data
+    const { list: data, totalCount } = jsonResponse; // 从解析后的JSON中解构data
     return {
       list: (data as FileList).map((item) => {
         return AlbumSchema.parse({
