@@ -58,7 +58,7 @@
     "ramda": "^0.29.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.48.2",
+    "react-hook-form": "^7.49.2",
     "react-wrap-balancer": "^1.1.0",
     "shared-types": "workspace:*",
     "socket.io-client": "4.7.2",
