@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.9",
-    "@types/react": "^18.2.37",
+    "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
     "eslint": "^8.53.0",
     "eslint-config-custom": "workspace:*",
