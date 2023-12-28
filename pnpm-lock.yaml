@@ -59,7 +59,7 @@ importers:
         version: 5.8.4(@bull-board/api@5.10.1)(@bull-board/express@5.10.1)(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/bull':
         specifier: ^10.0.1
-        version: 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(bull@4.11.5)
+        version: 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(bull@4.12.0)
       '@nestjs/common':
         specifier: ^10.2.8
         version: 10.2.8(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -94,8 +94,8 @@ importers:
         specifier: ^1.6.3
         version: 1.6.3
       bull:
-        specifier: ^4.11.5
-        version: 4.11.5
+        specifier: ^4.12.0
+        version: 4.12.0
       cheerio:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
@@ -2079,7 +2079,7 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /@nestjs/bull@10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(bull@4.11.5):
+  /@nestjs/bull@10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)(bull@4.12.0):
     resolution: {integrity: sha512-1GcJ8BkHDgQdBMZ7SqAqgUHiFnISXmpGvewFeTc8wf87JLk2PweiKv9j9/KQKU+NI237pCe82XB0bXzTnsdxSw==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -2089,7 +2089,7 @@ packages:
       '@nestjs/bull-shared': 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.2.7)
       '@nestjs/common': 10.2.8(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.8)(@nestjs/platform-express@10.2.7)(@nestjs/websockets@10.2.10)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      bull: 4.11.5
+      bull: 4.12.0
       tslib: 2.6.0
     dev: false
 
@@ -5325,8 +5325,8 @@ packages:
       ieee754: 1.2.1
     dev: false
 
-  /bull@4.11.5:
-    resolution: {integrity: sha512-9jazyvBBYr55IRDkfJh/mJjWiq8NJUMoCC5zTuBX4JhkZvVXegnwsaIa1jr3x9xwSxGvWEhwQ9lt1jlCT5j6pQ==}
+  /bull@4.12.0:
+    resolution: {integrity: sha512-+GCM3KayIZvgiwAq5YC1qDcuncQbRLusLULOBZYRky7a7ttf4tlKWaFxTFtOfRrcb0erzFw6aWy73waorvR5pw==}
     engines: {node: '>=12'}
     dependencies:
       cron-parser: 4.9.0
