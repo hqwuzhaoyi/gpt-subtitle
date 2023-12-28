@@ -47,7 +47,7 @@
     "cmdk": "^0.2.0",
     "cookies-next": "^4.1.0",
     "eslint": "8.53.0",
-    "eslint-config-next": "14.0.2",
+    "eslint-config-next": "14.0.4",
     "http-proxy": "^1.18.1",
     "jotai": "^2.6.0",
     "lucide-react": "^0.294.0",
