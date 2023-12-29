@@ -2,6 +2,7 @@
 .vscode
 models/*
 uploads/*
+whisper/*
 
 node_modules
 npm-debug.log
