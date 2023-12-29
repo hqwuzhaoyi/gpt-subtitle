@@ -9,6 +9,10 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { promises as fsPromises } from "fs";
 import { Repository } from "typeorm";
 import { describe } from "node:test";
+import { mockDeep } from "jest-mock-extended";
+import { SelectQueryBuilder } from "typeorm";
+
+const mockQueryBuilder = mockDeep<SelectQueryBuilder<VideoFileEntity>>();
 
 const videoFile1: any = {
   id: 1,
@@ -76,6 +80,7 @@ describe("FilesService", () => {
       find: jest.fn(),
       findOne: jest.fn(),
       count: jest.fn(),
+      createQueryBuilder: jest.fn(() => mockQueryBuilder),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -176,18 +181,47 @@ describe("FilesService", () => {
       // Arrange
       const skip = 0;
       const take = 10;
+      const searchKey = "file";
 
-      mockVideoFileRepo.find.mockResolvedValue(expectedVideoFiles);
+      const expectedVideoFiles: VideoFileEntity[] = [];
+
+      const queryBuilderMock = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue(expectedVideoFiles),
+      };
+
+      jest
+        .spyOn(service["videoFilesRepository"], "createQueryBuilder")
+        .mockReturnValue(queryBuilderMock as any);
 
       // Act
-      const result = await service.findRelatedFilesForVideo({ skip, take });
-
-      // Assert
-      expect(mockVideoFileRepo.find).toHaveBeenCalledWith({
-        relations: ["audioFile", "audioFile.subtitleFiles"],
+      const result = await service.findRelatedFilesForVideo({
         skip,
         take,
+        searchKey,
       });
+
+      // Assert
+      expect(
+        service["videoFilesRepository"].createQueryBuilder
+      ).toHaveBeenCalledWith("video");
+      expect(queryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        "video.audioFile",
+        "audio"
+      );
+      expect(queryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        "audio.subtitleFiles",
+        "subtitles"
+      );
+      expect(queryBuilderMock.where).toHaveBeenCalledWith(
+        "video.baseName LIKE :searchKey",
+        { searchKey: `%${searchKey}%` }
+      );
+      expect(queryBuilderMock.skip).toHaveBeenCalledWith(skip);
+      expect(queryBuilderMock.take).toHaveBeenCalledWith(take);
       expect(result).toEqual(expectedVideoFiles);
     });
 
