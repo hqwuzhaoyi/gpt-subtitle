@@ -1,14 +1,6 @@
-import { Metadata } from "next";
-import { Separator } from "@/components/ui/separator";
-
 import { GalleryList } from "./components/gallery-list";
 
-export const metadata: Metadata = {
-  title: "Whisper Tasks",
-  description: "A task and issue tracker build using Tanstack Table.",
-};
-
-export default async function TaskPage() {
+export default function TaskPage() {
   try {
     return (
       <>
@@ -25,11 +17,7 @@ export default async function TaskPage() {
             </div>
           </div>
 
-          <Separator className="my-4" />
-
-          <div className="relative">
-            <GalleryList />
-          </div>
+          <GalleryList />
         </div>
       </>
     );

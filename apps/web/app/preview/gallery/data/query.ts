@@ -5,15 +5,20 @@ import { customGet } from "@/lib/clientFetch";
 
 export const queryGallery: ({
   pagination,
+  searchKey,
 }: {
   pagination: { pageIndex?: number; pageSize?: number };
+  searchKey?: string;
 }) => Promise<{
   list: Album[];
   totalCount: number;
-}> = async ({ pagination: { pageIndex = 1, pageSize = 10 } = {} }) => {
+}> = async ({
+  pagination: { pageIndex = 1, pageSize = 10 } = {},
+  searchKey,
+}) => {
   try {
     const response = await customGet(
-      `/osrt/list?page=${pageIndex}&limit=${pageSize}`,
+      `/osrt/list?page=${pageIndex}&limit=${pageSize}&searchKey=${searchKey}`,
       {
         method: "GET",
       }

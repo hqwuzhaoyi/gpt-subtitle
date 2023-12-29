@@ -12,6 +12,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { DataTablePagination } from "../../tasks/components/data-table-pagination";
+import { Search } from "./Search";
+import { Separator } from "@/components/ui/separator";
+import { useSearchKey } from "@/atoms/searchKey";
 
 export const GalleryList = ({
   initialData,
@@ -35,21 +38,16 @@ export const GalleryList = ({
     [pageIndex, pageSize]
   );
 
-  const { data, error } = useSWR(
-    [
-      `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
-    ],
-    ([]) =>
-      queryGallery({
-        pagination: {
-          pageIndex: pagination.pageIndex + 1,
-          pageSize: pagination.pageSize,
-        },
-      }),
-    {
-      initialData,
-      revalidateOnMount: true, // 如果你想在组件挂载时重新验证数据，可以设置该选项为 true
-    }
+  const searchKey = useSearchKey();
+
+  const { data, error, mutate } = useSWR(`/api/gallery`, () =>
+    queryGallery({
+      pagination: {
+        pageIndex: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      },
+      searchKey,
+    })
   );
 
   const pageCount = useMemo(() => {
@@ -72,23 +70,34 @@ export const GalleryList = ({
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="space-y-4">
-      <ScrollArea className="h-[600px] w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-14">
-          {data?.list.map((album) => (
-            <AlbumArtwork
-              key={album.name}
-              album={album}
-              className="w-[220px] h-[120px]"
-              width={220}
-              height={120}
-              pagination={pagination}
-            />
-          ))}
-        </div>
-        <ScrollBar />
-      </ScrollArea>
-      <DataTablePagination table={table} />
-    </div>
+    <>
+      <Search
+        onSearch={() => {
+          table.setPagination({ pageIndex: 0, pageSize: 50 });
+          mutate();
+        }}
+      />
+      <Separator className="my-4" />
+      <div className="relative">
+        <div className="space-y-4">
+          <ScrollArea className="h-[600px] w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-14">
+              {data?.list.map((album) => (
+                <AlbumArtwork
+                  key={album.name}
+                  album={album}
+                  className="w-[220px] h-[120px]"
+                  width={220}
+                  height={120}
+                  pagination={pagination}
+                />
+              ))}
+            </div>
+            <ScrollBar />
+          </ScrollArea>
+          <DataTablePagination table={table} />
+        </div>{" "}
+      </div>
+    </>
   );
 };
