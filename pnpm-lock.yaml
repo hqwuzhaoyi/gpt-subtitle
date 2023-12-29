@@ -130,8 +130,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/nfoParser
       openai:
-        specifier: ^4.17.0
-        version: 4.17.0
+        specifier: ^4.24.1
+        version: 4.24.1
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.13
@@ -573,8 +573,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2
       openai:
-        specifier: ^4.17.0
-        version: 4.17.0
+        specifier: ^4.24.1
+        version: 4.24.1
       p-queue:
         specifier: npm:@esm2cjs/p-queue@^7.3.0
         version: /@esm2cjs/p-queue@7.3.0
@@ -9931,8 +9931,8 @@ packages:
       is-wsl: 2.2.0
     dev: true
 
-  /openai@4.17.0:
-    resolution: {integrity: sha512-fJUdfOzKE49L2oitQ+L8oCYcTDI2oLOYmQvnPjklFrmH7M+8w65/8Ag9120ky1A3Xr3lCivALs2oBmNaZIvTgg==}
+  /openai@4.24.1:
+    resolution: {integrity: sha512-ezm/O3eiZMnyBqirUnWm9N6INJU1WhNtz+nK/Zj/2oyKvRz9pgpViDxa5wYOtyGYXPn1sIKBV0I/S4BDhtydqw==}
     hasBin: true
     dependencies:
       '@types/node': 18.17.14
