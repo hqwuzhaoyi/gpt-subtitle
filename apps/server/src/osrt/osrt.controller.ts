@@ -16,7 +16,7 @@ import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { Observable, Subject, filter, interval, map, tap } from "rxjs";
 import { IEvent } from "./event.subject";
-import { PaginationDto } from "./dto/pagination.dto";
+import { ListDto, PaginationDto } from "./dto/pagination.dto";
 import { Public } from "@/auth/decorators/public.decorator";
 
 @Controller("osrt")
@@ -32,8 +32,8 @@ export class OsrtController {
   }
 
   @Get("list")
-  async list(@Query() paginationDto: PaginationDto) {
-    return await this.osrtService.list(paginationDto);
+  async list(@Query() listDto: ListDto) {
+    return await this.osrtService.list(listDto);
   }
   @Get("audios")
   async findAudios() {

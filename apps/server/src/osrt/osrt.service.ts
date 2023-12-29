@@ -14,7 +14,7 @@ import { FilesService } from "@/files/files.service";
 import { TranslateService } from "@/translate/translate.service";
 import { IEvent } from "./event.subject";
 import { Subject } from "rxjs";
-import { PaginationDto } from "./dto/pagination.dto";
+import { ListDto, PaginationDto } from "./dto/pagination.dto";
 import { CustomConfigService } from "@/config/custom-config.service";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
@@ -103,15 +103,16 @@ export class OsrtService {
     }
   }
 
-  async list(paginationDto: PaginationDto = {}): Promise<FileListResult> {
+  async list(listDto: ListDto = {}): Promise<FileListResult> {
     try {
       let filesServiceOptions = {};
-      if (paginationDto.page && paginationDto.limit) {
-        const skippedItems = (paginationDto.page - 1) * paginationDto.limit;
+      if (listDto.page && listDto.limit) {
+        const skippedItems = (listDto.page - 1) * listDto.limit;
         filesServiceOptions = {
           ...filesServiceOptions,
           skip: skippedItems,
-          take: paginationDto.limit,
+          take: listDto.limit,
+          searchKey: listDto.searchKey,
         };
       }
       const currentJobs = await this.audioQueue.getActive();
@@ -156,8 +157,8 @@ export class OsrtService {
 
       return {
         list: result,
-        page: paginationDto.page,
-        limit: paginationDto.limit,
+        page: listDto.page,
+        limit: listDto.limit,
         totalCount,
       };
     } catch (error) {

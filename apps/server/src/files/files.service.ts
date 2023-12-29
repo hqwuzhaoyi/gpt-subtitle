@@ -114,18 +114,36 @@ export class FilesService {
   public async findRelatedFilesForVideo({
     skip,
     take,
+    searchKey,
   }: {
     skip?: number;
     take?: number;
+    searchKey?: string;
   } = {}): Promise<VideoFileEntity[]> {
     // 查找所有的视频文件并加载关联的音频和字幕文件
-    const videoFiles = await this.videoFilesRepository.find({
-      relations: ["audioFile", "audioFile.subtitleFiles"],
-      skip,
-      take,
-    });
+    const queryBuilder = this.videoFilesRepository.createQueryBuilder("video");
 
-    return videoFiles;
+    // 添加关系
+    queryBuilder.leftJoinAndSelect("video.audioFile", "audio");
+    queryBuilder.leftJoinAndSelect("audio.subtitleFiles", "subtitles");
+
+    // 如果searchKey存在，则添加模糊匹配条件
+    if (searchKey) {
+      queryBuilder.where("video.baseName LIKE :searchKey", {
+        searchKey: `%${searchKey}%`,
+      });
+    }
+
+    // 添加分页条件
+    if (skip !== undefined) {
+      queryBuilder.skip(skip);
+    }
+    if (take !== undefined) {
+      queryBuilder.take(take);
+    }
+
+    // 执行查询并返回结果
+    return await queryBuilder.getMany();
   }
 
   public async videoFilesCount(): Promise<number> {

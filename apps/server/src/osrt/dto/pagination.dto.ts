@@ -9,3 +9,8 @@ export class PaginationDto {
   @IsOptional()
   limit?: number = 10;
 }
+
+export class ListDto extends PaginationDto {
+  @IsOptional()
+  searchKey?: string;
+}
