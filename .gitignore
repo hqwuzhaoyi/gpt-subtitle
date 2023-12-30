@@ -22,7 +22,7 @@ uploads/video/*
 !/uploads/video/.gitkeep
 /out/**
 docker-compose-self.yml
-whisper
+./whisper/**
 
 .pnpm-store/
 ~/.npmrc
