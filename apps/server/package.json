@@ -48,7 +48,7 @@
     "mysql2": "^3.6.3",
     "nfo-parser": "workspace:^",
     "openai": "^4.24.1",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
     "shared-types": "workspace:*",
     "socket.io": "4.7.2",
