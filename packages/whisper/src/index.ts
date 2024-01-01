@@ -16,7 +16,13 @@ interface WhisperInterface {
     videoLanguage: string,
     model?: string,
     id?: string,
-    sendEvent?: (data) => void
+    sendEvent?: (data) => void,
+    options?: {
+      mc?: string;
+      et?: string;
+      prompt?: string;
+      threads?: string;
+    }
   ): Promise<number | string>;
 }
 
@@ -25,7 +31,8 @@ export const whisper: WhisperInterface = async (
   videoLanguage,
   model = "ggml-medium.bin",
   id = "main",
-  sendEvent
+  sendEvent,
+  { mc, et, prompt, threads } = {}
 ) => {
   const whisperRoot = path.join(__dirname, "..", "..", "..", "whisper");
   console.log("whisperRoot", whisperRoot);
@@ -47,10 +54,27 @@ export const whisper: WhisperInterface = async (
   //   videoPath
   // );
 
+  const maxContentArgs = mc ? ["-mc", mc] : [];
+  const entropyTholdArgs = et ? ["-et", et] : [];
+  const promptArgs = prompt ? ["--prompt", prompt] : [];
+  const threadsArgs = threads ? ["-t", threads] : [];
+
   return new Promise((resolve, reject) => {
     let mainProcess = child_process.spawn(
       mainPath,
-      ["-f", `"${targetPath}"`, "-osrt", "-l", videoLanguage, "-m", modelPath],
+      [
+        "-f",
+        `"${targetPath}"`,
+        "-osrt",
+        "-l",
+        videoLanguage,
+        "-m",
+        modelPath,
+        ...maxContentArgs,
+        ...entropyTholdArgs,
+        ...promptArgs,
+        ...threadsArgs,
+      ],
       { shell: true }
     );
     mainProcessMap.set(id, mainProcess);
