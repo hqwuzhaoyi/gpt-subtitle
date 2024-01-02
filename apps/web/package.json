@@ -50,7 +50,7 @@
     "eslint-config-next": "14.0.4",
     "http-proxy": "^1.18.1",
     "jotai": "^2.6.0",
-    "lucide-react": "^0.294.0",
+    "lucide-react": "^0.303.0",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
