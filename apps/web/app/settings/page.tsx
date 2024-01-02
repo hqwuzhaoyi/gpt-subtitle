@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { ProfileForm } from "./profile-form";
+import { ProfileForm } from "./components/profile-form";
 import { getConfig } from "./api/profile";
 
 export default async function SettingsProfilePage() {

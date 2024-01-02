@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 
 import { Slider } from "@/components/ui/slider";
 
-import { ProfileFormValues, profileFormSchema } from "./data/schema";
+import { ProfileFormValues, profileFormSchema } from "../data/schema";
 
 import { customFetch } from "@/lib/clientFetch";
 import { TranslateLanguage, TranslateType } from "shared-types";
