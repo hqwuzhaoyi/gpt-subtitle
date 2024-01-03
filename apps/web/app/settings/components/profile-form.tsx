@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,27 +26,8 @@ import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 
 import { ProfileFormValues, profileFormSchema } from "../data/schema";
-
-import { customFetch } from "@/lib/clientFetch";
 import { TranslateLanguage, TranslateType } from "shared-types";
-export async function setProfile(data: ProfileFormValues) {
-  const res = await customFetch("/auth/updateProfile", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    console.error("getProfile error", res);
-    throw new Error("Failed to fetch data");
-  }
-}
+import { setProfile } from "../api/client";
 
 export function ProfileForm({
   defaultValues,
