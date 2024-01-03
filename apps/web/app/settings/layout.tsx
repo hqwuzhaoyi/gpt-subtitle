@@ -21,9 +21,8 @@ const sidebarNavItems = [
   },
 
   {
-    title: "Account",
-    href: "/examples/forms/account",
-    disabled: true,
+    title: "Whisper",
+    href: "/settings/whisper"
   },
   {
     title: "Appearance",

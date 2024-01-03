@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { TranslateType, TranslateLanguage } from "shared-types";
+import { TranslateType, TranslateLanguage, LanguageEnum } from "shared-types";
 
 export const profileFormSchema = z.object({
   OUTPUT_SRT_THEN_TRANSLATE: z.boolean().optional(),
@@ -10,3 +10,15 @@ export const profileFormSchema = z.object({
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+export const WhisperSchema = z.object({
+  // whisperPath: z.string(),
+  model: z.string(),
+  videoLanguage: z.nativeEnum(LanguageEnum),
+  maxContent: z.number().optional().default(-1),
+  entropyThold: z.number().optional().default(2.4),
+  prompt: z.string().optional(),
+  threads: z.number().optional(),
+});
+
+export type WhisperValues = z.infer<typeof WhisperSchema>;
