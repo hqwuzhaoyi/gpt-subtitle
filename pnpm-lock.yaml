@@ -55,8 +55,8 @@ importers:
         specifier: ^5.10.2
         version: 5.10.2
       '@bull-board/nestjs':
-        specifier: ^5.8.4
-        version: 5.8.4(@bull-board/api@5.10.2)(@bull-board/express@5.10.2)(@nestjs/common@10.2.8)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+        specifier: ^5.10.2
+        version: 5.10.2(@bull-board/api@5.10.2)(@bull-board/express@5.10.2)(@nestjs/common@10.2.8)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nestjs/bull':
         specifier: ^10.0.1
         version: 10.0.1(@nestjs/common@10.2.8)(@nestjs/core@10.3.0)(bull@4.12.0)
@@ -1112,11 +1112,11 @@ packages:
       - supports-color
     dev: false
 
-  /@bull-board/nestjs@5.8.4(@bull-board/api@5.10.2)(@bull-board/express@5.10.2)(@nestjs/common@10.2.8)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1):
-    resolution: {integrity: sha512-j2R4PUYO0PPpbffBISxLN5u8yqtyDqxVMLigApRxYEMl8h0msP32QyOObojSLPFLzabWanpgzsVyBzAO8I7k3A==}
+  /@bull-board/nestjs@5.10.2(@bull-board/api@5.10.2)(@bull-board/express@5.10.2)(@nestjs/common@10.2.8)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1):
+    resolution: {integrity: sha512-9a+UxsLXf8V8C1/Hk62J3Q58A03tgaxEkWk33t9cEcA6WTAxozbUin/7alOzilo3AEqevUlSyaLkHXh/TwAq5w==}
     peerDependencies:
-      '@bull-board/api': ^5.8.4
-      '@bull-board/express': ^5.8.4
+      '@bull-board/api': ^5.10.2
+      '@bull-board/express': ^5.10.2
       '@nestjs/common': ^9.0.0 || ^10.0.0
       '@nestjs/core': ^9.0.0 || ^10.0.0
       reflect-metadata: ^0.1.13
