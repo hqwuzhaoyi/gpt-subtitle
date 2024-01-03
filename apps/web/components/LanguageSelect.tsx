@@ -9,8 +9,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { languages } from "../app/preview/tasks/data/data";
 import { LanguageEnum } from "shared-types";
+import { Check, ChevronDown } from "lucide-react";
 
 export const LanguageSelect = ({
   value,
@@ -19,21 +35,53 @@ export const LanguageSelect = ({
   value: LanguageEnum;
   onChange: (value: LanguageEnum) => void;
 }) => {
+  const [open, setOpen] = React.useState(false);
+
   return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup className="max-h-[250px]">
-          <SelectLabel>Language</SelectLabel>
-          {languages?.map((option) => (
-            <SelectItem value={option.value} key={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="justify-between h-8 font-[400] px-3 min-w-[100px]"
+          >
+            {value
+              ? Object.entries(LanguageEnum).find(
+                  ([label, language]) => language === value
+                )?.[0]
+              : "Select language..."}
+            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[250px] p-0">
+          <Command>
+            <CommandInput placeholder="Search support language..." className="h-9" />
+            <CommandEmpty>No language found.</CommandEmpty>
+            <CommandGroup className="max-h-[250px] overflow-auto">
+              {Object.entries(LanguageEnum).map(([label, language]) => (
+                <CommandItem
+                  key={language}
+                  value={language}
+                  onSelect={(currentValue) => {
+                    currentValue && onChange(currentValue as LanguageEnum);
+                    setOpen(false);
+                  }}
+                >
+                  {label}
+                  <Check
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      value === language ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </>
   );
 };
