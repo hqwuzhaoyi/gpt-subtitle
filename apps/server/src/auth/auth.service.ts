@@ -155,4 +155,30 @@ export class AuthService {
     //   password,
     // });
   }
+
+  async updateWhisper(obj) {
+    if (obj) {
+      Object.keys(obj).forEach((key) => {
+        this.configService.set(key, obj[key]);
+      });
+    }
+  }
+
+  async getWhisper() {
+    const objPromise = {
+      model: this.configService.get("model"),
+      videoLanguage: this.configService.get("videoLanguage"),
+      maxContent: this.configService.get("maxContent"),
+      entropyThold: this.configService.get("entropyThold"),
+      prompt: this.configService.get("prompt"),
+      threads: this.configService.get("threads"),
+    };
+
+    return Promise.all(Object.values(objPromise)).then((values) => {
+      return Object.keys(objPromise).reduce((obj, key, index) => {
+        obj[key] = values[index];
+        return obj;
+      }, {});
+    });
+  }
 }

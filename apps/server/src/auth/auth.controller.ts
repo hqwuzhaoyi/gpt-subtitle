@@ -65,4 +65,14 @@ export class AuthController {
   async updateProfile(@Request() req, @Body() body) {
     return this.authService.updateProfile(req.user?.sub, body);
   }
+
+  @Post("updateWhisper")
+  async updateWhisper(@Request() req, @Body() body) {
+    return this.authService.updateWhisper(body);
+  }
+
+  @Get("getWhisper")
+  async getWhisper(@Request() req) {
+    return this.authService.getWhisper();
+  }
 }
