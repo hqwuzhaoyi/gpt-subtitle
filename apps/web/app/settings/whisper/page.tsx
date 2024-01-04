@@ -20,14 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
-
-import { Slider } from "@/components/ui/slider";
-
 import { WhisperSchema, WhisperValues } from "../data/schema";
-
-import { LanguageEnum, TranslateLanguage, TranslateType } from "shared-types";
 import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
 import { LanguageSelect } from "@/components/LanguageSelect";
@@ -39,7 +33,7 @@ import useSWR from "swr";
 export default function WhisperForm() {
   const { data, isLoading } = useSWR("/api/whisper", getWhisper);
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return null;
   } else {
     return <ProfileForm defaultValues={data} />;
