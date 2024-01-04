@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.9",
     "@types/node": "^20.9.0",
-    "eslint": "^8.53.0",
+    "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.7.0",
     "jest-presets": "workspace:*",
