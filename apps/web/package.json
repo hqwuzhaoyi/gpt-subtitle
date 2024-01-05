@@ -34,7 +34,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
-    "@tanstack/react-table": "^8.11.2",
+    "@tanstack/react-table": "^8.11.3",
     "@types/node": "20.9.0",
     "@types/ramda": "^0.29.9",
     "@types/react": "^18.2.46",
