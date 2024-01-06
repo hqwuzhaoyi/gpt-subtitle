@@ -59,24 +59,24 @@ export const whisper: WhisperInterface = async (
   const promptArgs = prompt ? ["--prompt", prompt] : [];
   const threadsArgs = threads ? ["-t", threads] : [];
 
+  const args = [
+    "-f",
+    `"${targetPath}"`,
+    "-osrt",
+    "-l",
+    videoLanguage,
+    "-m",
+    modelPath,
+    ...maxContentArgs,
+    ...entropyTholdArgs,
+    ...promptArgs,
+    ...threadsArgs,
+  ];
+
+  console.log("args", args.join(" "));
+
   return new Promise((resolve, reject) => {
-    let mainProcess = child_process.spawn(
-      mainPath,
-      [
-        "-f",
-        `"${targetPath}"`,
-        "-osrt",
-        "-l",
-        videoLanguage,
-        "-m",
-        modelPath,
-        ...maxContentArgs,
-        ...entropyTholdArgs,
-        ...promptArgs,
-        ...threadsArgs,
-      ],
-      { shell: true }
-    );
+    let mainProcess = child_process.spawn(mainPath, args, { shell: true });
     mainProcessMap.set(id, mainProcess);
 
     mainProcess.stdout.on("data", (data) => {
