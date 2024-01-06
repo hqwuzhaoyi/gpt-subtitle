@@ -188,3 +188,5 @@ export interface MediaInfo {
   }[];
   dateadded?: string;
 }
+
+export type FileType = "video" | "audio" | "subtitle";
