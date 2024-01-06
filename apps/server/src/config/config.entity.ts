@@ -8,6 +8,6 @@ export class Config {
   @Column()
   key: string;
 
-  @Column()
+  @Column({ length: 500, nullable: true })
   value: string;
 }
