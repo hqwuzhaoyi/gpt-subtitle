@@ -378,6 +378,8 @@ export class OsrtService {
           msg: `audioPath exist ${audioPath}`,
           jobId: String(job.id),
         });
+        const whisperConfig = await this.customConfigService.getWhisperConfig();
+
         const status = await whisper(
           audioPath,
           language,
@@ -388,7 +390,8 @@ export class OsrtService {
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
-          }
+          },
+          whisperConfig
         );
         job.progress(50);
         if (status === "SIGTERM") {
@@ -431,6 +434,8 @@ export class OsrtService {
           msg: `start whisper ${finalAudioPath} ${language} ${model} ${job.id.toString()}`,
           jobId: String(job.id),
         });
+        const whisperConfig = await this.customConfigService.getWhisperConfig();
+
         const status = await whisper(
           finalAudioPath,
           language,
@@ -441,7 +446,8 @@ export class OsrtService {
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
-          }
+          },
+          whisperConfig
         );
         this.eventSubject.next({
           msg: `whisper done ${status}`,
