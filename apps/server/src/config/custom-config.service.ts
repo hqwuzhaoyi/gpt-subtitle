@@ -30,4 +30,22 @@ export class CustomConfigService {
   async getAll(): Promise<Record<string, string>> {
     return this.configService.getAll();
   }
+
+  async getWhisperConfig(): Promise<{
+    mc?: string;
+    et?: string;
+    prompt?: string;
+    threads?: string;
+  }> {
+    const prompt = await this.get("prompt");
+    const threads = await this.get("threads");
+    const maxContent = await this.get("maxContent");
+    const entropyThold = await this.get("entropyThold");
+    return {
+      mc: maxContent,
+      et: entropyThold,
+      prompt: prompt,
+      threads: threads,
+    };
+  }
 }

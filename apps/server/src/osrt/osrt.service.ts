@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { CreateOsrtDto, FileType } from "./dto/create-osrt.dto";
+import { CreateOsrtDto, FileType, WhisperConfig } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
 import { whisper, extractAudio, stopWhisper, stopAllWhisper } from "whisper";
 import { AudioListResult, FileListResult } from "shared-types";
@@ -238,9 +238,22 @@ export class OsrtService {
     id: string,
     model: string,
     priority = 1,
-    fileType: FileType = "video"
+    fileType: FileType = "video",
+    whisperConfig?: {
+      prompt?: string;
+      threads?: number;
+      maxContent?: number;
+      entropyThold?: number;
+    }
   ) {
-    await this.addTranslationJob({ language, id, model, priority, fileType });
+    await this.addTranslationJob({
+      language,
+      id,
+      model,
+      priority,
+      fileType,
+      whisperConfig,
+    });
     return `This action returns a #${id} osrt`;
   }
 
@@ -326,6 +339,7 @@ export class OsrtService {
       srtPath,
       srtFile,
       fileName,
+      whisperConfig: propWhisperConfig,
     }: {
       language: string;
       model: string;
@@ -334,6 +348,7 @@ export class OsrtService {
       srtPath: any;
       srtFile: any;
       fileName: any;
+      whisperConfig?: WhisperConfig;
     },
     job: Bull.Job<CreateOsrtDto>
   ) {
@@ -355,6 +370,19 @@ export class OsrtService {
 
       const targetSrtPath = path.join(this.staticDir, "/video", srtFile);
       job.progress(10);
+
+      const globalWhisperConfig =
+        await this.customConfigService.getWhisperConfig();
+
+      const whisperConfig = propWhisperConfig
+        ? {
+            ...propWhisperConfig,
+            mc: propWhisperConfig.maxContent + "",
+            et: propWhisperConfig.entropyThold + "",
+            threads: propWhisperConfig.threads + "",
+          }
+        : globalWhisperConfig;
+
       if (srtPath) {
         console.info("srtPath exist", srtPath + ".srt");
         this.eventSubject.next({
@@ -378,6 +406,7 @@ export class OsrtService {
           msg: `audioPath exist ${audioPath}`,
           jobId: String(job.id),
         });
+
         const status = await whisper(
           audioPath,
           language,
@@ -388,7 +417,8 @@ export class OsrtService {
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
-          }
+          },
+          whisperConfig
         );
         job.progress(50);
         if (status === "SIGTERM") {
@@ -431,6 +461,7 @@ export class OsrtService {
           msg: `start whisper ${finalAudioPath} ${language} ${model} ${job.id.toString()}`,
           jobId: String(job.id),
         });
+
         const status = await whisper(
           finalAudioPath,
           language,
@@ -441,7 +472,8 @@ export class OsrtService {
               msg: `whisper ${data}`,
               jobId: String(job.id),
             });
-          }
+          },
+          whisperConfig
         );
         this.eventSubject.next({
           msg: `whisper done ${status}`,

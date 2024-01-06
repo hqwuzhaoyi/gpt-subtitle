@@ -90,9 +90,18 @@ export class OsrtController {
     @Body("ln") ln: string,
     @Body("model") model: string,
     @Body("priority") priority: number,
-    @Body("fileType") fileType?: FileType
+    @Body("fileType") fileType?: FileType,
+    @Body("prompt") prompt?: string,
+    @Body("threads") threads?: number,
+    @Body("maxContent") maxContent?: number,
+    @Body("entropyThold") entropyThold?: number
   ) {
-    return this.osrtService.translate(ln, id, model, priority, fileType);
+    return this.osrtService.translate(ln, id, model, priority, fileType, {
+      prompt,
+      threads,
+      maxContent,
+      entropyThold,
+    });
   }
 
   @Post("createJobs") createJobs(@Body() createOsrtDto: CreateOsrtDto[]) {

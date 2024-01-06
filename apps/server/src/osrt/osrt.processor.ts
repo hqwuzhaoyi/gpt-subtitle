@@ -35,7 +35,7 @@ export class QueueProcessor {
   })
   async handleTranslationJob(job: Job<CreateOsrtDto>): Promise<void> {
     this.osrtGateway.notifyClient(job.id as string, "start", job.data);
-    const { language, id, model, fileType } = job.data;
+    const { language, id, model, fileType, whisperConfig } = job.data;
     try {
       console.debug("job.data", job.data);
       this.eventSubject.next({
@@ -82,6 +82,7 @@ export class QueueProcessor {
           srtPath,
           srtFile,
           fileName,
+          whisperConfig
         },
         job
       );

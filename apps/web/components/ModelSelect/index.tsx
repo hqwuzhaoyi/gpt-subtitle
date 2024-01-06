@@ -9,12 +9,21 @@ import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
 import { setWhisperModel, useWhisperModel } from "@/atoms/whisperModel";
 
-export const ModelSelect = () => {
+export const ModelSelect = ({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange?: (value: string) => void;
+}) => {
   const { data: models = [], isLoading: modelsLoading } = useModels();
 
-  const { model: value } = useWhisperModel();
+  const { model: globalValue } = useWhisperModel();
   return (
-    <Select onValueChange={setWhisperModel} defaultValue={value}>
+    <Select
+      onValueChange={onChange ?? setWhisperModel}
+      defaultValue={value ?? globalValue}
+    >
       <SelectTrigger>
         {modelsLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

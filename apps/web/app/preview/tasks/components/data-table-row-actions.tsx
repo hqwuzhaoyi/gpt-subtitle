@@ -35,13 +35,13 @@ export function DataTableRowActions<TData extends Task>({
       table.options.meta?.model &&
       row.getValue("priority")
     ) {
-      await outPutSrt(
-        row.getValue("language"),
-        row.getValue("id"),
-        table.options.meta?.model,
-        row.getValue("priority"),
-        table.options.meta?.type
-      );
+      await outPutSrt({
+        language: row.getValue("language"),
+        id: row.getValue("id"),
+        model: table.options.meta?.model,
+        priority: row.getValue("priority"),
+        fileType: table.options.meta?.type,
+      });
       mutate(`/osrt/list/${table.options.meta?.type}`);
     } else {
       toast({
