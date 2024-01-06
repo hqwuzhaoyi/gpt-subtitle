@@ -12,6 +12,7 @@ import { DataTableRowActions } from "./data-table-row-actions";
 import { LanguageSelect } from "../../../../components/LanguageSelect";
 import { Slider } from "@/components/ui/slider";
 import { setImagePreview } from "@/atoms/imagePreview";
+import PrioritySlider from "@/components/PrioritySlider";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -133,13 +134,10 @@ export const columns: ColumnDef<Task>[] = [
             <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
           {/* <span>{priority.label}</span> */}
-          <Slider
-            defaultValue={[priority.value]}
-            max={3}
-            min={1}
-            step={1}
-            onValueChange={(value) =>
-              table.options.meta?.updateData(row.index, "priority", value[0])
+          <PrioritySlider
+            defaultValue={priority.value}
+            onChange={(value) =>
+              table.options.meta?.updateData(row.index, "priority", value)
             }
           />
         </div>
