@@ -11,6 +11,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
   Select,
@@ -29,14 +30,26 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getWhisper, updateWhisper } from "../api/client";
 import useSWR from "swr";
+import { useMemo } from "react";
 
 export default function WhisperForm() {
   const { data, isLoading } = useSWR("/api/whisper", getWhisper);
 
-  if (isLoading || !data) {
+  const defaultValue = useMemo(() => {
+    if (isLoading || !data) {
+      return null;
+    } else {
+      if (data.threads) data.threads = Number(data.threads);
+      if (data.maxContent) data.maxContent = Number(data.maxContent);
+      if (data.entropyThold) data.entropyThold = Number(data.entropyThold);
+      return WhisperSchema.parse(data);
+    }
+  }, [data, isLoading]);
+
+  if (isLoading || !defaultValue) {
     return null;
   } else {
-    return <ProfileForm defaultValues={data} />;
+    return <ProfileForm defaultValues={defaultValue} />;
   }
 }
 
@@ -76,6 +89,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                     <FormDescription>
                       Choose the whisper model you need
                     </FormDescription>
+                    <FormMessage />
                   </div>
                   <FormControl>
                     <Select
@@ -111,6 +125,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                     <FormDescription>
                       Choose the audio language you need
                     </FormDescription>
+                    <FormMessage />
                   </div>
                   <LanguageSelect
                     value={field.value}
@@ -128,6 +143,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Prompt</FormLabel>
                     <FormDescription>Set the entropy threshold</FormDescription>
+                    <FormMessage />
                   </div>
                   <Textarea value={field.value} onChange={field.onChange} />
                 </FormItem>
@@ -142,10 +158,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Threads</FormLabel>
                     <FormDescription>Set threads</FormDescription>
+                    <FormMessage />
                   </div>
                   <Input
                     value={field.value}
-                    onChange={field.onChange}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                     type="number"
                   />
                 </FormItem>
@@ -162,10 +179,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                     <FormDescription>
                       Set the max content length
                     </FormDescription>
+                    <FormMessage />
                   </div>
                   <Input
                     value={field.value}
-                    onChange={field.onChange}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                     type="number"
                   />
                 </FormItem>
@@ -182,10 +200,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                       Entropy Threshold
                     </FormLabel>
                     <FormDescription>Set the entropy threshold</FormDescription>
+                    <FormMessage />
                   </div>
                   <Input
                     value={field.value}
-                    onChange={field.onChange}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                     type="number"
                   />
                 </FormItem>
