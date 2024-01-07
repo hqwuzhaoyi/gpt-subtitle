@@ -67,7 +67,7 @@ Before using the translation feature, you need to register an account on the [Op
 
 ```sh
 # Frontend Setting
-NEXT_PUBLIC_API_URL=http://localhost:3001 # Same as above. Backend API address
+NEXT_PUBLIC_API_URL=http://localhost:3001 # Backend API address
 WEB_PORT=3000                             # Frontend start port
 
 # Backend Setting
