@@ -31,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { getWhisper, updateWhisper } from "../api/client";
 import useSWR from "swr";
 import { useMemo } from "react";
+import { LanguageEnum } from "shared-types";
 
 export default function WhisperForm() {
   const { data, isLoading } = useSWR("/api/whisper", getWhisper);
@@ -42,6 +43,8 @@ export default function WhisperForm() {
       if (data.threads) data.threads = Number(data.threads);
       if (data.maxContent) data.maxContent = Number(data.maxContent);
       if (data.entropyThold) data.entropyThold = Number(data.entropyThold);
+      if (!data.videoLanguage) data.videoLanguage = LanguageEnum.Auto;
+      if (!data.model) data.model = '';
       return WhisperSchema.parse(data);
     }
   }, [data, isLoading]);
