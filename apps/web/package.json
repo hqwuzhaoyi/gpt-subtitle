@@ -54,7 +54,7 @@
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
-    "postcss": "8.4.31",
+    "postcss": "8.4.33",
     "ramda": "^0.29.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
