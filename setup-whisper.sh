@@ -26,7 +26,9 @@ make base
 # make medium.en
 # make medium
 # make large-v1
-# make large
+# make large-v2
+# make large-v3
+
 
 # 输出完成信息
 echo "脚本执行完毕!"

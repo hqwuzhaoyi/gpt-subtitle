@@ -20,7 +20,15 @@ WHISPER_COREML=1 make -j
 
 ### Metal
 
+```
 make
+```
+
+### Nvidia
+
+```
+WHISPER_CUBLAS=1 make
+```
 
 ### Bench
 
