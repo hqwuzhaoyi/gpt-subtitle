@@ -9,6 +9,7 @@ import * as child_process from "child_process";
 // const child = child_process.spawn("node", ["./path/to/other/script.js"]);
 
 export let mainProcessMap = new Map<string, child_process.ChildProcess>();
+export * from "./setup";
 
 export interface WhisperInterface {
   (

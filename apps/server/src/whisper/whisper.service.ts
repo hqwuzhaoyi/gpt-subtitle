@@ -7,6 +7,7 @@ import {
   stopAllWhisper,
   stopWhisper,
   whisper,
+  setupWhisper,
 } from "whisper";
 import * as path from "path";
 import * as fs from "fs";
@@ -71,5 +72,14 @@ export class WhisperService {
 
   stopAll() {
     stopAllWhisper();
+  }
+
+  firstSetUp() {
+    console.log("firstSetup");
+
+    setupWhisper({
+      dir: this.whisperDir,
+    });
+    return "firstSetup";
   }
 }

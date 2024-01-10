@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { WhisperService } from './whisper.service';
-import { CreateWhisperDto } from './dto/create-whisper.dto';
-import { UpdateWhisperDto } from './dto/update-whisper.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { WhisperService } from "./whisper.service";
+import { CreateWhisperDto } from "./dto/create-whisper.dto";
+import { UpdateWhisperDto } from "./dto/update-whisper.dto";
 
-@Controller('whisper')
+@Controller("whisper")
 export class WhisperController {
   constructor(private readonly whisperService: WhisperService) {}
 
@@ -17,23 +25,23 @@ export class WhisperController {
     return this.whisperService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.whisperService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWhisperDto: UpdateWhisperDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateWhisperDto: UpdateWhisperDto) {
     return this.whisperService.update(+id, updateWhisperDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.whisperService.remove(+id);
   }
 
   @Get("models")
-  async findAllModels() {
-    return await this.whisperService.findAllModels();
+  models() {
+    return this.whisperService.findAllModels();
+  }
+
+  @Get("firstSetUp")
+  firstSetUp() {
+    return this.whisperService.firstSetUp();
   }
 }
