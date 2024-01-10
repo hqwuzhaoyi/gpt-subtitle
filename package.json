@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
-    "@types/node": "^20.10.7",
+    "@types/node": "^20.10.8",
     "changeset": "^0.2.6",
     "concurrently": "^8.2.2",
     "conventional-changelog-cli": "^4.1.0",
