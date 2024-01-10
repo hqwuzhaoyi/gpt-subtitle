@@ -100,19 +100,6 @@ describe("OsrtController", () => {
     });
   });
 
-  describe("findAllModels", () => {
-    it("should findAllModels", async () => {
-      const expectedResult = [
-        /* some list */
-      ];
-
-      (service.findAllModels as jest.Mock).mockResolvedValue(expectedResult);
-
-      expect(await controller.findAllModels()).toBe(expectedResult);
-      expect(service.findAllModels).toHaveBeenCalled();
-    });
-  });
-
   describe("findOne", () => {
     it("should findOne", async () => {
       const expectedResult = {

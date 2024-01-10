@@ -24,6 +24,7 @@ import * as path from "path";
 import { CustomConfigModule } from "./config/config.module";
 import { APP_FILTER } from "@nestjs/core";
 import { HttpExceptionFilter } from "./all-exceptions.filter";
+import { WhisperModule } from './whisper/whisper.module';
 
 const {
   REDIS_PORT = 6379,
@@ -87,6 +88,7 @@ const rootPath = path.join(__dirname, "..", "..", "..");
     SubtitleModule,
     AuthModule,
     UsersModule,
+    WhisperModule,
   ],
   controllers: [AppController],
   providers: [

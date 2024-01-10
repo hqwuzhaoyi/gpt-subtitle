@@ -1,7 +1,6 @@
 import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOsrtDto, FileType, WhisperConfig } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
-import { whisper, extractAudio, stopWhisper, stopAllWhisper } from "whisper";
 import { AudioListResult, FileListResult } from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
@@ -16,8 +15,9 @@ import { IEvent } from "./event.subject";
 import { Subject } from "rxjs";
 import { ListDto, PaginationDto } from "./dto/pagination.dto";
 import { CustomConfigService } from "@/config/custom-config.service";
+import { WhisperService } from "@/whisper/whisper.service";
 
-const visibleFiles = (file: string) => !file.startsWith(".");
+
 const autoTranslateLanguages = "ja";
 const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
 const audioExtensions = ["mp3", "wav", "ogg", "flac"];
@@ -31,22 +31,14 @@ export class OsrtService {
     private readonly translateService: TranslateService,
     @Inject("STATIC_DIR") private staticDir: string,
     @Inject("EVENT_SUBJECT") private readonly eventSubject: Subject<IEvent>,
-    private customConfigService: CustomConfigService
+    private customConfigService: CustomConfigService,
+    private whisperService: WhisperService
   ) {}
 
   private logger: Logger = new Logger("OsrtService");
 
   private readonly videoDir = path.join(this.staticDir, "video");
   private readonly audioDir = path.join(this.staticDir, "audio");
-  private readonly whisperDir = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "whisper"
-  );
-  private readonly modelsDir = path.join(this.whisperDir, "models");
 
   async getActiveJobs() {
     return await this.audioQueue.getActive();
@@ -69,7 +61,7 @@ export class OsrtService {
   }
   async terminateAllJobs() {
     await this.clearAllJobs();
-    stopAllWhisper();
+    await this.whisperService.stopAll();
     return await this.getActiveJobs();
   }
 
@@ -204,15 +196,7 @@ export class OsrtService {
     }
   }
 
-  findAllModels() {
-    const files = fs
-      .readdirSync(this.modelsDir)
-      .filter(visibleFiles)
-      .filter(
-        (file) => file.startsWith("ggml") && path.extname(file) === ".bin"
-      );
-    return files;
-  }
+
 
   async findAllSrt() {
     return await this.findFiles(this.staticDir, subtitleExtensions);
@@ -293,7 +277,7 @@ export class OsrtService {
 
   async stop(processingJobId) {
     try {
-      stopWhisper(processingJobId);
+      this.whisperService.stop(processingJobId);
       await this.deleteJob(processingJobId);
     } catch (error) {
       console.error("Could not remove job", error);
@@ -407,7 +391,7 @@ export class OsrtService {
           jobId: String(job.id),
         });
 
-        const status = await whisper(
+        const status = await this.whisperService.start(
           audioPath,
           language,
           model,
@@ -462,7 +446,7 @@ export class OsrtService {
           jobId: String(job.id),
         });
 
-        const status = await whisper(
+        const status = await this.whisperService.start(
           finalAudioPath,
           language,
           model,
@@ -531,7 +515,7 @@ export class OsrtService {
     if (!audioPath && videoPath) {
       try {
         audioPath = path.join(path.dirname(videoPath), fileName + ".wav");
-        await extractAudio(videoPath, audioPath);
+        await this.whisperService.extra(videoPath, audioPath);
         console.info("extractAudio done");
         console.info("audioPath:", audioPath);
       } catch (error) {

@@ -40,11 +40,6 @@ export class OsrtController {
     return await this.osrtService.findAudios();
   }
 
-  @Get("models")
-  async findAllModels() {
-    return await this.osrtService.findAllModels();
-  }
-
   @Get("/find/:ln/:file")
   findOne(@Param("ln") ln: string, @Param("file") file: string) {
     return this.osrtService.findOne(ln, file);

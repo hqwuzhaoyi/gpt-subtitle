@@ -10,7 +10,7 @@ import * as child_process from "child_process";
 
 export let mainProcessMap = new Map<string, child_process.ChildProcess>();
 
-interface WhisperInterface {
+export interface WhisperInterface {
   (
     targetPath: string,
     videoLanguage: string,
