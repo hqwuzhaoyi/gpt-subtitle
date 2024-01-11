@@ -1,72 +1,75 @@
 import { execSync } from "child_process";
 import { MakeType, WhisperModel } from "./types";
 import * as fs from "fs";
-export function cleanMake() {
-  execSync("cd whisper && make clean", { stdio: "inherit" });
-  console.log("Cleaned make");
+
+export function cleanMake(dir: string) {
+  execSync(`cd ${dir} && make clean`, { stdio: "inherit" });
+  console.log("Cleaned make in", dir);
 }
 
-function cloneWhisper(dir) {
-  console.log('dir', dir)
+export function cloneWhisper(dir: string) {
+  console.log("Cloning into directory:", dir);
   if (fs.existsSync(dir)) {
-    // Delete the contents of the directory
     fs.rmSync(dir, { recursive: true, force: true });
     console.log(`Cleared existing directory: ${dir}`);
   }
   execSync(
-    "git clone --branch master https://github.com/ggerganov/whisper.cpp " + dir,
-    { stdio: "inherit" } // Display the output in the terminal
+    `git clone --branch master https://github.com/ggerganov/whisper.cpp ${dir}`,
+    { stdio: "inherit" }
   );
   console.log("Cloned whisper.cpp repository");
 }
 
-function compileWhisper(type: MakeType) {
+export function compileWhisper(dir: string, type: MakeType) {
+  let command = `cd ${dir} && `;
   if (type === MakeType.Nvidia) {
-    execSync("cd whisper && WHISPER_CUBLAS=1 make", { stdio: "inherit" });
+    command += "WHISPER_CUBLAS=1 make";
   } else if (type === MakeType.Metal) {
-    execSync("cd whisper && make", { stdio: "inherit" });
+    command += "make";
   } else if (type === MakeType.CoreML) {
-    execSync("cd whisper && WHISPER_COREML=1 make -j", { stdio: "inherit" });
+    command += "WHISPER_COREML=1 make -j";
   }
-
-  console.log("Compiled whisper");
+  execSync(command, { stdio: "inherit" });
+  console.log(`Compiled whisper for ${type} in`, dir);
 }
 
-function downloadModel() {
-  execSync("cd whisper && bash ./models/download-ggml-model.sh base.en", {
+export function downloadModel(dir: string) {
+  execSync(`cd ${dir} && bash ./models/download-ggml-model.sh base.en`, {
     stdio: "inherit",
   });
-  console.log("Downloaded model");
+  console.log("Downloaded model in", dir);
 }
 
-function runWhisperSample() {
-  execSync("cd whisper && ./main -f samples/jfk.wav", { stdio: "inherit" });
-  console.log("Ran whisper sample");
+export function runWhisperSample(dir: string) {
+  execSync(`cd ${dir} && ./main -f samples/jfk.wav`, { stdio: "inherit" });
+  console.log("Ran whisper sample in", dir);
 }
 
-export function compileWhisperModel(model: WhisperModel) {
+export function compileWhisperModel(dir: string, model: WhisperModel) {
   try {
-    execSync(`cd whisper && make ${model}`, { stdio: "inherit" });
-    console.log(`Compiled whisper model: ${model}`);
+    execSync(`cd ${dir} && make ${model}`, { stdio: "inherit" });
+    console.log(`Compiled whisper model: ${model} in`, dir);
   } catch (error) {
-    console.error(`Error compiling model: ${model}`, error);
+    console.error(`Error compiling model: ${model} in ${dir}`, error);
   }
 }
-export function generateModelForCoreML(model: WhisperModel) {
+
+export function generateModelForCoreML(dir: string, model: WhisperModel) {
   try {
-    execSync(`cd whisper && ./models/generate-coreml-model.sh ${model}`, {
+    execSync(`cd ${dir} && ./models/generate-coreml-model.sh ${model}`, {
       stdio: "inherit",
     });
-    console.log(`Generated CoreML model: ${model}`);
+    console.log(`Generated CoreML model: ${model} in`, dir);
   } catch (error) {
-    console.error(`Error generating CoreML model: ${model}`, error);
+    console.error(`Error generating CoreML model: ${model} in ${dir}`, error);
   }
 }
 
-export function setupWhisper({ dir }) {
+export function setupWhisper({ dir }: { dir: string }) {
   cloneWhisper(dir);
-  compileWhisper(MakeType.Metal);
-  downloadModel();
-  runWhisperSample();
-  compileWhisperModel(WhisperModel.Base);
+  cleanMake(dir); // Depending on the actual workflow, you might need to clean the make after cloning or before compiling
+  compileWhisper(dir, MakeType.Metal);
+  downloadModel(dir);
+  runWhisperSample(dir);
+  compileWhisperModel(dir, WhisperModel.Base);
 }
