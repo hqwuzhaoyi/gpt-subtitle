@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { downloadWhisper, getWhisper, updateWhisper } from "../api/client";
 import useSWR from "swr";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { LanguageEnum } from "shared-types";
 
 export default function WhisperForm() {
@@ -74,13 +74,24 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
     refresh();
   }
 
-  async function onDownload() {
-    downloadWhisper();
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
-    toast({
-      title: "Download Success",
-      description: "Whisper service has been downloaded.",
-    });
+  async function onDownload() {
+    try {
+      setDownloadLoading(true);
+      await downloadWhisper();
+
+      toast({
+        title: "Download Success",
+        description: "Whisper service has been downloaded.",
+      });
+    } catch (error) {
+      toast({
+        title: "Download Failed",
+        description: "Whisper service download failed.",
+      });
+    }
+    setDownloadLoading(false);
   }
 
   const { data: models = [], isLoading: modelsLoading } = useModels();
@@ -90,7 +101,12 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <h3 className="mb-4 text-lg font-medium">Models Management</h3>
-          <Button onClick={() => onDownload()}>Download</Button>
+          <Button onClick={() => onDownload()}>
+            {downloadLoading && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Download
+          </Button>
         </div>
       </div>
 

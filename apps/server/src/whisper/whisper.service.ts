@@ -80,6 +80,8 @@ export class WhisperService {
     setupWhisper({
       dir: this.whisperDir,
     });
+
+    console.log('firstSetup end')
     return "firstSetup";
   }
 }
