@@ -12,5 +12,6 @@
     {
       "pattern": "./packages/*/"
     }
-  ]
+  ],
+  "github.copilot.editor.enableAutoCompletions": true
 }
