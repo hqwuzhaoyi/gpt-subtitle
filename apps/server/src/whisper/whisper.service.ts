@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { CreateWhisperDto } from "./dto/create-whisper.dto";
 import { UpdateWhisperDto } from "./dto/update-whisper.dto";
 import {
@@ -74,14 +74,17 @@ export class WhisperService {
     stopAllWhisper();
   }
 
-  firstSetUp() {
-    console.log("firstSetup");
+  async firstSetUp() {
+    // 如果this.whisperDir存在
+    if (fs.existsSync(this.whisperDir)) {
+      // throw new InternalServerErrorException("alreadySetup");
+      // 如果this.modelsDir存在
+      return this.findAllModels();
+    }
 
-    setupWhisper({
+    await setupWhisper({
       dir: this.whisperDir,
     });
-
-    console.log('firstSetup end')
-    return "firstSetup";
+    return this.findAllModels();
   }
 }

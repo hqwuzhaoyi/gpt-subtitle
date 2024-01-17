@@ -41,7 +41,8 @@ export class WhisperController {
   }
 
   @Get("firstSetUp")
-  firstSetUp() {
-    return this.whisperService.firstSetUp();
+  async firstSetUp() {
+    const data = await this.whisperService.firstSetUp();
+    return data;
   }
 }
