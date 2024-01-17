@@ -142,8 +142,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared-types
       socket.io:
-        specifier: 4.7.2
-        version: 4.7.2
+        specifier: 4.7.4
+        version: 4.7.4
       translator:
         specifier: workspace:*
         version: link:../../packages/translater
@@ -10961,6 +10961,23 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  /socket.io@4.7.4:
+    resolution: {integrity: sha512-DcotgfP1Zg9iP/dH9zvAQcWrE0TtbMVwXmlV4T4mqsvY+gw+LqUGPfx2AoVyRk0FLME+GQhufDMyacFmw7ksqw==}
+    engines: {node: '>=10.2.0'}
+    dependencies:
+      accepts: 1.3.8
+      base64id: 2.0.0
+      cors: 2.8.5
+      debug: 4.3.4
+      engine.io: 6.5.2
+      socket.io-adapter: 2.5.2
+      socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}

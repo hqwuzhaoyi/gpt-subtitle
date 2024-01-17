@@ -51,7 +51,7 @@
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
     "shared-types": "workspace:*",
-    "socket.io": "4.7.2",
+    "socket.io": "4.7.4",
     "translator": "workspace:*",
     "typeorm": "0.3.17",
     "utils": "workspace:*",
