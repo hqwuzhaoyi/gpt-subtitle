@@ -11,6 +11,7 @@ import {
 } from "whisper";
 import * as path from "path";
 import * as fs from "fs";
+import { FirstSetupDto } from "./dto/first-setup.dto";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 
@@ -74,9 +75,9 @@ export class WhisperService {
     stopAllWhisper();
   }
 
-  async firstSetUp() {
+  async firstSetUp(firstSetupDto: FirstSetupDto) {
     // 如果this.whisperDir存在
-    if (fs.existsSync(this.whisperDir)) {
+    if (fs.existsSync(this.whisperDir) && !firstSetupDto.force) {
       // throw new InternalServerErrorException("alreadySetup");
       // 如果this.modelsDir存在
       return this.findAllModels();

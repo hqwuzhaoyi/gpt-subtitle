@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from "@nestjs/common";
 import { WhisperService } from "./whisper.service";
 import { CreateWhisperDto } from "./dto/create-whisper.dto";
 import { UpdateWhisperDto } from "./dto/update-whisper.dto";
+import { FirstSetupDto } from "./dto/first-setup.dto";
 
 @Controller("whisper")
 export class WhisperController {
@@ -41,8 +43,11 @@ export class WhisperController {
   }
 
   @Get("firstSetUp")
-  async firstSetUp() {
-    const data = await this.whisperService.firstSetUp();
+  async firstSetUp(
+    @Query()
+    firstSetupDto: FirstSetupDto
+  ) {
+    const data = await this.whisperService.firstSetUp(firstSetupDto);
     return data;
   }
 }
