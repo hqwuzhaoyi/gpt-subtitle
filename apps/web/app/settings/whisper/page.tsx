@@ -67,7 +67,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
   async function onSubmit(data: WhisperValues) {
     updateWhisper(data);
 
-    toast({
+    await toast({
       title: "Update Success",
       description: "Your profile has been updated.",
     });
@@ -79,7 +79,9 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
   async function onDownload() {
     try {
       setDownloadLoading(true);
-      await downloadWhisper();
+      await downloadWhisper({
+        force: true,
+      });
 
       toast({
         title: "Download Success",
@@ -105,7 +107,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
             {downloadLoading && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Download
+            Re-Download
           </Button>
         </div>
       </div>

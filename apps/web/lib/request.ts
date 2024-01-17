@@ -13,7 +13,7 @@ request.interceptors.request.use(async (request) => {
 // 增加401的處理
 request.interceptors.response.use(
   (response) => {
-    return response;
+    return response.data;
   },
   (error) => {
     if (error.response.status === 401) {
