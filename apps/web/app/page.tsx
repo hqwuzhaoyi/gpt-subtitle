@@ -3,6 +3,10 @@ import UploadPage from "./preview/tasks/page";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const metadata: Metadata = {
+  title: "Gpt Subtitle",
+};
+
 export default function Example() {
   const cookieStore = cookies();
   const proxyUrlHasBeenSet = cookieStore.get("proxyUrlHasBeenSet");

@@ -15,7 +15,6 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Subtitles",
-  description: "Check out some examples app built using the components.",
 };
 
 interface ExamplesLayoutProps {
