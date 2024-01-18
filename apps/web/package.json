@@ -9,6 +9,7 @@
     "start": "next start  -p $WEB_PORT",
     "lint": "next lint",
     "test": "jest --passWithNoTests",
+    "test:silent": "jest --silent",
     "test:watch": "jest --passWithNoTests --watch",
     "test:coverage": "jest --passWithNoTests --coverage"
   },

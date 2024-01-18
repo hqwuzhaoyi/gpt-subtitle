@@ -32,6 +32,10 @@
       "outputs": ["coverage/**"],
       "dependsOn": []
     },
+    "test:silent": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
+    },
     "translate": {},
     "test:watch": {
       "cache": false
