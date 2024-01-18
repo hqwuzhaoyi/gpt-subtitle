@@ -192,3 +192,4 @@ export interface MediaInfo {
 export type FileType = "video" | "audio" | "subtitle";
 
 export * from "./api.response";
+export * from "./whisper";
