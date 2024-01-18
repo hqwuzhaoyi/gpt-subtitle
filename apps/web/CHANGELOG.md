@@ -1,5 +1,22 @@
 # web
 
+## 1.7.0
+
+### Minor Changes
+
+- [#289](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/289) [`c689087`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/c68908773728f849f080f90331ac23930e847b62) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - New whisper service automatic download script
+
+### Patch Changes
+
+- [#289](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/289) [`d12f73f`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/d12f73f97e2115a7c636a40f997efe1e3f617383) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - New whisper service automatic download script
+
+  Refactored the data structure returned by the server
+
+- Updated dependencies [[`d12f73f`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/d12f73f97e2115a7c636a40f997efe1e3f617383), [`c689087`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/c68908773728f849f080f90331ac23930e847b62)]:
+  - shared-types@2.4.0
+  - translator@0.5.0
+  - utils@0.4.1
+
 ## 1.6.0
 
 ### Minor Changes

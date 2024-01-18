@@ -1,5 +1,13 @@
 # logger
 
+## 0.4.1
+
+### Patch Changes
+
+- [#289](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/289) [`d12f73f`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/d12f73f97e2115a7c636a40f997efe1e3f617383) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - New whisper service automatic download script
+
+  Refactored the data structure returned by the server
+
 ## 0.4.0
 
 ### Minor Changes
