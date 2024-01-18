@@ -23,6 +23,7 @@ uploads/video/*
 /out/**
 docker-compose-self.yml
 ./whisper/**
+./whisper
 
 .pnpm-store/
 ~/.npmrc

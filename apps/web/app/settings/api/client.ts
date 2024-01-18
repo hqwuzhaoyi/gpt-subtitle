@@ -1,5 +1,6 @@
 import { customFetch } from "@/lib/clientFetch";
 import { ProfileFormValues, WhisperValues } from "../data/schema";
+import { ApiResponse } from "shared-types";
 
 export async function updateWhisper(data: WhisperValues) {
   const res = await customFetch("/auth/updateWhisper", {
@@ -10,14 +11,19 @@ export async function updateWhisper(data: WhisperValues) {
     },
     body: JSON.stringify(data),
   });
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
+}
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    console.error("getProfile error", res);
-    throw new Error("Failed to fetch data");
-  }
+export async function downloadWhisper({ force = false }) {
+  const res = await customFetch(
+    "/whisper/firstSetUp" + (force ? "?force=true" : ""),
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
 export async function setProfile(data: ProfileFormValues) {
@@ -31,15 +37,9 @@ export async function setProfile(data: ProfileFormValues) {
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    console.error("getProfile error", res);
-    throw new Error("Failed to fetch data");
-  }
 }
 
 export async function getWhisper(): Promise<WhisperValues> {
-    const res = await customFetch("/auth/getWhisper");
-    return res.json();
-  }
+  const res = await customFetch<WhisperValues>("/auth/getWhisper");
+  return res?.data;
+}

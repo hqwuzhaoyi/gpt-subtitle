@@ -22,8 +22,10 @@ import { UsersModule } from "./users/users.module";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { CustomConfigModule } from "./config/config.module";
-import { APP_FILTER } from "@nestjs/core";
-import { HttpExceptionFilter } from "./all-exceptions.filter";
+import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
+import { WhisperModule } from "./whisper/whisper.module";
+import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 
 const {
   REDIS_PORT = 6379,
@@ -87,12 +89,17 @@ const rootPath = path.join(__dirname, "..", "..", "..");
     SubtitleModule,
     AuthModule,
     UsersModule,
+    WhisperModule,
   ],
   controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
     AppService,
   ],

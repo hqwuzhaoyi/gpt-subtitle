@@ -28,9 +28,9 @@ import { Loader2 } from "lucide-react";
 import { LanguageSelect } from "@/components/LanguageSelect";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getWhisper, updateWhisper } from "../api/client";
+import { downloadWhisper, getWhisper, updateWhisper } from "../api/client";
 import useSWR from "swr";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { LanguageEnum } from "shared-types";
 
 export default function WhisperForm() {
@@ -44,7 +44,7 @@ export default function WhisperForm() {
       if (data.maxContent) data.maxContent = Number(data.maxContent);
       if (data.entropyThold) data.entropyThold = Number(data.entropyThold);
       if (!data.videoLanguage) data.videoLanguage = LanguageEnum.Auto;
-      if (!data.model) data.model = '';
+      if (!data.model) data.model = "";
       return WhisperSchema.parse(data);
     }
   }, [data, isLoading]);
@@ -67,17 +67,51 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
   async function onSubmit(data: WhisperValues) {
     updateWhisper(data);
 
-    toast({
+    await toast({
       title: "Update Success",
       description: "Your profile has been updated.",
     });
     refresh();
   }
 
+  const [downloadLoading, setDownloadLoading] = useState(false);
+
+  async function onDownload() {
+    try {
+      setDownloadLoading(true);
+      await downloadWhisper({
+        force: true,
+      });
+
+      toast({
+        title: "Download Success",
+        description: "Whisper service has been downloaded.",
+      });
+    } catch (error) {
+      toast({
+        title: "Download Failed",
+        description: "Whisper service download failed.",
+      });
+    }
+    setDownloadLoading(false);
+  }
+
   const { data: models = [], isLoading: modelsLoading } = useModels();
 
   return (
     <Form {...form}>
+      <div className="mb-8">
+        <div className="flex justify-between items-center">
+          <h3 className="mb-4 text-lg font-medium">Models Management</h3>
+          <Button onClick={() => onDownload()}>
+            {downloadLoading && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Re-Download
+          </Button>
+        </div>
+      </div>
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <h3 className="mb-4 text-lg font-medium">Global Whisper Settings</h3>

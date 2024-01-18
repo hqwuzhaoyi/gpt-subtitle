@@ -10,6 +10,7 @@ import Bull, { JobStatusClean, Queue } from "bull";
 import { getQueueToken } from "@nestjs/bull";
 import { Subject } from "rxjs";
 import { CustomConfigService } from "@/config/custom-config.service";
+import { WhisperService } from "@/whisper/whisper.service";
 
 
 describe("OsrtService", () => {
@@ -18,6 +19,7 @@ describe("OsrtService", () => {
   let sharedGateway: SharedGateway;
   let filesService: FilesService;
   let watchService: WatchService;
+  let whisperService: WhisperService;
 
   const subtitlePath = "subtitlePath";
   const audioPath = "audioPath";
@@ -71,6 +73,7 @@ describe("OsrtService", () => {
         },
         { provide: FilesService, useValue: mockFilesService },
         { provide: TranslateService, useValue: mockWatchService },
+        { provide: WhisperService, useValue: mockWatchService },
         {
           provide: "STATIC_DIR",
           useValue: "/static",

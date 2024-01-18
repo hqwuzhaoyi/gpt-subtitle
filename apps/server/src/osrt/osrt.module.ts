@@ -7,9 +7,10 @@ import { QueueProcessor } from "./osrt.processor";
 import { FilesModule } from "@/files/files.module";
 import { TranslateModule } from "@/translate/translate.module";
 import { WatchModule } from "@/files/watch/watch.module";
+import { WhisperModule } from "@/whisper/whisper.module";
 
 @Module({
-  imports: [SharedModule, FilesModule, TranslateModule, WatchModule],
+  imports: [SharedModule, FilesModule, TranslateModule, WatchModule, WhisperModule],
   controllers: [OsrtController],
 
   providers: [OsrtService, QueueProcessor],

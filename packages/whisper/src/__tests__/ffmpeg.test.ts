@@ -9,6 +9,7 @@ describe("extractAudio function", () => {
 
       jest.doMock("child_process", () => ({
         spawn: jest.fn().mockReturnValue(spawnMock),
+        exec: jest.fn(),
       }));
 
       const { extractAudio } = require("../index"); // 替换成你的模块路径
@@ -32,6 +33,7 @@ describe("extractAudio function", () => {
 
       jest.doMock("child_process", () => ({
         spawn: jest.fn().mockReturnValue(spawnMock),
+        exec: jest.fn(),
       }));
 
       const { extractAudio } = require("../index"); // 替换成你的模块路径

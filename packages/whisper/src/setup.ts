@@ -1,66 +1,83 @@
-import { execSync } from "child_process";
+import { exec } from "child_process";
 import { MakeType, WhisperModel } from "./types";
-import chalk from "chalk";
+import * as fs from "fs";
+import { promisify } from 'util';
 
-export function cleanMake() {
-  execSync("cd whisper && make clean", { stdio: "inherit" });
-  console.log(chalk.red("Cleaned make"));
+const execAsync = promisify(exec);
+
+async function runCommand(command: string) {
+  try {
+    const { stdout, stderr } = await execAsync(command);
+    console.log(stdout);
+    if (stderr) {
+      console.error(stderr);
+    }
+  } catch (error) {
+    console.error('Error during command execution', error);
+  }
 }
 
-function cloneWhisper() {
-  execSync(
-    "git clone --branch master https://github.com/ggerganov/whisper.cpp whisper"
-  );
-  console.log(chalk.green("Cloned whisper.cpp repository"));
+export async function cleanMake(dir: string) {
+  await runCommand(`cd ${dir} && make clean`);
+  console.log("Cleaned make in", dir);
 }
 
-function compileWhisper(type: MakeType) {
+export async function cloneWhisper(dir: string) {
+  console.log("Cloning into directory:", dir);
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+    console.log(`Cleared existing directory: ${dir}`);
+  }
+  await runCommand(`git clone --branch master https://github.com/ggerganov/whisper.cpp ${dir}`);
+  console.log("Cloned whisper.cpp repository");
+}
+
+export async function compileWhisper(dir: string, type: MakeType) {
+  let command = `cd ${dir} && `;
   if (type === MakeType.Nvidia) {
-    execSync("cd whisper && WHISPER_CUBLAS=1 make", { stdio: "inherit" });
+    command += "WHISPER_CUBLAS=1 make";
   } else if (type === MakeType.Metal) {
-    execSync("cd whisper && make", { stdio: "inherit" });
+    command += "make";
   } else if (type === MakeType.CoreML) {
-    execSync("cd whisper && WHISPER_COREML=1 make -j", { stdio: "inherit" });
+    command += "WHISPER_COREML=1 make -j";
   }
-
-  console.log(chalk.blue("Compiled whisper"));
+  await runCommand(command);
+  console.log(`Compiled whisper for ${type} in`, dir);
 }
 
-function downloadModel() {
-  execSync("cd whisper && bash ./models/download-ggml-model.sh base.en", {
-    stdio: "inherit",
-  });
-  console.log(chalk.magenta("Downloaded model"));
+export async function downloadModel(dir: string) {
+  await runCommand(`cd ${dir} && bash ./models/download-ggml-model.sh base.en`);
+  console.log("Downloaded model in", dir);
 }
 
-function runWhisperSample() {
-  execSync("cd whisper && ./main -f samples/jfk.wav", { stdio: "inherit" });
-  console.log(chalk.cyan("Ran whisper sample"));
+export async function runWhisperSample(dir: string) {
+  await runCommand(`cd ${dir} && ./main -f samples/jfk.wav`);
+  console.log("Ran whisper sample in", dir);
 }
 
-export function compileWhisperModel(model: WhisperModel) {
+export async function compileWhisperModel(dir: string, model: WhisperModel) {
   try {
-    execSync(`cd whisper && make ${model}`, { stdio: "inherit" });
-    console.log(chalk.yellow(`Compiled whisper model: ${model}`));
+    await runCommand(`cd ${dir} && make ${model}`);
+    console.log(`Compiled whisper model: ${model} in`, dir);
   } catch (error) {
-    console.error(chalk.red(`Error compiling model: ${model}`), error);
-  }
-}
-export function generateModelForCoreML(model: WhisperModel) {
-  try {
-    execSync(`cd whisper && ./models/generate-coreml-model.sh ${model}`, {
-      stdio: "inherit",
-    });
-    console.log(chalk.yellow(`Generated CoreML model: ${model}`));
-  } catch (error) {
-    console.error(chalk.red(`Error generating CoreML model: ${model}`), error);
+    console.error(`Error compiling model: ${model} in ${dir}`, error);
   }
 }
 
-export function setupWhisper() {
-  cloneWhisper();
-  compileWhisper(MakeType.Metal);
-  downloadModel();
-  runWhisperSample();
-  compileWhisperModel(WhisperModel.Base);
+export async function generateModelForCoreML(dir: string, model: WhisperModel) {
+  try {
+    await runCommand(`cd ${dir} && ./models/generate-coreml-model.sh ${model}`);
+    console.log(`Generated CoreML model: ${model} in`, dir);
+  } catch (error) {
+    console.error(`Error generating CoreML model: ${model} in ${dir}`, error);
+  }
+}
+
+export async function setupWhisper({ dir }: { dir: string }) {
+  await cloneWhisper(dir);
+  await cleanMake(dir); // Depending on the actual workflow, you might need to clean the make after cloning or before compiling
+  await compileWhisper(dir, MakeType.Metal);
+  await downloadModel(dir);
+  await runWhisperSample(dir);
+  await compileWhisperModel(dir, WhisperModel.Base);
 }

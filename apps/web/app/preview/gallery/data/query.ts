@@ -17,26 +17,16 @@ export const queryGallery: ({
   searchKey,
 }) => {
   try {
-    const response = await customGet(
+    const response = await customGet<{ list: Album[]; totalCount: number }>(
       `/osrt/list?page=${pageIndex}&limit=${pageSize}&searchKey=${searchKey}`,
       {
         method: "GET",
       }
     );
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        // signOut({ redirect: false }).then(() => {
-        //   window.location.href = "/login";
-        // });
-      }
-      throw new Error("Network response was not ok");
-    }
-
-    const jsonResponse = await response.json(); // 等待JSON解析
-    const { list: data, totalCount } = jsonResponse; // 从解析后的JSON中解构data
+    const { list: data, totalCount } = response.data; // 从解析后的JSON中解构data
     return {
-      list: (data as FileList).map((item) => {
+      list: (data as unknown as FileList).map((item) => {
         return AlbumSchema.parse({
           id: item.id + "",
           name: item.fileName,
