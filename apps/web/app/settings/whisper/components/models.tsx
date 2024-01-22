@@ -1,5 +1,5 @@
 import React from "react";
-import { downloadWhisper } from "../../api/client";
+import { downloadModel, downloadWhisper } from "../../api/client";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,7 @@ export const Models = () => {
       setDownloadLoading(true);
       await downloadWhisper({
         force: true,
+        makeType: whisperMakeValue.value,
       });
 
       toast({
@@ -70,8 +71,11 @@ export const Models = () => {
     setDownloadLoading(false);
   }
 
-  function onModelDownload(model: WhisperModel) {
-    console.log(model);
+  async function onModelDownload(model: WhisperModel) {
+    await downloadModel({
+      model,
+      makeType: whisperMakeValue.value,
+    });
     toast({
       title: "Download Success",
       description: "Whisper model has been downloaded.",
