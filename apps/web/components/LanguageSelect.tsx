@@ -55,9 +55,23 @@ export const LanguageSelect = ({
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[250px] p-0">
-          <Command>
-            <CommandInput placeholder="Search support language..." className="h-9" />
+        <PopoverContent className="min-w-[250px] w-full p-0">
+          <Command
+            filter={(value, search) => {
+              if (
+                Object.entries(LanguageEnum)
+                  .find(([label, language]) => language === value)?.[0]
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+              )
+                return 1;
+              else return 0;
+            }}
+          >
+            <CommandInput
+              placeholder="Search support language..."
+              className="h-9"
+            />
             <CommandEmpty>No language found.</CommandEmpty>
             <CommandGroup className="max-h-[250px] overflow-auto">
               {Object.entries(LanguageEnum).map(([label, language]) => (
