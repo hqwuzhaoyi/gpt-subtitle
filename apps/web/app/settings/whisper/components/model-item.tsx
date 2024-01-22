@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MakeType, WhisperModel, WhisperModelDescription } from "shared-types";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -42,9 +42,10 @@ const Budges = ({ type }: { type: WhisperModel }) => {
 export interface ModelItemInterface {
   title: string;
   value: WhisperModel;
+  isFinished?: boolean;
 }
 
-export const ModelItem = ({ title, value }: ModelItemInterface) => {
+export const ModelItem = ({ title, value, isFinished }: ModelItemInterface) => {
   const [whisperMakeValue] = useWhisperMake();
 
   const [downloadLoading, setDownloadLoading] = useState(false);
@@ -100,6 +101,8 @@ export const ModelItem = ({ title, value }: ModelItemInterface) => {
       >
         {downloadLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
+        ) : isFinished ? (
+          <Check className="h-4 w-4" />
         ) : (
           <DownloadCloud className="h-4 w-4" />
         )}

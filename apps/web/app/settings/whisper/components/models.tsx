@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { setWhisperMake, useWhisperMake } from "@/atoms/whisperMakeType";
 import { ModelItem } from "./model-item";
+import { useModels } from "@/hooks/useModels";
 
 export const Models = () => {
   const [downloadLoading, setDownloadLoading] = useState(false);
@@ -44,6 +45,8 @@ export const Models = () => {
   }
 
   const [whisperMakeValue, setWhisperMakeValue] = useWhisperMake();
+
+  const { data: models = [], isLoading: modelsLoading } = useModels();
 
   return (
     <div>
@@ -82,7 +85,15 @@ export const Models = () => {
         <ScrollArea className="h-screen">
           <div className="flex flex-col gap-2 p-4 pt-0">
             {Object.entries(WhisperModel).map(([title, value]) => (
-              <ModelItem title={title} value={value} key={value} />
+              <ModelItem
+                title={title}
+                value={value}
+                key={value}
+                isFinished={
+                  models.find((model) => model === `ggml-${value}.bin`) !==
+                  undefined
+                }
+              />
             ))}
           </div>
         </ScrollArea>
