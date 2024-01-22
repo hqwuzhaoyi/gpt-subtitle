@@ -36,7 +36,7 @@ export const WhisperModelDescription = {
 };
 
 export enum MakeType {
-  Nvidia,
-  Metal,
-  CoreML,
+  Nvidia = "nvidia",
+  Metal = "metal",
+  CoreML = "coreml",
 }

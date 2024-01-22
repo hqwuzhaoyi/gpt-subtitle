@@ -5,10 +5,18 @@ import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { WhisperModel, WhisperModelDescription } from "shared-types";
+import { MakeType, WhisperModel, WhisperModelDescription } from "shared-types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { DownloadCloud } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { setWhisperMake, useWhisperMake } from "@/atoms/whisperMakeType";
 
 const Budges = ({ type }: { type: WhisperModel }) => {
   return WhisperModelDescription[
@@ -70,17 +78,41 @@ export const Models = () => {
     });
   }
 
+  const [whisperMakeValue, setWhisperMakeValue] = useWhisperMake();
+
   return (
     <div>
       <div className="mb-8">
         <div className="flex justify-between items-center p-4">
           <h3 className="text-lg font-medium">Models Management</h3>
-          <Button onClick={() => onDownload()} variant="outline">
-            {downloadLoading && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Re-Download
-          </Button>
+          <div className="flex items-center gap-2">
+            <Select
+              value={whisperMakeValue.value as string}
+              onValueChange={(e) => {
+                setWhisperMakeValue({
+                  value: e as MakeType,
+                });
+              }}
+            >
+              <SelectTrigger className="w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(MakeType).map(([label, value]) => (
+                  <SelectItem value={value} key={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button onClick={() => onDownload()} variant="outline">
+              {downloadLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Re-Download
+            </Button>
+          </div>
         </div>
         <ScrollArea className="h-screen">
           <div className="flex flex-col gap-2 p-4 pt-0">
