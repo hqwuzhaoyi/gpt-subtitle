@@ -12,6 +12,8 @@ import { WhisperService } from "./whisper.service";
 import { CreateWhisperDto } from "./dto/create-whisper.dto";
 import { UpdateWhisperDto } from "./dto/update-whisper.dto";
 import { FirstSetupDto } from "./dto/first-setup.dto";
+import { downloadModel } from "whisper";
+import { WhisperModelDto } from "./dto/whisper-model.dto";
 
 @Controller("whisper")
 export class WhisperController {
@@ -42,12 +44,22 @@ export class WhisperController {
     return this.whisperService.findAllModels();
   }
 
-  @Get("firstSetUp")
+  @Post("firstSetUp")
   async firstSetUp(
-    @Query()
+    @Body()
     firstSetupDto: FirstSetupDto
   ) {
     const data = await this.whisperService.firstSetUp(firstSetupDto);
+    return data;
+  }
+
+  @Post("downloadModel")
+  async downloadModel(
+    @Body()
+    downloadModelDto: WhisperModelDto
+  ) {
+    const data = this.whisperService.downloadModel(downloadModelDto);
+
     return data;
   }
 }

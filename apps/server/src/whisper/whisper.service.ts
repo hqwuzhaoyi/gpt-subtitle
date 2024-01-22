@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from "@nestjs/common";
 import { CreateWhisperDto } from "./dto/create-whisper.dto";
 import { UpdateWhisperDto } from "./dto/update-whisper.dto";
 import {
@@ -8,10 +12,13 @@ import {
   stopWhisper,
   whisper,
   setupWhisper,
+  compileWhisperModel,
 } from "whisper";
 import * as path from "path";
 import * as fs from "fs";
 import { FirstSetupDto } from "./dto/first-setup.dto";
+import { WhisperModel } from "shared-types";
+import { WhisperModelDto } from "./dto/whisper-model.dto";
 
 const visibleFiles = (file: string) => !file.startsWith(".");
 
@@ -26,6 +33,8 @@ export class WhisperService {
     "whisper"
   );
   private readonly modelsDir = path.join(this.whisperDir, "models");
+
+  private logger: Logger = new Logger("WhisperService");
 
   create(createWhisperDto: CreateWhisperDto) {
     return "This action adds a new whisper";
@@ -83,9 +92,22 @@ export class WhisperService {
       return this.findAllModels();
     }
 
+    this.logger.log("firstSetUp", firstSetupDto);
+
     await setupWhisper({
       dir: this.whisperDir,
+      makeType: firstSetupDto.makeType,
     });
     return this.findAllModels();
+  }
+
+  async downloadModel(downloadModelDto: WhisperModelDto) {
+    this.logger.log("downloadModel", downloadModelDto);
+    const data = await compileWhisperModel(
+      this.whisperDir,
+      downloadModelDto.model,
+      downloadModelDto.makeType
+    );
+    return data;
   }
 }
