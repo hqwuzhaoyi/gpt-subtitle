@@ -25,7 +25,7 @@ export function Terminal({ jobId }: TerminalProps) {
 
     eventSource.onmessage = ({ data }) => {
       const parsedData = JSON.parse(data);
-      setMessages((prevMessages) => [...prevMessages, parsedData.msg]); // 将新消息添加到现有消息数组中
+      setMessages((prevMessages) => [...prevMessages, parsedData.data.msg]); // 将新消息添加到现有消息数组中
     };
     return () => {
       eventSource.close();
