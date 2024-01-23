@@ -7,6 +7,7 @@ import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SettingButton } from "./setting-button";
+import { GlobalTerminal } from "./global-terminal";
 
 export function SiteHeader() {
   return (
@@ -55,6 +56,7 @@ export function SiteHeader() {
                 <span className="sr-only">Twitter</span>
               </div>
             </Link> */}
+            <GlobalTerminal />
             <ModeToggle />
             {/* TODO: when login show sign out button and username */}
             {/* <Link href="/login"> */}
