@@ -73,6 +73,7 @@ export class WhisperService {
   async start(
     ...args: Parameters<WhisperInterface>
   ): Promise<ReturnType<WhisperInterface>> {
+    this.logger.log("start", args);
     return whisper(...args);
   }
 
