@@ -89,7 +89,7 @@ importers:
         version: 4.0.0(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)
       '@nestjs/typeorm':
         specifier: ^10.0.1
-        version: 10.0.1(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)(typeorm@0.3.17)
+        version: 10.0.1(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)(typeorm@0.3.19)
       '@nestjs/websockets':
         specifier: ^10.2.10
         version: 10.2.10(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)(@nestjs/platform-socket.io@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)
@@ -151,8 +151,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/translater
       typeorm:
-        specifier: 0.3.17
-        version: 0.3.17(mysql2@3.7.0)(ts-node@10.9.2)
+        specifier: 0.3.19
+        version: 0.3.19(mysql2@3.7.0)(ts-node@10.9.2)
       utils:
         specifier: workspace:*
         version: link:../../packages/utils
@@ -2329,7 +2329,7 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@nestjs/typeorm@10.0.1(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)(typeorm@0.3.17):
+  /@nestjs/typeorm@10.0.1(@nestjs/common@10.3.1)(@nestjs/core@10.3.0)(reflect-metadata@0.2.1)(rxjs@7.8.1)(typeorm@0.3.19):
     resolution: {integrity: sha512-YVFYL7D25VAVp5/G+KLXIgsRfYomA+VaFZBpm2rtwrrBOmkXNrxr7kuI2bBBO/Xy4kKBDe6wbvIVVFeEA7/ngA==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -2342,7 +2342,7 @@ packages:
       '@nestjs/core': 10.3.0(@nestjs/common@10.3.1)(@nestjs/platform-express@10.3.0)(@nestjs/websockets@10.2.10)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       reflect-metadata: 0.2.1
       rxjs: 7.8.1
-      typeorm: 0.3.17(mysql2@3.7.0)(ts-node@10.9.2)
+      typeorm: 0.3.19(mysql2@3.7.0)(ts-node@10.9.2)
       uuid: 9.0.1
     dev: false
 
@@ -5298,7 +5298,7 @@ packages:
     dev: true
 
   /buffer@6.0.3:
-    resolution: {integrity: sha1-Ks5XhFnMj74qcKqo9S7mO2p0xsY=}
+    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
@@ -5503,7 +5503,7 @@ packages:
     dev: true
 
   /cli-highlight@2.1.11:
-    resolution: {integrity: sha1-SXNvpFLwqvT65YDjCssmgo0twb8=}
+    resolution: {integrity: sha512-9KDcoEVwyUXrjcJNvHD0NFc/hiwe/WPVYIleQh2O1N2Zro5gWJZ/K+3DGn8w8P/F6FxOgzyC5bxDyHIgCSPhGg==}
     engines: {node: '>=8.0.0', npm: '>=5.0.0'}
     hasBin: true
     dependencies:
@@ -6034,6 +6034,7 @@ packages:
     engines: {node: '>=0.11'}
     dependencies:
       '@babel/runtime': 7.23.7
+    dev: true
 
   /dayjs@1.11.10:
     resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
@@ -7544,17 +7545,6 @@ packages:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
-  /glob@8.1.0:
-    resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
-    engines: {node: '>=12'}
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 5.1.6
-      once: 1.4.0
-    dev: false
-
   /glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -7731,7 +7721,7 @@ packages:
     dev: true
 
   /highlight.js@10.7.3:
-    resolution: {integrity: sha1-aXJy45kTVuQMPKxWanTu9oF1ZTE=}
+    resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: false
 
   /hosted-git-info@2.8.9:
@@ -9921,7 +9911,7 @@ packages:
     dev: true
 
   /parse5-htmlparser2-tree-adapter@6.0.1:
-    resolution: {integrity: sha1-LN+a2CMyEUA3DU2/XT6Sx8jdxuY=}
+    resolution: {integrity: sha512-qPuWvbLgvDGilKc5BoicRovlT4MtYT6JfJyBOMDsKoiT+GiuP5qyrPCnR9HcPECIJJmZh5jRndyNThnhhb/vlA==}
     dependencies:
       parse5: 6.0.1
     dev: false
@@ -9934,11 +9924,11 @@ packages:
     dev: false
 
   /parse5@5.1.1:
-    resolution: {integrity: sha1-9o5OW6GFKsLK3AD0VV//bCq7YXg=}
+    resolution: {integrity: sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==}
     dev: false
 
   /parse5@6.0.1:
-    resolution: {integrity: sha1-4aHAhcVps9wIMhGE8Zo5zCf3wws=}
+    resolution: {integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==}
     dev: false
 
   /parse5@7.1.2:
@@ -10561,7 +10551,7 @@ packages:
     dev: false
 
   /reflect-metadata@0.1.13:
-    resolution: {integrity: sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=}
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
     dev: false
 
   /reflect-metadata@0.2.1:
@@ -10873,7 +10863,7 @@ packages:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
 
   /sha.js@2.4.11:
-    resolution: {integrity: sha1-N6XPC4HsvGlD3hCbopYNGyZYSuc=}
+    resolution: {integrity: sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==}
     hasBin: true
     dependencies:
       inherits: 2.0.4
@@ -11919,20 +11909,20 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  /typeorm@0.3.17(mysql2@3.7.0)(ts-node@10.9.2):
-    resolution: {integrity: sha512-UDjUEwIQalO9tWw9O2A4GU+sT3oyoUXheHJy4ft+RFdnRdQctdQ34L9SqE2p7LdwzafHx1maxT+bqXON+Qnmig==}
+  /typeorm@0.3.19(mysql2@3.7.0)(ts-node@10.9.2):
+    resolution: {integrity: sha512-OGelrY5qEoAU80mR1iyvmUHiKCPUydL6xp6bebXzS7jyv/X70Gp/jBWRAfF4qGOfy2A7orMiGRfwsBUNbEL65g==}
     engines: {node: '>= 12.9.0'}
     hasBin: true
     peerDependencies:
       '@google-cloud/spanner': ^5.18.0
       '@sap/hana-client': ^2.12.25
-      better-sqlite3: ^7.1.2 || ^8.0.0
+      better-sqlite3: ^7.1.2 || ^8.0.0 || ^9.0.0
       hdb-pool: ^0.1.6
       ioredis: ^5.0.4
-      mongodb: ^5.2.0
-      mssql: ^9.1.1
+      mongodb: ^5.8.0
+      mssql: ^9.1.1 || ^10.0.1
       mysql2: ^2.2.5 || ^3.0.1
-      oracledb: ^5.1.0
+      oracledb: ^6.3.0
       pg: ^8.5.1
       pg-native: ^3.0.0
       pg-query-stream: ^4.0.0
@@ -11982,10 +11972,10 @@ packages:
       buffer: 6.0.3
       chalk: 4.1.2
       cli-highlight: 2.1.11
-      date-fns: 2.30.0
+      dayjs: 1.11.10
       debug: 4.3.4
       dotenv: 16.3.1
-      glob: 8.1.0
+      glob: 10.3.10
       mkdirp: 2.1.6
       mysql2: 3.7.0
       reflect-metadata: 0.1.13
