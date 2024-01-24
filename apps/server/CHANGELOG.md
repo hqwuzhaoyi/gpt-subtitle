@@ -1,5 +1,20 @@
 # server
 
+## 1.8.0
+
+### Minor Changes
+
+- [#298](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/298) [`7314bc6`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/7314bc678802b11f80b2d1eed8124112138a21ef) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Added Whisper service and model download
+
+### Patch Changes
+
+- Updated dependencies [[`7314bc6`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/7314bc678802b11f80b2d1eed8124112138a21ef)]:
+  - shared-types@2.5.0
+  - translator@0.6.0
+  - nfo-parser@0.3.0
+  - whisper@0.7.0
+  - utils@0.5.0
+
 ## 1.7.0
 
 ### Minor Changes
