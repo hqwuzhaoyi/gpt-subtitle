@@ -1,5 +1,11 @@
 # ui
 
+## 0.5.0
+
+### Minor Changes
+
+- [#298](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/298) [`7314bc6`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/7314bc678802b11f80b2d1eed8124112138a21ef) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Added Whisper service and model download
+
 ## 0.4.1
 
 ### Patch Changes
