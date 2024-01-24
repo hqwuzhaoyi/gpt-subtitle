@@ -2,6 +2,11 @@ import { StyleSwitcher } from "@/components/style-switcher";
 import UploadPage from "./preview/tasks/page";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Gpt Subtitle",
+};
 
 export default function Example() {
   const cookieStore = cookies();

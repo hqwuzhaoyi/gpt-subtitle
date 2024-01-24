@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { MakeType, WhisperModel } from "./types";
 import * as fs from "fs";
-import { promisify } from 'util';
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
@@ -13,7 +13,7 @@ async function runCommand(command: string) {
       console.error(stderr);
     }
   } catch (error) {
-    console.error('Error during command execution', error);
+    console.error("Error during command execution", error);
   }
 }
 
@@ -28,7 +28,9 @@ export async function cloneWhisper(dir: string) {
     fs.rmSync(dir, { recursive: true, force: true });
     console.log(`Cleared existing directory: ${dir}`);
   }
-  await runCommand(`git clone --branch master https://github.com/ggerganov/whisper.cpp ${dir}`);
+  await runCommand(
+    `git clone --branch master https://github.com/ggerganov/whisper.cpp ${dir}`
+  );
   console.log("Cloned whisper.cpp repository");
 }
 
@@ -55,10 +57,17 @@ export async function runWhisperSample(dir: string) {
   console.log("Ran whisper sample in", dir);
 }
 
-export async function compileWhisperModel(dir: string, model: WhisperModel) {
+export async function compileWhisperModel(
+  dir: string,
+  model: WhisperModel,
+  makeType: MakeType = MakeType.Metal
+) {
   try {
     await runCommand(`cd ${dir} && make ${model}`);
     console.log(`Compiled whisper model: ${model} in`, dir);
+    if (makeType === MakeType.CoreML) {
+      await generateModelForCoreML(dir, model);
+    }
   } catch (error) {
     console.error(`Error compiling model: ${model} in ${dir}`, error);
   }
@@ -73,10 +82,15 @@ export async function generateModelForCoreML(dir: string, model: WhisperModel) {
   }
 }
 
-export async function setupWhisper({ dir }: { dir: string }) {
+export type SetupWhisperOptions = {
+  dir: string;
+  makeType?: MakeType;
+};
+
+export async function setupWhisper({ dir, makeType = MakeType.Metal }) {
   await cloneWhisper(dir);
   await cleanMake(dir); // Depending on the actual workflow, you might need to clean the make after cloning or before compiling
-  await compileWhisper(dir, MakeType.Metal);
+  await compileWhisper(dir, makeType);
   await downloadModel(dir);
   await runWhisperSample(dir);
   await compileWhisperModel(dir, WhisperModel.Base);

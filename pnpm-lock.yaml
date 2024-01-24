@@ -697,6 +697,9 @@ importers:
       execa:
         specifier: ^8.0.1
         version: 8.0.1
+      shared-types:
+        specifier: workspace:^
+        version: link:../shared-types
     devDependencies:
       '@types/jest':
         specifier: ^29.5.11

@@ -55,10 +55,12 @@ export const whisper: WhisperInterface = async (
   //   videoPath
   // );
 
-  const maxContentArgs = mc ? ["-mc", mc] : [];
-  const entropyTholdArgs = et ? ["-et", et] : [];
-  const promptArgs = prompt ? ["--prompt", prompt] : [];
-  const threadsArgs = threads ? ["-t", threads] : [];
+  const isExist = (value) => value && value !== "undefined" && value !== "";
+
+  const maxContentArgs = isExist(mc) ? ["-mc", mc] : [];
+  const entropyTholdArgs = isExist(et) ? ["-et", et] : [];
+  const promptArgs = isExist(prompt) ? ["--prompt", prompt] : [];
+  const threadsArgs = isExist(threads) ? ["-t", threads] : [];
 
   const args = [
     "-f",

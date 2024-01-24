@@ -1,6 +1,6 @@
 import { customFetch } from "@/lib/clientFetch";
 import { ProfileFormValues, WhisperValues } from "../data/schema";
-import { ApiResponse } from "shared-types";
+import { ApiResponse, WhisperModel } from "shared-types";
 
 export async function updateWhisper(data: WhisperValues) {
   const res = await customFetch("/auth/updateWhisper", {
@@ -13,17 +13,41 @@ export async function updateWhisper(data: WhisperValues) {
   });
 }
 
-export async function downloadWhisper({ force = false }) {
-  const res = await customFetch(
-    "/whisper/firstSetUp" + (force ? "?force=true" : ""),
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }
-  );
+export async function downloadWhisper({
+  force = false,
+  makeType,
+}: {
+  force?: boolean;
+  makeType: string;
+}) {
+  const res = await customFetch("/whisper/firstSetUp", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify({ force, makeType }),
+    body: JSON.stringify({ force, makeType }),
+  });
+}
+
+export type WhisperModelDto = {
+  model: WhisperModel;
+  makeType: string;
+};
+export async function downloadModel({ model, makeType }: WhisperModelDto) {
+  const res = await customFetch("/whisper/downloadModel", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify({ force, makeType }),
+    body: JSON.stringify({
+      model,
+      makeType,
+    }),
+  });
 }
 
 export async function setProfile(data: ProfileFormValues) {

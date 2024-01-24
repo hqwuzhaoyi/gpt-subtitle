@@ -1,4 +1,9 @@
+import { Metadata } from "next";
 import { GalleryList } from "./components/gallery-list";
+
+export const metadata: Metadata = {
+  title: "Gallery",
+};
 
 export default function TaskPage() {
   try {

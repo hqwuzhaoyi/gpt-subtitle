@@ -1,6 +1,9 @@
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./components/profile-form";
 import { getConfig } from "./api/profile";
+import { Metadata } from "next";
+
+
 
 export default async function SettingsProfilePage() {
   const [config] = await Promise.all([getConfig()]);
