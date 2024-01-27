@@ -32,8 +32,6 @@ COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN ls /app
-COPY --from=builder /app/entrypoint.sh /entrypoint.sh
-COPY --from=builder /app/setup-whisper.sh /setup-whisper.sh
 RUN npm install -g pnpm
 RUN pnpm install --shamefully-hoist
 
@@ -60,16 +58,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir -p /app/uploads/video
 
-COPY --from=installer /entrypoint.sh /entrypoint.sh
-COPY --from=installer /setup-whisper.sh /setup-whisper.sh
 COPY --from=installer /app .
-
-RUN chmod +x /entrypoint.sh
-RUN chmod +x /setup-whisper.sh
-
-RUN sh /setup-whisper.sh
-
-# Set entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
 
 CMD  node apps/server/dist/main.js
