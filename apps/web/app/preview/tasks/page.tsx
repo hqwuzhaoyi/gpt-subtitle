@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
-import { UserNav } from "./components/user-nav";
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -29,7 +28,6 @@ export default async function TaskPage() {
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <UserNav />
           </div>
         </div>
 
