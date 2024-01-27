@@ -1,6 +1,6 @@
 import { customFetch } from "@/lib/clientFetch";
 import { ProfileFormValues, WhisperValues } from "../data/schema";
-import { ApiResponse, WhisperModel } from "shared-types";
+import { WhisperModel } from "shared-types";
 
 export async function updateWhisper(data: WhisperValues) {
   const res = await customFetch("/auth/updateWhisper", {
@@ -65,5 +65,10 @@ export async function setProfile(data: ProfileFormValues) {
 
 export async function getWhisper(): Promise<WhisperValues> {
   const res = await customFetch<WhisperValues>("/auth/getWhisper");
+  return res?.data;
+}
+
+export async function getConfig(): Promise<Record<string, string>> {
+  const res = await customFetch<Record<string, string>>("/config");
   return res?.data;
 }

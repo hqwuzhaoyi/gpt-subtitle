@@ -1,12 +1,16 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./components/profile-form";
-import { getConfig } from "./api/profile";
-import { Metadata } from "next";
+import { getConfig } from "./api/client";
+import useSWR from "swr";
 
+export default function SettingsProfilePage() {
+  const { data: config, isLoading } = useSWR("settings/profile", getConfig);
 
-
-export default async function SettingsProfilePage() {
-  const [config] = await Promise.all([getConfig()]);
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className="space-y-6">
@@ -18,14 +22,18 @@ export default async function SettingsProfilePage() {
       </div>
       <Separator />
       <ProfileForm
-        defaultValues={{
-          OUTPUT_SRT_THEN_TRANSLATE:
-            config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
-          TranslateModel: config.TranslateModel,
-          TRANSLATE_GROUP: +config.TRANSLATE_GROUP,
-          TRANSLATE_DELAY: +config.TRANSLATE_DELAY,
-          LANGUAGE: config.LANGUAGE,
-        }}
+        defaultValues={
+          config
+            ? {
+                OUTPUT_SRT_THEN_TRANSLATE:
+                  config.OUTPUT_SRT_THEN_TRANSLATE === "1" ? true : false,
+                TranslateModel: config.TranslateModel as any,
+                TRANSLATE_GROUP: +config.TRANSLATE_GROUP as any,
+                TRANSLATE_DELAY: +config.TRANSLATE_DELAY as any,
+                LANGUAGE: config.LANGUAGE as any,
+              }
+            : {}
+        }
       />
     </div>
   );
