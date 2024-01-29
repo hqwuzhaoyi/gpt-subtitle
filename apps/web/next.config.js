@@ -1,4 +1,11 @@
 require("dotenv").config({ path: "../../.env" });
+
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin(
+  './locales/i18n.ts'
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
@@ -19,4 +26,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);
