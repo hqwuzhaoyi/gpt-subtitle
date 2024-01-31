@@ -32,7 +32,7 @@ import { outPutSrtList, outPutSrtAudios } from "../api/osrt";
 import useSWR from "swr";
 import { io } from "socket.io-client";
 import { ModelSelect } from "@/components/ModelSelect";
-import { AutoStartModal } from "../../../../components/Modal/Autostart";
+import { AutoStartModal } from "components/Modal/Autostart";
 import { TableType } from "../data/types";
 import { Task, taskSchema } from "../data/schema";
 import { ImagePreviewModal } from "./ImagePreviewModal";

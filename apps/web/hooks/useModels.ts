@@ -1,4 +1,4 @@
-import { getModels } from "@/app/api/models";
+import { getModels } from "app/api/models";
 import useSWR from "swr";
 
 export function useModels() {

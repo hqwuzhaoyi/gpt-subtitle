@@ -1,14 +1,21 @@
+import { useTranslations } from "next-intl";
+import { unstable_setRequestLocale } from "next-intl/server";
+
 import { StyleSwitcher } from "@/components/style-switcher";
-import UploadPage from "./preview/tasks/page";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import UploadPage from "../preview/tasks/page";
 
 export const metadata: Metadata = {
   title: "Gpt Subtitle",
 };
 
-export default function Example() {
+type Props = {
+  params: { locale: string };
+};
+
+export default function AppRootPage({ params: { locale } }: Props) {
   const cookieStore = cookies();
   const proxyUrlHasBeenSet = cookieStore.get("proxyUrlHasBeenSet");
 
@@ -16,12 +23,18 @@ export default function Example() {
     redirect("/initial-setup");
   }
 
+  const t = useTranslations("Index");
+
+  console.log("t", t("title"));
+  console.log(t);
+
   return (
     <div className="container relative p-10">
       <StyleSwitcher />
       {/* <HomeNav className="[&>a:first-child]:text-primary" /> */}
       <section className="hidden md:block">
         <div className="overflow-hidden rounded-lg border bg-background shadow-xl">
+          <h1>{t("title")}</h1>
           <UploadPage />
         </div>
       </section>

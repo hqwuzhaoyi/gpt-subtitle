@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "lib/navigation";
 import { UserAuthForm } from "../login/components/user-auth-form";
 
 export const metadata: Metadata = {

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-// import Link from "next/link";
+// import { Link } from "lib/navigation";
 // import { ChevronRight } from "lucide-react";
 
 // import { cn } from "@/lib/utils";

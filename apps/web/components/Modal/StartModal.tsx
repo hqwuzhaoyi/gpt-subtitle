@@ -14,12 +14,12 @@ import { LanguageSelect } from "../LanguageSelect";
 import { ModelSelect } from "@/components/ModelSelect";
 import { LanguageEnum } from "shared-types";
 import { outPutSrt } from "app/preview/tasks/api/osrt";
-import { getWhisper } from "@/app/settings/api/client";
+import { getWhisper } from "app/settings/api/client";
 import useSWR from "swr";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import PrioritySlider from "../PrioritySlider";
-import { WhisperValues } from "@/app/settings/data/schema";
+import { WhisperValues } from "app/settings/data/schema";
 
 type StartModalProps = {
   id: string;

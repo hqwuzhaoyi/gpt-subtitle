@@ -9,7 +9,7 @@ import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 
-import { LanguageSelect } from "../../../../components/LanguageSelect";
+import { LanguageSelect } from "components/LanguageSelect";
 import { Slider } from "@/components/ui/slider";
 import { setImagePreview } from "@/atoms/imagePreview";
 import PrioritySlider from "@/components/PrioritySlider";
