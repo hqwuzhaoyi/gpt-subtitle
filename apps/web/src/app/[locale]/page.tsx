@@ -25,9 +25,6 @@ export default function AppRootPage({ params: { locale } }: Props) {
 
   const t = useTranslations("Index");
 
-  console.log("t", t("title"));
-  console.log(t);
-
   return (
     <div className="container relative p-10">
       <StyleSwitcher />
