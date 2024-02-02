@@ -5,7 +5,7 @@ import { StyleSwitcher } from "@/components/style-switcher";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
-import UploadPage from "../preview/tasks/page";
+import UploadPage from "./preview/tasks/page";
 
 export const metadata: Metadata = {
   title: "Gpt Subtitle",

@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { Providers } from "../providers";
+import { Providers } from "./providers";
 import { StyleSwitcher } from "@/components/style-switcher";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 

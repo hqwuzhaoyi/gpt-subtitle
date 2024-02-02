@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { LanguageSelect } from "../LanguageSelect";
 import { ModelSelect } from "@/components/ModelSelect";
 import { LanguageEnum } from "shared-types";
-import { autoStart } from "app/preview/tasks/api/osrt";
+import { autoStart } from "locale/preview/tasks/api/osrt";
 import { useWhisperModel } from "@/atoms/whisperModel";
 import { toast } from "../ui/use-toast";
 

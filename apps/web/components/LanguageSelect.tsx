@@ -1,14 +1,4 @@
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +14,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { languages } from "../app/preview/tasks/data/data";
 import { LanguageEnum } from "shared-types";
 import { Check, ChevronDown } from "lucide-react";
 
