@@ -53,5 +53,12 @@
         "of": "共",
         "row(s) selected": "行被选中",
         "Filter tasks": "过滤任务..."
+    },
+    "InitialSetup": {
+        "title": "初始化设置",
+        "description": "请填写以下信息继续",
+        "server address": "服务器地址",
+        "server address description": "GPT subtitle 服务器地址",
+        "Next": "下一步"
     }
 }

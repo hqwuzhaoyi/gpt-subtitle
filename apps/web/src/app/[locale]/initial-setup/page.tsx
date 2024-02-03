@@ -19,8 +19,11 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { InitialSetupValues, useSeverSetting } from "@/hooks/useSeverSetting";
+import { useTranslations } from "next-intl";
 
-export default function Component() {
+export default function Component({}) {
+  const t = useTranslations("InitialSetup");
+
   const { replace } = useRouter();
 
   const { form, onSubmit } = useSeverSetting();
@@ -31,13 +34,13 @@ export default function Component() {
   };
 
   return (
-    <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0">
+    <div
+      className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0"
+    >
       <Card>
         <CardHeader>
-          <CardTitle>Initial Setup</CardTitle>
-          <CardDescription>
-            Please fill in the following information to get started
-          </CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -51,12 +54,12 @@ export default function Component() {
                   name="localProxyUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Server address</FormLabel>
+                      <FormLabel>{t("server address")}</FormLabel>
                       <FormControl>
                         <Input placeholder="http://localhost:3001" {...field} />
                       </FormControl>
                       <FormDescription>
-                        This is your http server address.
+                        {t("server address description")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -65,7 +68,7 @@ export default function Component() {
               </div>
               <div className="flex justify-center pt-4">
                 <Button type="submit" className="w-full">
-                  Next
+                  {t("Next")}
                 </Button>
               </div>
             </form>

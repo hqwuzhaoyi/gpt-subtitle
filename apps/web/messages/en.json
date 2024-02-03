@@ -53,5 +53,12 @@
         "of": "of",
         "row(s) selected": "row(s) selected",
         "Filter tasks": "Filter tasks..."
+    },
+    "InitialSetup": {
+        "title": "Initialization settings",
+        "description": "Please fill in the following information to continue.",
+        "server address": "Server address",
+        "server address description": "GPT subtitle service address",
+        "Next": "Next"
     }
 }

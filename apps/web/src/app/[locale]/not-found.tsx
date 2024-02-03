@@ -1,15 +1,9 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 import { useTranslations } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
 // Note that `app/[locale]/[...rest]/page.tsx`
 // is necessary for this page to render.
 
-export default function NotFoundPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  unstable_setRequestLocale(locale);
+export default function NotFoundPage() {
   const t = useTranslations("NotFoundPage");
 
   return (
