@@ -3,8 +3,7 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -18,9 +17,12 @@ const AudioTable = async () => {
   return <DataTable columns={columns} type="audio" />;
 };
 
-export default async function TaskPage() {
-  // const t = useTranslations("Whisper");
-
+export default async function TaskPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
   const t = await getTranslations("Whisper");
   const tIndex = await getTranslations("Index");
   return (

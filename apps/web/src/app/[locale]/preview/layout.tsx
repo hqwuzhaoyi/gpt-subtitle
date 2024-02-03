@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { unstable_setRequestLocale } from "next-intl/server";
 // import { Link } from "lib/navigation";
 // import { ChevronRight } from "lucide-react";
 
@@ -19,9 +20,14 @@ export const metadata: Metadata = {
 
 interface ExamplesLayoutProps {
   children: React.ReactNode;
+  params: { locale: string };
 }
 
-export default function ExamplesLayout({ children }: ExamplesLayoutProps) {
+export default function ExamplesLayout({
+  children,
+  params: { locale },
+}: ExamplesLayoutProps) {
+  unstable_setRequestLocale(locale);
   return (
     <>
       <div className="container relative p-10">

@@ -1,12 +1,18 @@
 import { Metadata } from "next";
 import { GalleryList } from "./components/gallery-list";
 import { useTranslations } from "next-intl";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Gallery",
 };
 
-export default function TaskPage() {
+export default function TaskPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
   const t = useTranslations("Whisper");
   try {
     return (
