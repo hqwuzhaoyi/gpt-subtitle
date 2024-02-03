@@ -1,6 +1,6 @@
 import { StyleSwitcher } from "@/components/style-switcher";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect } from "lib/navigation";
 import { Metadata } from "next";
 import UploadPage from "./preview/tasks/page";
 import { unstable_setRequestLocale } from "next-intl/server";
