@@ -1,6 +1,7 @@
 {
     "Index": {
-        "title": "Hello world!"
+        "title": "Hello world!",
+        "loading": "loading..."
     },
     "Nav": {
         "Whisper Tasks": "Whisper Tasks",
@@ -8,8 +9,49 @@
         "Subtitle Translate": "Subtitle Translate",
         "Queues": "Queues"
     },
+    "NotFoundPage": {
+        "title": "Page not found",
+        "description": "Please double-check the browser address bar or use the navigation to go to a known page."
+    },
     "LocaleSwitcher": {
         "label": "Change language",
         "locale": "{locale, select, cn {Chinese} en {English} other {Unknown}}"
+    },
+    "Whisper": {
+        "description": "Use Whisper to add subtitles to the video",
+        "video": "video",
+        "subtitle": "subtitle",
+        "audio": "audio",
+        "model": "model",
+        "Model": "Model",
+        "Select a whisper model to use": "Select a whisper model to use",
+        "Automatic Startup": "Automatic Startup",
+        "Settings for automatic startup": "Settings for automatic startup",
+        "Language": "Language",
+        "Cancel": "Cancel",
+        "Continue": "Continue",
+        "Filter tasks": "Filter tasks...",
+        "Reset": "Reset",
+        "Translate Selected": "Translate Selected",
+        "Stop": "Stop",
+        "Status": "Status",
+        "Priority": "Priority",
+        "row(s) selected": "row(s) selected",
+        "Rows per page": "Rows per page",
+        "Page": "Page",
+        "of": "of",
+        "Go to first page": "Go to first page",
+        "Go to previous page": "Go to previous page",
+        "Go to next page": "Go to next page",
+        "Go to last page": "Go to last page"
+    },
+    "Translate": {
+        "title": "Translate",
+        "description": "Use translation services to translate subtitles",
+        "Upload": "Upload",
+        "Columns": "Columns",
+        "of": "of",
+        "row(s) selected": "row(s) selected",
+        "Filter tasks": "Filter tasks..."
     }
 }

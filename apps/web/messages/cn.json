@@ -9,6 +9,10 @@
         "Subtitle Translate": "字幕翻译",
         "Queues": "任务队列"
     },
+    "NotFoundPage": {
+        "title": "页面未找到",
+        "description": "抱歉，你访问的页面不存在"
+    },
     "LocaleSwitcher": {
         "label": "Change language",
         "locale": "{locale, select, cn {中文} en {English} other {Unknown}}"

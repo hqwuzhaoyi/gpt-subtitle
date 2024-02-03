@@ -11,10 +11,6 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { locales } from "@/lib/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
-
 export default function LocaleLayout({
   children,
   params: { locale },

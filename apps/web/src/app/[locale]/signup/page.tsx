@@ -2,13 +2,19 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { Link } from "lib/navigation";
 import { UserAuthForm } from "../login/components/user-auth-form";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  unstable_setRequestLocale(locale);
   return (
     <>
       <div className="md:hidden">

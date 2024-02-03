@@ -10,8 +10,9 @@ export const metadata = {
 
 type Props = {
   children: ReactNode;
+  params: { locale: string };
 };
 
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children, params: { locale } }: Props) {
   return children;
 }
