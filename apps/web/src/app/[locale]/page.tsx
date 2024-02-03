@@ -1,6 +1,3 @@
-import { useTranslations } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
-
 import { StyleSwitcher } from "@/components/style-switcher";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -23,15 +20,11 @@ export default function AppRootPage({ params: { locale } }: Props) {
     redirect("/initial-setup");
   }
 
-  const t = useTranslations("Index");
-
   return (
     <div className="container relative p-10">
       <StyleSwitcher />
-      {/* <HomeNav className="[&>a:first-child]:text-primary" /> */}
       <section className="hidden md:block">
         <div className="overflow-hidden rounded-lg border bg-background shadow-xl">
-          <h1>{t("title")}</h1>
           <UploadPage />
         </div>
       </section>

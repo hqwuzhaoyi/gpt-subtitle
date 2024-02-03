@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { LanguageSelect } from "../LanguageSelect";
+import { LanguageSelect } from "../language-select";
 import { ModelSelect } from "@/components/ModelSelect";
 import { LanguageEnum } from "shared-types";
 import { autoStart } from "locale/preview/tasks/api/osrt";

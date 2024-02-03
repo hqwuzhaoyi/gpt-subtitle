@@ -1,5 +1,15 @@
 {
     "Index": {
         "title": "Hello world!"
+    },
+    "Nav": {
+        "Whisper Tasks": "Whisper Tasks",
+        "Gallery": "Gallery",
+        "Subtitle Translate": "Subtitle Translate",
+        "Queues": "Queues"
+    },
+    "LocaleSwitcher": {
+        "label": "Change language",
+        "locale": "{locale, select, cn {Chinese} en {English} other {Unknown}}"
     }
 }

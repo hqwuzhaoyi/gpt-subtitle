@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 import { WhisperSchema, WhisperValues } from "../../data/schema";
 import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
-import { LanguageSelect } from "@/components/LanguageSelect";
+import { LanguageSelect } from "@/components/language-select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getWhisper, updateWhisper } from "../../api/client";

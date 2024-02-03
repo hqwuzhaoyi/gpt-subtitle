@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { LanguageSelect } from "../LanguageSelect";
+import { LanguageSelect } from "../language-select";
 import { ModelSelect } from "@/components/ModelSelect";
 import { LanguageEnum } from "shared-types";
 import { outPutSrt } from "locale/preview/tasks/api/osrt";
