@@ -44,6 +44,8 @@ import {
 } from "./file";
 import useSWR, { mutate } from "swr";
 import { SubtitleItem } from "./types";
+import { useTranslations } from "next-intl";
+import { DataTablePagination } from "../tasks/components/data-table-pagination";
 
 export const columns: ColumnDef<SubtitleItem>[] = [
   {
@@ -232,11 +234,15 @@ export function SubtitleTable() {
     },
   });
 
+  const t = useTranslations("Translate");
+
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4 justify-between">
+    <div className="w-full space-y-4">
+      <div className="flex items-center justify-between">
         <Input
-          placeholder="Filter names..."
+          placeholder={
+            t("Filter tasks")
+          }
           value={
             (table.getColumn("baseName")?.getFilterValue() as string) ?? ""
           }
@@ -253,12 +259,14 @@ export function SubtitleTable() {
             onChange={handleFileChange}
           />
           <Button onClick={onButtonClick} className="justify-items-end">
-            Upload
+            {
+              t("Upload")
+            }
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
+                {t('Columns')} <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -333,30 +341,7 @@ export function SubtitleTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   );
 }

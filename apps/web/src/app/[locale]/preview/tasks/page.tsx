@@ -34,7 +34,7 @@ export default async function TaskPage() {
           <div className="flex items-center space-x-2"></div>
         </div>
 
-        <Tabs defaultValue="video" className="w-full">
+        <Tabs defaultValue="video" className="w-full space-y-4">
           <TabsList>
             <TabsTrigger value="video">{t("video")}</TabsTrigger>
             <TabsTrigger value="audio">{t("audio")}</TabsTrigger>

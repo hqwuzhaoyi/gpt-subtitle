@@ -40,5 +40,14 @@
         "Go to previous page": "跳转到上一页",
         "Go to next page": "跳转到下一页",
         "Go to last page": "跳转到最后一页"
+    },
+    "Translate": {
+        "title": "字幕翻译",
+        "description": "使用翻译服务来翻译字幕",
+        "Upload": "上传",
+        "Columns": "列",
+        "of": "共",
+        "row(s) selected": "行被选中",
+        "Filter tasks": "过滤任务..."
     }
 }
