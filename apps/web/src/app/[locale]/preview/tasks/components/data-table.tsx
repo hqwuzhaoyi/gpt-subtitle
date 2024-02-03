@@ -39,6 +39,7 @@ import { ImagePreviewModal } from "./ImagePreviewModal";
 import { LanguageEnum } from "shared-types";
 import { useWhisperModel } from "@/atoms/whisperModel";
 import { useProxyUrlAtom } from "@/atoms/proxyUrl";
+import { useTranslations } from "next-intl";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -266,11 +267,13 @@ export function DataTable<TData extends Task, TValue>({
     },
   });
 
+  const t = useTranslations("Whisper");
+
   return (
     <div className="space-y-4">
       <div className="h-8 flex">
         <div className="text-base tracking-tight h-auto pr-4 items-center flex">
-          Model
+          {t("model")}
         </div>
         <div className="flex-auto pr-4">
           <ModelSelect />

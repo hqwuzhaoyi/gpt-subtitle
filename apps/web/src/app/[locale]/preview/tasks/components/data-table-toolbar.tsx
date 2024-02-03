@@ -13,6 +13,7 @@ import { Task } from "../data/schema";
 import { ModelType } from "@/types/index";
 import { createJobs, terminateAllJobs } from "../api/osrt";
 import { toast } from "@/components/ui/use-toast";
+import { useTranslations } from "next-intl";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -30,12 +31,12 @@ export function DataTableToolbar<TData extends Task>({
   const isFiltered =
     table.getPreFilteredRowModel().rows.length >
     table.getFilteredRowModel().rows.length;
-
+  const t = useTranslations("Whisper");
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter tasks..."
+          placeholder={t("Filter tasks")}
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
@@ -45,14 +46,14 @@ export function DataTableToolbar<TData extends Task>({
         {table.getColumn("status") && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}
-            title="Status"
+            title={t("Status")}
             options={statuses}
           />
         )}
         {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
-            title="Priority"
+            title={t("Priority")}
             options={priorities as any}
           />
         )}
@@ -62,7 +63,7 @@ export function DataTableToolbar<TData extends Task>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            {t("Reset")}
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -83,7 +84,7 @@ export function DataTableToolbar<TData extends Task>({
             }}
             className="h-8 px-2 lg:px-3"
           >
-            Translate Selected
+            {t("Translate Selected")}
           </Button>
         ) : null}
       </div>
@@ -101,7 +102,8 @@ export function DataTableToolbar<TData extends Task>({
           className="h-8 "
         >
           <Ban className="mr-2 h-4 w-4"></Ban>
-          Stop
+
+          {t("Stop")}
         </Button>
         <DataTableViewOptions table={table} />
       </div>
