@@ -13,7 +13,8 @@ type Props = {
   params: { locale: string };
 };
 
-export default function AppRootPage({ params: { locale } }: Props) {
+export default function AppRootPage(props: Props) {
+  const { params: { locale } } = props;
   unstable_setRequestLocale(locale);
   const cookieStore = cookies();
   const proxyUrlHasBeenSet = cookieStore.get("proxyUrlHasBeenSet");
@@ -27,7 +28,7 @@ export default function AppRootPage({ params: { locale } }: Props) {
       <StyleSwitcher />
       <section className="hidden md:block">
         <div className="overflow-hidden rounded-lg border bg-background shadow-xl">
-          <UploadPage />
+          <UploadPage {...props} />
         </div>
       </section>
     </div>
