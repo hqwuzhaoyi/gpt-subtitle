@@ -1,5 +1,11 @@
 # web
 
+## 1.8.1
+
+### Patch Changes
+
+- [#305](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/305) [`a651f76`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/a651f7672839ab2e7dd2b13ae11efdba43c498fa) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Refactor API client and profile settings
+
 ## 1.8.0
 
 ### Minor Changes
