@@ -40,7 +40,7 @@
     "@types/ramda": "^0.29.10",
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.18",
-    "ahooks": "^3.7.8",
+    "ahooks": "^3.7.10",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
