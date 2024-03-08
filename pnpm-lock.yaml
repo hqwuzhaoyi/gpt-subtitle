@@ -341,8 +341,8 @@ importers:
         specifier: ^1.18.1
         version: 1.18.1
       jotai:
-        specifier: ^2.6.1
-        version: 2.6.1(@types/react@18.2.59)(react@18.2.0)
+        specifier: ^2.7.0
+        version: 2.7.0(@types/react@18.2.59)(react@18.2.0)
       lucide-react:
         specifier: ^0.303.0
         version: 0.303.0(react@18.2.0)
@@ -8928,8 +8928,8 @@ packages:
     resolution: {integrity: sha512-RZJdL9Qjd1sqNdyiVteRGV/bnWtik/+PJh1JP4kT6+x1QQMn+7ryueRys5BEueuayvSVY8CWGCisCDazeRLTuw==}
     dev: false
 
-  /jotai@2.6.1(@types/react@18.2.59)(react@18.2.0):
-    resolution: {integrity: sha512-GLQtAnA9iEKRMXnyCjf1azIxfQi5JausX2EI5qSlb59j4i73ZEyV/EXPDEAQj4uQNZYEefi3degv/Pw3+L/Dtg==}
+  /jotai@2.7.0(@types/react@18.2.59)(react@18.2.0):
+    resolution: {integrity: sha512-4qsyFKu4MprI39rj2uoItyhu24NoCHzkOV7z70PQr65SpzV6CSyhQvVIfbNlNqOIOspNMdf5OK+kTXLvqe63Jw==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=17.0.0'
