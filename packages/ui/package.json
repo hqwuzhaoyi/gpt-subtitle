@@ -23,7 +23,7 @@
     "preset": "jest-presets/jest/node"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.18",
     "eslint": "^8.56.0",
