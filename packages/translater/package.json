@@ -30,7 +30,7 @@
     "jest": "^29.7.0",
     "jest-presets": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   },
   "dependencies": {
     "@google-cloud/translate": "^8.0.3",

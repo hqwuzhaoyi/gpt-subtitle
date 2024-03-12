@@ -68,7 +68,7 @@
     "tailwindcss": "3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "translator": "workspace:^",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "utils": "workspace:*",
     "zod": "^3.22.4"
   },
