@@ -136,7 +136,9 @@ export function DataTable<TData extends Task, TValue>({
   const proxyUrl = useProxyUrlAtom();
 
   const socketRef = React.useRef(
-    io(proxyUrl ? proxyUrl : "http://localhost:3001")
+    io(proxyUrl ? proxyUrl : "http://localhost:3001", {
+      ackTimeout: 5000
+    })
   );
 
   socketRef.current.on("connection", (message) => {
