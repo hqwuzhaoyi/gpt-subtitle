@@ -579,8 +579,8 @@ importers:
   packages/translater:
     dependencies:
       '@google-cloud/translate':
-        specifier: ^8.0.3
-        version: 8.0.3
+        specifier: ^8.1.0
+        version: 8.1.0
       openai:
         specifier: ^4.25.0
         version: 4.25.0
@@ -1728,8 +1728,8 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
-  /@google-cloud/translate@8.0.3:
-    resolution: {integrity: sha512-ybgGiugW/hvHz0gp1wzv58EfvuUSYo2R/6x90DAhvW0amzwfopt4u8cfwXIP8k+gnkvI8VbpaeNiZualvCyy3Q==}
+  /@google-cloud/translate@8.1.0:
+    resolution: {integrity: sha512-L+y8IZKZuk5xJFoz2BwyFqzZcV6mLfxV95yKE2s9Qv3RH1wBhpb20FHtN4wYmcmw1fKzXUSQnO+wWcrGhR492Q==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@google-cloud/common': 5.0.0
