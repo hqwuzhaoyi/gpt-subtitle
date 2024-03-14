@@ -75,5 +75,18 @@
     "Audio Files": "音频文件",
     "ClearTaskToastTitle": "任务已停止",
     "ClearTaskToastDescription": "任务已停止并清除"
+  },
+  "Settings": {
+    "title": "设置",
+    "description": "更改应用程序设置",
+    "Server Address": "服务器地址",
+    "Language": "语言",
+    "Save": "保存",
+    "General": "通用",
+    "Server": "服务器",
+    "Whisper": "Whisper",
+    "Appearance": "外观",
+    "Notifications": "通知",
+    "Display": "显示"
   }
 }

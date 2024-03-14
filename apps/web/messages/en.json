@@ -75,5 +75,19 @@
     "Audio Files": "Audio Files",
     "ClearTaskToastTitle": "Stop all jobs success.",
     "ClearTaskToastDescription": "All jobs have been stopped."
+  },
+  "Settings": {
+    "title": "Settings",
+    "description": "Use the settings to configure the application",
+    "Server Address": "Server Address",
+    "Language": "Language",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "General": "General",
+    "Server": "Server",
+    "Whisper": "Whisper",
+    "Appearance": "Appearance",
+    "Notifications": "Notifications",
+    "Display": "Display"
   }
 }
