@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "components/ui/tooltip";
 import { Eye, View } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const PreviewCircle = ({
   className,
@@ -14,6 +15,7 @@ export const PreviewCircle = ({
   className?: string;
   url: string;
 }) => {
+  const t = useTranslations("Gallery");
   return (
     <TooltipProvider>
       <Tooltip>
@@ -26,7 +28,7 @@ export const PreviewCircle = ({
           ></Eye>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Preview</p>
+          <p>{t("Preview")}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

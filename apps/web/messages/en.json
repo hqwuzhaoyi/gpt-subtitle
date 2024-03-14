@@ -1,64 +1,79 @@
 {
-    "Index": {
-        "title": "Hello world!",
-        "loading": "loading..."
-    },
-    "Nav": {
-        "Whisper Tasks": "Whisper Tasks",
-        "Gallery": "Gallery",
-        "Subtitle Translate": "Subtitle Translate",
-        "Queues": "Queues"
-    },
-    "NotFoundPage": {
-        "title": "Page not found",
-        "description": "Please double-check the browser address bar or use the navigation to go to a known page."
-    },
-    "LocaleSwitcher": {
-        "label": "Change language",
-        "locale": "{locale, select, cn {Chinese} en {English} other {Unknown}}"
-    },
-    "Whisper": {
-        "description": "Use Whisper to add subtitles to the video",
-        "video": "video",
-        "subtitle": "subtitle",
-        "audio": "audio",
-        "model": "model",
-        "Model": "Model",
-        "Select a whisper model to use": "Select a whisper model to use",
-        "Automatic Startup": "Automatic Startup",
-        "Settings for automatic startup": "Settings for automatic startup",
-        "Language": "Language",
-        "Cancel": "Cancel",
-        "Continue": "Continue",
-        "Filter tasks": "Filter tasks...",
-        "Reset": "Reset",
-        "Translate Selected": "Translate Selected",
-        "Stop": "Stop",
-        "Status": "Status",
-        "Priority": "Priority",
-        "row(s) selected": "row(s) selected",
-        "Rows per page": "Rows per page",
-        "Page": "Page",
-        "of": "of",
-        "Go to first page": "Go to first page",
-        "Go to previous page": "Go to previous page",
-        "Go to next page": "Go to next page",
-        "Go to last page": "Go to last page"
-    },
-    "Translate": {
-        "title": "Translate",
-        "description": "Use translation services to translate subtitles",
-        "Upload": "Upload",
-        "Columns": "Columns",
-        "of": "of",
-        "row(s) selected": "row(s) selected",
-        "Filter tasks": "Filter tasks..."
-    },
-    "InitialSetup": {
-        "title": "Initialization settings",
-        "description": "Please fill in the following information to continue.",
-        "server address": "Server address",
-        "server address description": "GPT subtitle service address",
-        "Next": "Next"
-    }
+  "Index": {
+    "title": "Hello world!",
+    "loading": "loading..."
+  },
+  "Nav": {
+    "Whisper Tasks": "Whisper Tasks",
+    "Gallery": "Gallery",
+    "Subtitle Translate": "Subtitle Translate",
+    "Queues": "Queues"
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page."
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, cn {Chinese} en {English} other {Unknown}}"
+  },
+  "Whisper": {
+    "description": "Use Whisper to add subtitles to the video",
+    "video": "video",
+    "subtitle": "subtitle",
+    "audio": "audio",
+    "model": "model",
+    "Model": "Model",
+    "Select a whisper model to use": "Select a whisper model to use",
+    "Automatic Startup": "Automatic Startup",
+    "Settings for automatic startup": "Settings for automatic startup",
+    "Language": "Language",
+    "Cancel": "Cancel",
+    "Continue": "Continue",
+    "Filter tasks": "Filter tasks...",
+    "Reset": "Reset",
+    "Translate Selected": "Translate Selected",
+    "Stop": "Stop",
+    "Status": "Status",
+    "Priority": "Priority",
+    "row(s) selected": "row(s) selected",
+    "Rows per page": "Rows per page",
+    "Page": "Page",
+    "of": "of",
+    "Go to first page": "Go to first page",
+    "Go to previous page": "Go to previous page",
+    "Go to next page": "Go to next page",
+    "Go to last page": "Go to last page"
+  },
+  "Translate": {
+    "title": "Translate",
+    "description": "Use translation services to translate subtitles",
+    "Upload": "Upload",
+    "Columns": "Columns",
+    "of": "of",
+    "row(s) selected": "row(s) selected",
+    "Filter tasks": "Filter tasks..."
+  },
+  "InitialSetup": {
+    "title": "Initialization settings",
+    "description": "Please fill in the following information to continue.",
+    "server address": "Server address",
+    "server address description": "GPT subtitle service address",
+    "Next": "Next"
+  },
+  "Gallery": {
+    "Restart": "Restart",
+    "Stop": "Stop",
+    "Status": "Status",
+    "Start": "Start",
+    "Finished": "Finished",
+    "Download": "Download",
+    "Preview": "Preview",
+    "Actors": "Actors",
+    "Date Added": "Date Added",
+    "Subtitle Files": "Subtitle Files",
+    "Audio Files": "Audio Files",
+    "ClearTaskToastTitle": "Stop all jobs success.",
+    "ClearTaskToastDescription": "All jobs have been stopped."
+  }
 }

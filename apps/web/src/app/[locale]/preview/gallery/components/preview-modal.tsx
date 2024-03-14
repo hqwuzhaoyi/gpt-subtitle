@@ -23,6 +23,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PreviewCircle } from "./preview-circle";
+import { useTranslations } from "next-intl";
 
 function ShowCard({
   album,
@@ -31,6 +32,7 @@ function ShowCard({
   album: Album;
   handleStart: () => void;
 }) {
+  const t = useTranslations("Gallery");
   return (
     <div>
       <div className="h-64 w-full relative">
@@ -60,7 +62,7 @@ function ShowCard({
 
             <div className="flex items-center  mt-4">
               <Button type="button" variant="secondary" onClick={handleStart}>
-                {album.path ? "Restart" : "Start"}
+                {album.path ? t("Restart") : t("Start")}
               </Button>
               {album.path && (
                 <FinishedCircle className="ml-[0.5em] w-[32px] h-[32px]" />
@@ -76,13 +78,13 @@ function ShowCard({
                   onClick={async () => {
                     await outPutSrtStop(album.processingJobId);
                     toast({
-                      title: "Stop all jobs success.",
-                      description: "All tasks have been cleared.",
+                      title: t("ClearTaskToastTitle"),
+                      description: t("ClearTaskToastDescription"),
                     });
                   }}
                   className="ml-[0.5em] w-[32px] h-[32px]"
                 >
-                  Stop
+                  {t("Stop")}
                 </Ban>
               )}
             </div>
@@ -90,7 +92,7 @@ function ShowCard({
 
             <div className="text-left mt-6">
               <p>
-                <strong>Date Added: </strong>
+                <strong>{t("Date Added")}: </strong>
                 {album.dateadded}
               </p>
               {/* <p>
@@ -104,7 +106,7 @@ function ShowCard({
             {album.actors && (
               <div className="text-left mt-6">
                 <p>
-                  <strong>Actor: </strong>
+                  <strong>{t("Actors")}: </strong>
                 </p>
                 <div className="flex flex-wrap">
                   {album.actors?.map((actor, index) => (
@@ -131,6 +133,7 @@ const PreviewAccordion: React.FC<{
   audio: Album["audio"];
   subtitle: Album["subtitle"];
 }> = ({ audio, subtitle }) => {
+  const t = useTranslations("Gallery");
   return (
     <Accordion
       type="single"
@@ -141,7 +144,9 @@ const PreviewAccordion: React.FC<{
       }}
     >
       <AccordionItem value="audio">
-        <AccordionTrigger>Audio Files</AccordionTrigger>
+        <AccordionTrigger>
+          {t("Audio Files")}
+        </AccordionTrigger>
         <AccordionContent>
           <div className="grid gap-6">
             <div className="flex items-center justify-between space-x-4">
@@ -163,7 +168,9 @@ const PreviewAccordion: React.FC<{
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="subtitle">
-        <AccordionTrigger>Subtitle Files</AccordionTrigger>
+        <AccordionTrigger>
+          {t("Subtitle Files")} ({subtitle?.length})
+        </AccordionTrigger>
         <AccordionContent>
           <div className="grid gap-6">
             {subtitle?.map((sub, index) => (

@@ -33,6 +33,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "components/ui/tooltip";
+import { useTranslations } from "next-intl";
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
@@ -58,6 +59,8 @@ export function AlbumArtwork({
       `/api/gallery?page=${pagination.pageIndex}&pageSize=${pagination.pageSize}`,
     ]);
   };
+
+  const t = useTranslations("Gallery");
 
   return (
     <div className={cn("space-y-3", className)} {...props}>
@@ -106,7 +109,7 @@ export function AlbumArtwork({
                       <CheckCircle2 className="  opacity-80 rounded-full shadow-md text-green-600"></CheckCircle2>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Status: Finished</p>
+                      <p>{t("Finished")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -130,7 +133,7 @@ export function AlbumArtwork({
               setOpen(true);
             }}
           >
-            {album.path ? "Restart" : "Start"}
+            {album.path ? t("Restart") : t("Start")}
           </ContextMenuItem>
           {album.processingJobId && (
             <ContextMenuItem
@@ -142,7 +145,7 @@ export function AlbumArtwork({
                 });
               }}
             >
-              Stop
+              {t("Stop")}
             </ContextMenuItem>
           )}
           {album.path && (
@@ -151,7 +154,7 @@ export function AlbumArtwork({
                 window.open(album.path);
               }}
             >
-              Download
+              {t("Download")}
             </ContextMenuItem>
           )}
         </ContextMenuContent>
