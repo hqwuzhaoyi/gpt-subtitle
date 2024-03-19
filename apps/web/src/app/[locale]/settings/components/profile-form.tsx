@@ -28,6 +28,7 @@ import { Slider } from "@/components/ui/slider";
 import { ProfileFormValues, profileFormSchema } from "../data/schema";
 import { TranslateLanguage, TranslateType } from "shared-types";
 import { setProfile } from "../api/client";
+import { useTranslations } from "next-intl";
 
 export function ProfileForm({
   defaultValues,
@@ -39,14 +40,17 @@ export function ProfileForm({
     defaultValues,
     mode: "onChange",
   });
+
+  const t = useTranslations("Settings.Profile");
+
   const { refresh } = useRouter();
 
   async function onSubmit(data: ProfileFormValues) {
     setProfile(data);
 
     toast({
-      title: "Update Success",
-      description: "Your profile has been updated.",
+      title: t("profileUpdated"),
+      description: t("profileUpdatedDescription"),
     });
     refresh();
   }
@@ -55,7 +59,7 @@ export function ProfileForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div>
-          <h3 className="mb-4 text-lg font-medium">System Settings</h3>
+          <h3 className="mb-4 text-lg font-medium">{t("System Settings")}</h3>
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -64,10 +68,12 @@ export function ProfileForm({
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      Output Srt Then Translate
+                      {t("Output Srt Then Translate")}
                     </FormLabel>
                     <FormDescription>
-                      Do you need translation after outputting the srt file
+                      {t(
+                        "Do you need translation after outputting the srt file"
+                      )}
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -85,9 +91,11 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Translate Model</FormLabel>
+                    <FormLabel className="text-base">
+                      {t("Translate Model")}
+                    </FormLabel>
                     <FormDescription>
-                      Choose the translation model you need
+                      {t("Choose the translation model you need")}
                     </FormDescription>
                   </div>
                   <Select
@@ -117,10 +125,10 @@ export function ProfileForm({
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      Translate Language
+                      {t("Translate Language")}
                     </FormLabel>
                     <FormDescription>
-                      Choose the translation language you need
+                      {t("Choose the translation language you need")}
                     </FormDescription>
                   </div>
                   <Select
@@ -149,9 +157,11 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Translate Group</FormLabel>
+                    <FormLabel className="text-base">
+                      {t("Translate Group")}
+                    </FormLabel>
                     <FormDescription>
-                      Number of dialogue lines translated at once
+                      {t("Number of dialogue lines translated at once")}
                     </FormDescription>
                   </div>
                   <Slider
@@ -175,10 +185,13 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Translate Delay</FormLabel>
+                    <FormLabel className="text-base">
+                      {t("Translate Delay")}
+                    </FormLabel>
                     <FormDescription>
-                      The interval between translation interfaces, in
-                      milliseconds
+                      {t(
+                        "The interval between translation interfaces, in milliseconds"
+                      )}
                     </FormDescription>
                   </div>
                   <Slider
@@ -198,7 +211,7 @@ export function ProfileForm({
             />
           </div>
         </div>
-        <Button type="submit">Update profile</Button>
+        <Button type="submit">{t("Update profile")}</Button>
       </form>
     </Form>
   );

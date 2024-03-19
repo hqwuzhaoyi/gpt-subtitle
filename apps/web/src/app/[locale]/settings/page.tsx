@@ -4,9 +4,12 @@ import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "./components/profile-form";
 import { getConfig } from "./api/client";
 import useSWR from "swr";
+import { useTranslations } from "next-intl";
 
 export default function SettingsProfilePage() {
   const { data: config, isLoading } = useSWR("settings/profile", getConfig);
+
+  const t = useTranslations("Settings.Profile");
 
   if (isLoading) {
     return null;
@@ -15,10 +18,8 @@ export default function SettingsProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Profile</h3>
-        <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
-        </p>
+        <h3 className="text-lg font-medium">{t("title")}</h3>
+        <p className="text-sm text-muted-foreground">{t("description")}</p>
       </div>
       <Separator />
       <ProfileForm

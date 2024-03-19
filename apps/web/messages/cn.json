@@ -87,6 +87,24 @@
     "Whisper": "Whisper",
     "Appearance": "外观",
     "Notifications": "通知",
-    "Display": "显示"
+    "Display": "显示",
+    "Profile": {
+      "title": "配置",
+      "description": "管理您的帐户设置并设置偏好。",
+      "profileUpdated": "更新成功",
+      "profileUpdatedDescription": "您的配置已成功更新",
+      "systemSettings": "系统设置",
+      "Output Srt Then Translate": "先输出SRT再翻译",
+      "Do you need translation after outputting the srt file": "是否需要输出SRT文件后翻译",
+      "Translate Model": "翻译模型",
+      "Choose the translation model you need": "选择您需要的翻译模型",
+      "Translate Language": "翻译语言",
+      "Choose the translation language you need": "选择您需要的翻译语言",
+      "Translate Group": "翻译组",
+      "Number of dialogue lines translated at once": "一次翻译的对话行数",
+      "Translate Delay": "翻译延迟",
+      "The interval between translation interfaces, in milliseconds": "翻译界面之间的间隔，以毫秒为单位",
+      "Update profile": "更新配置"
+    }
   }
 }

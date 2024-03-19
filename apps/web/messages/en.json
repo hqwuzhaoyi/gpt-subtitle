@@ -88,6 +88,24 @@
     "Whisper": "Whisper",
     "Appearance": "Appearance",
     "Notifications": "Notifications",
-    "Display": "Display"
+    "Display": "Display",
+    "Profile": {
+      "title": "Settings",
+      "description": "Manage your account settings and set preferences.",
+      "profileUpdated": "Profile updated",
+      "profileUpdatedDescription": "Your profile has been updated successfully.",
+      "systemSettings": "System settings",
+      "Output Srt Then Translate": "Output SRT Then Translate",
+      "Do you need translation after outputting the srt file": "Do you need translation after outputting the srt file",
+      "Translate Model": "Translate Model",
+      "Choose the translation model you need": "Choose the translation model you need",
+      "Translate Language": "Translate Language",
+      "Choose the translation language you need": "Choose the translation language you need",
+      "Translate Group": "Translate Group",
+      "Number of dialogue lines translated at once": "Number of dialogue lines translated at once",
+      "Translate Delay": "Translate Delay",
+      "The interval between translation interfaces, in milliseconds": "The interval between translation interfaces, in milliseconds",
+      "Update profile": "Update profile",
+    }
   }
 }
