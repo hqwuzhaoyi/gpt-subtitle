@@ -59,7 +59,7 @@ export function ProfileForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div>
-          <h3 className="mb-4 text-lg font-medium">{t("System Settings")}</h3>
+          <h3 className="mb-4 text-lg font-medium">{t("systemSettings")}</h3>
           <div className="space-y-4">
             <FormField
               control={form.control}
