@@ -114,7 +114,25 @@
       "title": "Whisper",
       "description": "Transcribe audio and video files",
       "Preferences": "Preferences",
-      "Models": "Models"
+      "Models": "Models",
+      "ModelsDescription": "Choose the whisper model you need",
+      "ModelsPlaceholder": "Select a whisper model to use",
+      "AudioLanguage": "Audio Language",
+      "AudioLanguageDescription": "Choose the audio language you need",
+      "Prompt": "Prompt",
+      "PromptDescription": "Set prompt",
+      "Threads": "Threads",
+      "ThreadsDescription": "Set threads",
+      "MaxContent": "Max Content",
+      "MaxContentDescription": "Set the max content length",
+      "EntropyThreshold": "Entropy Threshold",
+      "EntropyThresholdDescription": "Set the entropy threshold",
+      "DownloadSuccess": "Download Success",
+      "DownloadSuccessDesc": "Whisper service has been downloaded.",
+      "DownloadFailed": "Download Failed",
+      "DownloadFailedDesc": "Whisper service download failed.",
+      "ModelsManagement": "Models Management",
+      "ReDownload": "Re-Download"
     }
   }
 }

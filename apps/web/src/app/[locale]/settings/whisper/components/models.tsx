@@ -19,9 +19,11 @@ import {
 import { setWhisperMake, useWhisperMake } from "@/atoms/whisperMakeType";
 import { ModelItem } from "./model-item";
 import { useModels } from "@/hooks/useModels";
+import { useTranslations } from "next-intl";
 
 export const Models = () => {
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const t = useTranslations("Settings.Whisper");
 
   async function onDownload() {
     try {
@@ -32,13 +34,13 @@ export const Models = () => {
       });
 
       toast({
-        title: "Download Success",
-        description: "Whisper service has been downloaded.",
+        title: t("DownloadSuccess"),
+        description: t("DownloadSuccessDesc"),
       });
     } catch (error) {
       toast({
-        title: "Download Failed",
-        description: "Whisper service download failed.",
+        title: t("DownloadFailed"),
+        description: t("DownloadFailedDesc"),
       });
     }
     setDownloadLoading(false);
@@ -52,7 +54,7 @@ export const Models = () => {
     <div>
       <div className="mb-8">
         <div className="flex justify-between items-center p-4">
-          <h3 className="text-lg font-medium">Models Management</h3>
+          <h3 className="text-lg font-medium">{t("ModelsManagement")}</h3>
           <div className="flex items-center gap-2">
             <Select
               value={whisperMakeValue.value as string}
@@ -78,7 +80,7 @@ export const Models = () => {
               {downloadLoading && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Re-Download
+              {t("ReDownload")}
             </Button>
           </div>
         </div>

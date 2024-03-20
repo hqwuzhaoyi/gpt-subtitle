@@ -32,6 +32,7 @@ import { getWhisper, updateWhisper } from "../../api/client";
 import useSWR from "swr";
 import { useMemo } from "react";
 import { LanguageEnum } from "shared-types";
+import { useTranslations } from "next-intl";
 
 export function Preferences() {
   const { data, isLoading } = useSWR("/api/whisper", getWhisper);
@@ -64,12 +65,15 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
   });
   const { refresh } = useRouter();
 
+  const t = useTranslations("Settings");
+  const tWhisper = useTranslations("Settings.Whisper");
+
   async function onSubmit(data: WhisperValues) {
     updateWhisper(data);
 
     await toast({
-      title: "Update Success",
-      description: "Your profile has been updated.",
+      title: t("updated"),
+      description: t("updatedDescription"),
     });
     refresh();
   }
@@ -87,9 +91,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Whisper Model</FormLabel>
+                    <FormLabel className="text-base">
+                      Whisper {tWhisper("Models")}
+                    </FormLabel>
                     <FormDescription>
-                      Choose the whisper model you need
+                      {tWhisper("ModelsDescription")}
                     </FormDescription>
                     <FormMessage />
                   </div>
@@ -102,7 +108,9 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                         {modelsLoading ? (
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
-                          <SelectValue placeholder="Select a whisper model to use" />
+                          <SelectValue
+                            placeholder={tWhisper("ModelsPlaceholder")}
+                          />
                         )}
                       </SelectTrigger>
                       <SelectContent>
@@ -123,9 +131,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Audio Language</FormLabel>
+                    <FormLabel className="text-base">
+                      {tWhisper("AudioLanguage")}
+                    </FormLabel>
                     <FormDescription>
-                      Choose the audio language you need
+                      {tWhisper("AudioLanguageDescription")}
                     </FormDescription>
                     <FormMessage />
                   </div>
@@ -143,8 +153,12 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Prompt</FormLabel>
-                    <FormDescription>Set the entropy threshold</FormDescription>
+                    <FormLabel className="text-base">
+                      {tWhisper("Prompt")}
+                    </FormLabel>
+                    <FormDescription>
+                      {tWhisper("PromptDescription")}
+                    </FormDescription>
                     <FormMessage />
                   </div>
                   <Textarea value={field.value} onChange={field.onChange} />
@@ -158,8 +172,12 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Threads</FormLabel>
-                    <FormDescription>Set threads</FormDescription>
+                    <FormLabel className="text-base">
+                      {tWhisper("Threads")}
+                    </FormLabel>
+                    <FormDescription>
+                      {tWhisper("ThreadsDescription")}
+                    </FormDescription>
                     <FormMessage />
                   </div>
                   <Input
@@ -177,9 +195,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base">Max Content</FormLabel>
+                    <FormLabel className="text-base">
+                      {tWhisper("MaxContent")}
+                    </FormLabel>
                     <FormDescription>
-                      Set the max content length
+                      {tWhisper("MaxContentDescription")}
                     </FormDescription>
                     <FormMessage />
                   </div>
@@ -199,9 +219,11 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      Entropy Threshold
+                      {tWhisper("EntropyThreshold")}
                     </FormLabel>
-                    <FormDescription>Set the entropy threshold</FormDescription>
+                    <FormDescription>
+                      {tWhisper("EntropyThresholdDescription")}
+                    </FormDescription>
                     <FormMessage />
                   </div>
                   <Input
@@ -214,7 +236,7 @@ function ProfileForm({ defaultValues }: { defaultValues: WhisperValues }) {
             />
           </div>
         </div>
-        <Button type="submit">Update</Button>
+        <Button type="submit">{t("Update")}</Button>
       </form>
     </Form>
   );

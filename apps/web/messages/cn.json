@@ -115,7 +115,25 @@
       "title": "Whisper",
       "description": "转录音频和视频文件",
       "Preferences": "偏好设置",
-      "Models": "模型"
+      "Models": "模型",
+      "ModelsDescription": "选择您需要的耳语模型",
+      "ModelsPlaceholder": "选择一个耳语模型来使用",
+      "AudioLanguage": "音频语言",
+      "AudioLanguageDescription": "选择您需要的音频语言",
+      "Prompt": "提示",
+      "PromptDescription": "设置提示",
+      "Threads": "线程",
+      "ThreadsDescription": "设置线程",
+      "MaxContent": "最大内容",
+      "MaxContentDescription": "设置最大内容长度",
+      "EntropyThreshold": "熵阈值",
+      "EntropyThresholdDescription": "设置熵阈值",
+      "DownloadSuccess": "下载成功",
+      "DownloadSuccessDesc": "耳语服务已下载。",
+      "DownloadFailed": "下载失败",
+      "DownloadFailedDesc": "耳语服务下载失败。",
+      "ModelsManagement": "模型管理",
+      "ReDownload": "重新下载"
     }
   }
 }

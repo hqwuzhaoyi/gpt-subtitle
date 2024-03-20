@@ -9,6 +9,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useWhisperMake } from "@/atoms/whisperMakeType";
 import { cn } from "@/lib/utils";
 import { DownloadCloud } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const Budges = ({ type }: { type: WhisperModel }) => {
   return WhisperModelDescription[
@@ -49,6 +50,7 @@ export const ModelItem = ({ title, value, isFinished }: ModelItemInterface) => {
   const [whisperMakeValue] = useWhisperMake();
 
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const t = useTranslations("Settings.Whisper");
 
   async function onModelDownload(model: WhisperModel) {
     try {
@@ -59,14 +61,14 @@ export const ModelItem = ({ title, value, isFinished }: ModelItemInterface) => {
       });
       setDownloadLoading(false);
       toast({
-        title: "Download Success",
-        description: "Whisper model has been downloaded.",
+        title: t("DownloadSuccess"),
+        description: t("DownloadSuccessDesc"),
       });
     } catch (error) {
       setDownloadLoading(false);
       toast({
-        title: "Download Failed",
-        description: "Whisper model download failed.",
+        title: t("DownloadFailed"),
+        description: t("DownloadFailedDesc"),
       });
     }
   }
@@ -87,7 +89,7 @@ export const ModelItem = ({ title, value, isFinished }: ModelItemInterface) => {
           </div>
         </div>
         <div className="line-clamp-2 text-xs text-muted-foreground">
-          whisper model description
+          {/* whisper model description */}
         </div>
         <Budges type={value} />
       </div>
