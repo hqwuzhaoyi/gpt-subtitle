@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "subtitle",
+  name: "GPT subtitle",
   // url: "https://ui.shadcn.com",
   // ogImage: "https://ui.shadcn.com/og.jpg",
   description:

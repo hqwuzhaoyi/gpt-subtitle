@@ -1,0 +1,139 @@
+{
+  "Index": {
+    "title": "Hello world!",
+    "loading": "loading..."
+  },
+  "Nav": {
+    "Whisper Tasks": "Whisper Tasks",
+    "Gallery": "Gallery",
+    "Subtitle Translate": "Subtitle Translate",
+    "Queues": "Queues"
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page."
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, cn {Chinese} en {English} other {Unknown}}"
+  },
+  "Whisper": {
+    "description": "Use Whisper to add subtitles to the video",
+    "video": "video",
+    "subtitle": "subtitle",
+    "audio": "audio",
+    "model": "model",
+    "Model": "Model",
+    "Select a whisper model to use": "Select a whisper model to use",
+    "Automatic Startup": "Automatic Startup",
+    "Settings for automatic startup": "Settings for automatic startup",
+    "Language": "Language",
+    "Cancel": "Cancel",
+    "Continue": "Continue",
+    "Filter tasks": "Filter tasks...",
+    "Reset": "Reset",
+    "Translate Selected": "Translate Selected",
+    "Stop": "Stop",
+    "View": "View",
+    "Status": "Status",
+    "Priority": "Priority",
+    "row(s) selected": "row(s) selected",
+    "Rows per page": "Rows per page",
+    "Page": "Page",
+    "of": "of",
+    "Go to first page": "Go to first page",
+    "Go to previous page": "Go to previous page",
+    "Go to next page": "Go to next page",
+    "Go to last page": "Go to last page"
+  },
+  "Translate": {
+    "title": "Translate",
+    "description": "Use translation services to translate subtitles",
+    "Upload": "Upload",
+    "Columns": "Columns",
+    "of": "of",
+    "row(s) selected": "row(s) selected",
+    "Filter tasks": "Filter tasks..."
+  },
+  "InitialSetup": {
+    "title": "Initialization settings",
+    "description": "Please fill in the following information to continue.",
+    "server address": "Server address",
+    "server address description": "GPT subtitle service address",
+    "Next": "Next"
+  },
+  "Gallery": {
+    "Restart": "Restart",
+    "Stop": "Stop",
+    "Status": "Status",
+    "Start": "Start",
+    "Finished": "Finished",
+    "Download": "Download",
+    "Preview": "Preview",
+    "Actors": "Actors",
+    "Date Added": "Date Added",
+    "Subtitle Files": "Subtitle Files",
+    "Audio Files": "Audio Files",
+    "ClearTaskToastTitle": "Stop all jobs success.",
+    "ClearTaskToastDescription": "All jobs have been stopped."
+  },
+  "Settings": {
+    "title": "Settings",
+    "description": "Use the settings to configure the application",
+    "Server Address": "Server Address",
+    "Language": "Language",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "General": "General",
+    "Appearance": "Appearance",
+    "Notifications": "Notifications",
+    "Display": "Display",
+    "Update": "Update",
+    "updated": "Setting updated",
+    "updatedDescription": "Your setting has been updated successfully.",
+    "Profile": {
+      "title": "Settings",
+      "description": "Manage your account settings and set preferences.",
+      "systemSettings": "System settings",
+      "Output Srt Then Translate": "Output SRT Then Translate",
+      "Do you need translation after outputting the srt file": "Do you need translation after outputting the srt file",
+      "Translate Model": "Translate Model",
+      "Choose the translation model you need": "Choose the translation model you need",
+      "Translate Language": "Translate Language",
+      "Choose the translation language you need": "Choose the translation language you need",
+      "Translate Group": "Translate Group",
+      "Number of dialogue lines translated at once": "Number of dialogue lines translated at once",
+      "Translate Delay": "Translate Delay",
+      "The interval between translation interfaces, in milliseconds": "The interval between translation interfaces, in milliseconds",
+      "Update profile": "Update profile"
+    },
+    "Server": {
+      "title": "Server",
+      "description": "This is your http server address."
+    },
+    "Whisper": {
+      "title": "Whisper",
+      "description": "Transcribe audio and video files",
+      "Preferences": "Preferences",
+      "Models": "Models",
+      "ModelsDescription": "Choose the whisper model you need",
+      "ModelsPlaceholder": "Select a whisper model to use",
+      "AudioLanguage": "Audio Language",
+      "AudioLanguageDescription": "Choose the audio language you need",
+      "Prompt": "Prompt",
+      "PromptDescription": "Set prompt",
+      "Threads": "Threads",
+      "ThreadsDescription": "Set threads",
+      "MaxContent": "Max Content",
+      "MaxContentDescription": "Set the max content length",
+      "EntropyThreshold": "Entropy Threshold",
+      "EntropyThresholdDescription": "Set the entropy threshold",
+      "DownloadSuccess": "Download Success",
+      "DownloadSuccessDesc": "Whisper service has been downloaded.",
+      "DownloadFailed": "Download Failed",
+      "DownloadFailedDesc": "Whisper service download failed.",
+      "ModelsManagement": "Models Management",
+      "ReDownload": "Re-Download"
+    }
+  }
+}

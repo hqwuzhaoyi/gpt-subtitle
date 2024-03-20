@@ -12,18 +12,20 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { LanguageSelect } from "../LanguageSelect";
+import { LanguageSelect } from "../language-select";
 import { ModelSelect } from "@/components/ModelSelect";
 import { LanguageEnum } from "shared-types";
-import { autoStart } from "app/preview/tasks/api/osrt";
+import { autoStart } from "locale/preview/tasks/api/osrt";
 import { useWhisperModel } from "@/atoms/whisperModel";
 import { toast } from "../ui/use-toast";
+import { useTranslations } from "next-intl";
 
 export const AutoStartModal = () => {
   const [language, setLanguage] = React.useState<LanguageEnum>(
     LanguageEnum.Auto
   );
   const { model } = useWhisperModel();
+  const t = useTranslations("Whisper");
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -31,27 +33,29 @@ export const AutoStartModal = () => {
           variant="outline"
           className="h-8 bg-primary text-primary-foreground"
         >
-          Automatic Startup
+          {t("Automatic Startup")}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Settings for automatic startup</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("Settings for automatic startup")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Language</Label>
+                <Label htmlFor="name">{t("Language")}</Label>
                 <LanguageSelect value={language} onChange={setLanguage} />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Model</Label>
+                <Label htmlFor="name">{t("Model")}</Label>
                 <ModelSelect />
               </div>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel> {t("Cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               if (!model) {
@@ -63,7 +67,7 @@ export const AutoStartModal = () => {
               autoStart(language, model);
             }}
           >
-            Continue
+            {t("Continue")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

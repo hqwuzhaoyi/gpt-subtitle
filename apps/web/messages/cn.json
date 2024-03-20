@@ -1,0 +1,140 @@
+{
+  "Index": {
+    "title": "你好",
+    "loading": "加载中..."
+  },
+  "Nav": {
+    "Whisper Tasks": "Whisper 任务",
+    "Gallery": "浏览",
+    "Subtitle Translate": "字幕翻译",
+    "Queues": "任务队列"
+  },
+  "NotFoundPage": {
+    "title": "页面未找到",
+    "description": "抱歉，你访问的页面不存在"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, cn {中文} en {English} other {Unknown}}"
+  },
+  "Whisper": {
+    "description": "使用Whisper为视频添加字幕",
+    "video": "视频",
+    "subtitle": "字幕",
+    "audio": "音频",
+    "model": "模型",
+    "Model": "模型",
+    "Select a whisper model to use": "选择一个Whisper模型",
+    "Automatic Startup": "自动",
+    "Settings for automatic startup": "自动启动设置",
+    "Language": "语言",
+    "Cancel": "取消",
+    "Continue": "继续",
+    "Filter tasks": "过滤任务...",
+    "Reset": "重置",
+    "Translate Selected": "翻译选中",
+    "Stop": "停止",
+    "View": "查看",
+    "Status": "状态",
+    "Priority": "优先级",
+    "row(s) selected": "行被选中",
+    "Rows per page": "每页行数",
+    "Page": "页数",
+    "of": "共",
+    "Go to first page": "跳转到第一页",
+    "Go to previous page": "跳转到上一页",
+    "Go to next page": "跳转到下一页",
+    "Go to last page": "跳转到最后一页"
+  },
+  "Translate": {
+    "title": "字幕翻译",
+    "description": "使用翻译服务来翻译字幕",
+    "Upload": "上传",
+    "Columns": "列",
+    "of": "共",
+    "row(s) selected": "行被选中",
+    "Filter tasks": "过滤任务..."
+  },
+  "InitialSetup": {
+    "title": "初始化设置",
+    "description": "请填写以下信息继续",
+    "server address": "服务器地址",
+    "server address description": "GPT subtitle 服务器地址",
+    "Next": "下一步"
+  },
+  "Gallery": {
+    "Restart": "重启",
+    "Stop": "停止",
+    "Status": "状态",
+    "Start": "开始",
+    "Finished": "完成",
+    "Download": "下载",
+    "Preview": "预览",
+    "Actors": "演员",
+    "Date Added": "添加日期",
+    "Subtitle Files": "字幕文件",
+    "Audio Files": "音频文件",
+    "ClearTaskToastTitle": "任务已停止",
+    "ClearTaskToastDescription": "任务已停止并清除"
+  },
+  "Settings": {
+    "title": "设置",
+    "description": "更改应用程序设置",
+    "Server Address": "服务器地址",
+    "Language": "语言",
+    "Save": "保存",
+    "General": "通用",
+    "Appearance": "外观",
+    "Notifications": "通知",
+    "Display": "显示",
+    "Update": "更新",
+    "updated": "更新成功",
+    "updatedDescription": "您的设置已成功更新。",
+    "Profile": {
+      "title": "配置",
+      "description": "管理您的帐户设置并设置偏好。",
+      "profileUpdated": "更新成功",
+      "profileUpdatedDescription": "您的配置已成功更新",
+      "systemSettings": "系统设置",
+      "Output Srt Then Translate": "先输出SRT再翻译",
+      "Do you need translation after outputting the srt file": "是否需要输出SRT文件后翻译",
+      "Translate Model": "翻译模型",
+      "Choose the translation model you need": "选择您需要的翻译模型",
+      "Translate Language": "翻译语言",
+      "Choose the translation language you need": "选择您需要的翻译语言",
+      "Translate Group": "翻译组",
+      "Number of dialogue lines translated at once": "一次翻译的对话行数",
+      "Translate Delay": "翻译延迟",
+      "The interval between translation interfaces, in milliseconds": "翻译界面之间的间隔，以毫秒为单位",
+      "Update profile": "更新配置"
+    },
+    "Server": {
+      "title": "服务器",
+      "description": "这是您的服务器地址。"
+    },
+    "Whisper": {
+      "title": "Whisper",
+      "description": "转录音频和视频文件",
+      "Preferences": "偏好设置",
+      "Models": "模型",
+      "ModelsDescription": "选择您需要的耳语模型",
+      "ModelsPlaceholder": "选择一个耳语模型来使用",
+      "AudioLanguage": "音频语言",
+      "AudioLanguageDescription": "选择您需要的音频语言",
+      "Prompt": "提示",
+      "PromptDescription": "设置提示",
+      "Threads": "线程",
+      "ThreadsDescription": "设置线程",
+      "MaxContent": "最大内容",
+      "MaxContentDescription": "设置最大内容长度",
+      "EntropyThreshold": "熵阈值",
+      "EntropyThresholdDescription": "设置熵阈值",
+      "DownloadSuccess": "下载成功",
+      "DownloadSuccessDesc": "耳语服务已下载。",
+      "DownloadFailed": "下载失败",
+      "DownloadFailedDesc": "耳语服务下载失败。",
+      "ModelsManagement": "模型管理",
+      "ReDownload": "重新下载"
+    }
+  }
+}

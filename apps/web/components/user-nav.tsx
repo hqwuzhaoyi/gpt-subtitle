@@ -13,7 +13,7 @@ import {
 } from "components/ui/dropdown-menu";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
-import Link from "next/link";
+import { Link } from "lib/navigation";
 import { useRouter } from "next/navigation";
 
 export function UserNav({ user }: { user: User }) {

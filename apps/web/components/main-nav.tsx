@@ -1,18 +1,19 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { useProxyUrlAtom } from "@/atoms/proxyUrl";
+import { Link } from "lib/navigation";
+import { useTranslations } from "next-intl";
 
 export function MainNav() {
   const pathname = usePathname();
   const proxyUrl = useProxyUrlAtom();
-
+  const t = useTranslations("Nav");
 
   return (
     <div className="mr-4 hidden md:flex">
@@ -32,7 +33,7 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-          Whisper Tasks
+          {t("Whisper Tasks")}
         </Link>
         <Link
           href="/preview/gallery"
@@ -43,7 +44,7 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-          Gallery
+          {t("Gallery")}
         </Link>
         <Link
           href="/preview/translate"
@@ -54,7 +55,7 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-          Subtitle Translate
+          {t("Subtitle Translate")}
         </Link>
         <Link
           href={proxyUrl + "/queues"}
@@ -65,7 +66,7 @@ export function MainNav() {
               : "text-foreground/60"
           )}
         >
-          Queues
+          {t("Queues")}
         </Link>
       </nav>
     </div>

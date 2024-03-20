@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "lib/navigation";
 
 export const SignButton = async () => {
   const pathname = usePathname();

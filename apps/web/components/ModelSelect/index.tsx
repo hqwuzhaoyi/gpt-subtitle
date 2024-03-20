@@ -8,6 +8,7 @@ import {
 import { useModels } from "@/hooks/useModels";
 import { Loader2 } from "lucide-react";
 import { setWhisperModel, useWhisperModel } from "@/atoms/whisperModel";
+import { useTranslations } from "next-intl";
 
 export const ModelSelect = ({
   value,
@@ -19,16 +20,17 @@ export const ModelSelect = ({
   const { data: models = [], isLoading: modelsLoading } = useModels();
 
   const { model: globalValue } = useWhisperModel();
+  const t = useTranslations("Whisper");
   return (
     <Select
       onValueChange={onChange ?? setWhisperModel}
       defaultValue={value ?? globalValue}
     >
-      <SelectTrigger>
+      <SelectTrigger className={"h-8"}>
         {modelsLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <SelectValue placeholder="Select a whisper model to use" />
+          <SelectValue placeholder={t("Select a whisper model to use")} />
         )}
       </SelectTrigger>
       <SelectContent>

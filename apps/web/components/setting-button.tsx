@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "lib/navigation";
 import { Cog } from "lucide-react";
 
 export const SettingButton = async () => {
