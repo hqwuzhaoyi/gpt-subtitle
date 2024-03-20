@@ -42,6 +42,7 @@ export function ProfileForm({
   });
 
   const t = useTranslations("Settings.Profile");
+  const tSettings = useTranslations("Settings");
 
   const { refresh } = useRouter();
 
@@ -49,8 +50,8 @@ export function ProfileForm({
     setProfile(data);
 
     toast({
-      title: t("profileUpdated"),
-      description: t("profileUpdatedDescription"),
+      title: tSettings("updated"),
+      description: tSettings("updatedDescription"),
     });
     refresh();
   }

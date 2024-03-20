@@ -24,7 +24,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     },
 
     {
-      title: t("Server"),
+      title: t("Server.title"),
       href: "/settings/server",
     },
 

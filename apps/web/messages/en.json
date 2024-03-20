@@ -84,16 +84,16 @@
     "Save": "Save",
     "Cancel": "Cancel",
     "General": "General",
-    "Server": "Server",
     "Whisper": "Whisper",
     "Appearance": "Appearance",
     "Notifications": "Notifications",
     "Display": "Display",
+    "Update": "Update",
+    "updated": "Setting updated",
+    "updatedDescription": "Your setting has been updated successfully.",
     "Profile": {
       "title": "Settings",
       "description": "Manage your account settings and set preferences.",
-      "profileUpdated": "Profile updated",
-      "profileUpdatedDescription": "Your profile has been updated successfully.",
       "systemSettings": "System settings",
       "Output Srt Then Translate": "Output SRT Then Translate",
       "Do you need translation after outputting the srt file": "Do you need translation after outputting the srt file",
@@ -106,6 +106,10 @@
       "Translate Delay": "Translate Delay",
       "The interval between translation interfaces, in milliseconds": "The interval between translation interfaces, in milliseconds",
       "Update profile": "Update profile"
+    },
+    "Server": {
+      "title": "Server",
+      "description": "This is your http server address."
     }
   }
 }

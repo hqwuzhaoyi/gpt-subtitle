@@ -13,26 +13,28 @@ import { InitialSetupValues, useSeverSetting } from "@/hooks/useSeverSetting";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslations } from "next-intl";
 
 export default function SettingsProfilePage() {
   const { form, onSubmit } = useSeverSetting();
   const { toast } = useToast();
 
+  const t = useTranslations("Settings.Server");
+  const tSettings = useTranslations("Settings");
+
   const handleSubmit = (data: InitialSetupValues) => {
     onSubmit(data);
     toast({
-      title: "Profile updated",
-      description: "Your profile has been updated.",
+      title: tSettings("updated"),
+      description: tSettings("updatedDescription"),
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Server address</h3>
-        <p className="text-sm text-muted-foreground">
-          This is your http server address.
-        </p>
+        <h3 className="text-lg font-medium">{t("title")}</h3>
+        <p className="text-sm text-muted-foreground">{t("description")}</p>
       </div>
       <Separator />
       <Form {...form}>
@@ -43,19 +45,17 @@ export default function SettingsProfilePage() {
               name="localProxyUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Server address</FormLabel>
+                  <FormLabel>{t("title")}</FormLabel>
                   <FormControl>
                     <Input placeholder="http://localhost:3001" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your http server address.
-                  </FormDescription>
+                  <FormDescription>{t("description")}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit">Update</Button>
+          <Button type="submit">{tSettings("Update")}</Button>
         </form>
       </Form>
     </div>

@@ -83,11 +83,13 @@
     "Language": "语言",
     "Save": "保存",
     "General": "通用",
-    "Server": "服务器",
     "Whisper": "Whisper",
     "Appearance": "外观",
     "Notifications": "通知",
     "Display": "显示",
+    "Update": "更新",
+    "updated": "更新成功",
+    "updatedDescription": "您的设置已成功更新。",
     "Profile": {
       "title": "配置",
       "description": "管理您的帐户设置并设置偏好。",
@@ -105,6 +107,10 @@
       "Translate Delay": "翻译延迟",
       "The interval between translation interfaces, in milliseconds": "翻译界面之间的间隔，以毫秒为单位",
       "Update profile": "更新配置"
+    },
+    "Server": {
+      "title": "服务器",
+      "description": "这是您的服务器地址。"
     }
   }
 }
