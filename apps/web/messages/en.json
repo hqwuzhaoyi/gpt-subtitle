@@ -84,7 +84,6 @@
     "Save": "Save",
     "Cancel": "Cancel",
     "General": "General",
-    "Whisper": "Whisper",
     "Appearance": "Appearance",
     "Notifications": "Notifications",
     "Display": "Display",
@@ -110,6 +109,12 @@
     "Server": {
       "title": "Server",
       "description": "This is your http server address."
+    },
+    "Whisper": {
+      "title": "Whisper",
+      "description": "Transcribe audio and video files",
+      "Preferences": "Preferences",
+      "Models": "Models"
     }
   }
 }

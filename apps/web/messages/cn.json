@@ -83,7 +83,6 @@
     "Language": "语言",
     "Save": "保存",
     "General": "通用",
-    "Whisper": "Whisper",
     "Appearance": "外观",
     "Notifications": "通知",
     "Display": "显示",
@@ -111,6 +110,12 @@
     "Server": {
       "title": "服务器",
       "description": "这是您的服务器地址。"
+    },
+    "Whisper": {
+      "title": "Whisper",
+      "description": "转录音频和视频文件",
+      "Preferences": "偏好设置",
+      "Models": "模型"
     }
   }
 }

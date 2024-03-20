@@ -29,7 +29,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     },
 
     {
-      title: t("Whisper"),
+      title: t("Whisper.title"),
       href: "/settings/whisper",
     },
     {

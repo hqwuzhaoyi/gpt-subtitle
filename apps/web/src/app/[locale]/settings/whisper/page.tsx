@@ -4,8 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Preferences } from "./components/prefrences";
 import { Models } from "./components/models";
+import { useTranslations } from "next-intl";
 
 export default function WhisperSetting() {
+  const t = useTranslations("Settings.Whisper");
   return (
     <Tabs defaultValue="preferences">
       <div className="flex items-center px-4 py-2">
@@ -15,13 +17,13 @@ export default function WhisperSetting() {
             value="preferences"
             className="text-zinc-600 dark:text-zinc-200"
           >
-            Preferences
+            {t("Preferences")}
           </TabsTrigger>
           <TabsTrigger
             value="models"
             className="text-zinc-600 dark:text-zinc-200"
           >
-            Models
+            {t("Models")}
           </TabsTrigger>
         </TabsList>
       </div>
