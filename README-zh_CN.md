@@ -14,7 +14,7 @@
 
 GPT-Subtitle 结合了 [Whisper](https://github.com/ggerganov/whisper.cpp) 和 [OpenAI](https://openai.com/) 的 [GPT-3 语言模型](https://openai.com/gpt-3/) :brain:，为你提供音频和视频的本地翻译功能。不仅能够将字幕转换成对话并进行翻译，而且支持多种语言的翻译，并能方便地将字幕翻译成其他语言。 :artificial_satellite:
 
-## :sparkles: 主要特性:
+## :sparkles: 主要特性
 
 通过接入 [whisper.cpp](https://github.com/ggerganov/whisper.cpp) 模型，现在你可以:
 
@@ -100,22 +100,71 @@ npm run deploy:prod
 
 ## :whale: Docker 部署
 
-### :books: docker-compose
+本指南将引导您通过两种方式使用 Docker 部署 GPT Subtitle 应用：直接使用预构建的 Docker 镜像启动服务，或通过构建自定义镜像启动服务。以下是具体步骤和相关配置。
 
-1. change the args inside `docker-compose.yml`
+### :arrow_forward: 直接启动（使用 docker-compose.yml）
 
-   ```text
-   args:
-        - WEB_PORT=3000
-        - SERVER_PORT=3001
-        - NEXT_PUBLIC_API_URL=http://localhost:3001
+可以直接使用 docker-compose.yml 文件来启动和运行您的服务。
+
+1. 编辑环境变量
+
+   确保 .env 文件中包含所有必要的环境变量，如数据库凭据等。
+
+2. 启动服务
+
+   执行以下命令来启动所有服务：
+
+   ```sh
+   docker-compose up -d
    ```
 
-2. run command
+这将基于 docker-compose.yml 文件中的配置，在后台启动服务。
 
-```bash
-docker-compose up -d
+### :gear: 构建并启动（使用 docker-compose-build.yml）
+
+如果您需要根据自己的需求构建镜像，或者想要从源代码开始部署应用，可以使用 docker-compose-build.yml 文件。
+
+1. 配置构建参数
+
+   在 docker-compose-build.yml 文件中，为需要构建的服务配置构建参数和环境变量。例如，对于前端服务 subtitle_web，您可以如下配置构建参数：
+
+   ```yml
+   services:
+     subtitle_web:
+       build:
+         args:
+           - WEB_PORT=3000
+           - SERVER_PORT=3001
+           - NEXT_PUBLIC_API_URL=http://localhost:3001
+
+   ```
+
+2. 构建并启动服务
+
+   使用以下命令来构建镜像并启动服务：
+
+   ```sh
+   docker-compose -f docker-compose-build.yml up -d
+
+   ```
+
+   请注意，这里指定了 -f 参数来使用 docker-compose-build.yml 文件。
+
+### :stop_sign: 停止服务
+
+不论使用哪种方式启动服务，当需要停止和清理服务时，可以执行：
+
+```sh
+docker-compose -f <对应的文件名> down
 ```
+
+## :memo: 注意事项
+
+- 请确保所有的环境变量都已经在 `.env` 文件中正确配置。
+- 如果需要修改服务的端口映射或卷路径，请确保这些修改反映在相应的 `docker-compose.yml` 或 `docker-compose-build.yml` 文件中。
+- 使用 `docker-compose-build.yml` 文件时，您可能需要根据实际路径调整 `context` 和 `dockerfile` 的路径。
+
+这样，您就可以根据具体需求选择直接启动服务或通过构建镜像启动服务，灵活部署 GPT Subtitle应用。
 
 ## setup-whisper
 

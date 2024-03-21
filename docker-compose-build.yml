@@ -3,10 +3,12 @@ version: "3"
 services:
   subtitle_api:
     container_name: subtitle_api
-    image: hqwuzhaoyi/gpt-subtitle-api:latest
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
     restart: always
     volumes:
-      - /Users/admin/workspace/gpt-subtitle/uploads:/app/uploads
+      - /Users/wuzhaoyi/workspace/gpt-subtitle/uploads:/app/uploads
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -19,7 +21,13 @@ services:
 
   subtitle_web:
     container_name: subtitle_web
-    image: hqwuzhaoyi/gpt-subtitle-web:latest
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      args:
+        - WEB_PORT=3000
+        - SERVER_PORT=3001
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
     restart: always
     ports:
       - ${WEB_PORT}:3000
@@ -27,6 +35,8 @@ services:
       - subtitle_app_network
     env_file:
       - .env
+    depends_on:
+      - subtitle_api
 
   subtitle_mysql:
     container_name: subtitle_mysql
@@ -36,10 +46,10 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - subtitle_mysql_data:/var/lib/mysql
-    ports:
-      - ${MYSQL_PORT}:3306
     networks:
       - subtitle_app_network
+    ports:
+      - ${MYSQL_PORT}:3306
 
   subtitle_redis:
     container_name: subtitle_redis
