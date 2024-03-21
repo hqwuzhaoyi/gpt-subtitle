@@ -65,7 +65,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3001 # Backend API address
 WEB_PORT=3000                             # Frontend start port
 
 # Backend Setting
-OPEN_AUTH=true            # Whether to enable authentication
 OPENAI_API_KEY=           # OpenAI API KEY
 GOOGLE_TRANSLATE_API_KEY= # Google API KEY(Can be left blank)
 BASE_URL=                 # OpenAI API URL
@@ -103,22 +102,71 @@ npm run deploy:prod
 
 ## :whale: Docker Deployment
 
-### :books: Using docker-compose
+This guide will lead you through two ways to deploy the GPT Subtitle app with Docker: directly using pre-built Docker images to start services or by building custom images to start services. Here are the specific steps and related configurations.
 
-1. Change the arguments inside `docker-compose.yml`
+### :arrow_forward: Direct Start (Using docker-compose.yml)
 
-   ```text
-   args:
-        - WEB_PORT=3000
-        - SERVER_PORT=3001
-        - NEXT_PUBLIC_API_URL=http://localhost:3001
-   ```
+You can directly use the docker-compose.yml file to start and run your services.
 
-2. Run the command
+1. Edit Environment Variables
 
-   ```bash
+   Ensure the .env file contains all necessary environment variables, such as database credentials, etc.
+
+2. Start Services
+
+   Execute the following command to start all services:
+
+   ```sh
    docker-compose up -d
    ```
+
+   This will start the services in the background based on the configuration in the docker-compose.yml file.
+
+### :gear: Build and Start (Using docker-compose-build.yml)
+
+If you need to build images according to your own needs, or want to deploy the application from the source code, you can use the docker-compose-build.yml file.
+
+1. Configure Build Arguments
+
+   In the docker-compose-build.yml file, configure the build arguments and environment variables for the services that need to be built. For example, for the frontend service subtitle_web, you can configure the build arguments as follows:
+
+   ```yml
+   services:
+     subtitle_web:
+       build:
+         args:
+           - WEB_PORT=3000
+           - SERVER_PORT=3001
+           - NEXT_PUBLIC_API_URL=http://localhost:3001
+
+   ```
+
+2. Build and Start Services
+
+   Use the following command to build the images and start the services:
+
+   ```sh
+   docker-compose -f docker-compose-build.yml up -d
+
+   ```
+
+   Note that the -f parameter is specified to use the docker-compose-build.yml file.
+
+### :stop_sign: Stop Services
+
+Regardless of which method is used to start the services, you can execute the following command when you need to stop and clean up the services:
+
+```sh
+docker-compose -f <corresponding file name> down
+```
+
+## :memo: Considerations
+
+- Ensure all environment variables are correctly configured in the `.env` file.
+- If you need to modify the service's port mappings or volume paths, ensure these modifications are reflected in the respective `docker-compose.yml` or `docker-compose-build.yml` file.
+- When using the `docker-compose-build.yml` file, you may need to adjust the `context` and `dockerfile` paths according to the actual paths.
+
+This way, you can flexibly deploy the GPT Subtitle app by choosing to directly start the services or build the images based on your specific needs.
 
 ## setup-whisper
 

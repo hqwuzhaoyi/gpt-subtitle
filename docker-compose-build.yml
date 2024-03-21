@@ -10,7 +10,7 @@ services:
     volumes:
       - /Users/wuzhaoyi/workspace/gpt-subtitle/uploads:/app/uploads
     ports:
-      - 3001:3001
+      - ${SERVER_PORT}:${SERVER_PORT}
     networks:
       - subtitle_app_network
     env_file:
@@ -30,7 +30,7 @@ services:
         - NEXT_PUBLIC_API_URL=http://localhost:3001
     restart: always
     ports:
-      - 3000:3000
+      - ${WEB_PORT}:3000
     networks:
       - subtitle_app_network
     env_file:
@@ -49,13 +49,13 @@ services:
     networks:
       - subtitle_app_network
     ports:
-      - ${MYSQL_PORT}:${MYSQL_PORT}
+      - ${MYSQL_PORT}:3306
 
   subtitle_redis:
     container_name: subtitle_redis
     image: redis:latest
     ports:
-      - "6379:6379"
+      - ${REDIS_PORT}:6379
     networks:
       - subtitle_app_network
 

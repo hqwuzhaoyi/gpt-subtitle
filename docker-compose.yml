@@ -8,7 +8,7 @@ services:
     volumes:
       - /Users/admin/workspace/gpt-subtitle/uploads:/app/uploads
     ports:
-      - 3001:3001
+      - ${SERVER_PORT}:${SERVER_PORT}
     networks:
       - subtitle_app_network
     env_file:
@@ -22,7 +22,7 @@ services:
     image: hqwuzhaoyi/gpt-subtitle-web:latest
     restart: always
     ports:
-      - 3000:3000
+      - ${WEB_PORT}:3000
     networks:
       - subtitle_app_network
     env_file:
