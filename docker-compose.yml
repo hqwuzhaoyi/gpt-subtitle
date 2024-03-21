@@ -6,7 +6,7 @@ services:
     image: hqwuzhaoyi/gpt-subtitle-api:latest
     restart: always
     volumes:
-      - /Users/wuzhaoyi/workspace/gpt-subtitle/uploads:/app/uploads
+      - /Users/admin/workspace/gpt-subtitle/uploads:/app/uploads
     ports:
       - 3001:3001
     networks:
@@ -16,6 +16,17 @@ services:
     depends_on:
       - subtitle_mysql
       - subtitle_redis
+
+  subtitle_web:
+    container_name: subtitle_web
+    image: hqwuzhaoyi/gpt-subtitle-web:latest
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - subtitle_app_network
+    env_file:
+      - .env
 
   subtitle_mysql:
     container_name: subtitle_mysql
