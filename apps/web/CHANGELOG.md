@@ -1,5 +1,15 @@
 # web
 
+## 1.9.0
+
+### Minor Changes
+
+- [#351](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/351) [`eb7cd78`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/eb7cd783652a1716025c96f636d9d53b5a162d75) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - The use of next-intl has added internationalization for Chinese and English.
+
+### Patch Changes
+
+- [#351](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/351) [`eb7cd78`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/eb7cd783652a1716025c96f636d9d53b5a162d75) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Remove UserNav component from TaskPage
+
 ## 1.8.1
 
 ### Patch Changes
