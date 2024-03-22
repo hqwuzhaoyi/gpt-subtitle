@@ -51,7 +51,7 @@
     "eslint-config-next": "14.1.0",
     "http-proxy": "^1.18.1",
     "jotai": "^2.7.0",
-    "lucide-react": "^0.303.0",
+    "lucide-react": "^0.360.0",
     "next": "14.1.0",
     "next-auth": "^4.24.5",
     "next-intl": "^3.5.2",
