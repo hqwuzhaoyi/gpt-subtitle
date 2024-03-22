@@ -2,10 +2,12 @@ name: Build and Push Docker Images on Tag
 
 on:
   push:
+    branches:
+      - master
     tags:
       - 'web@*'
       - 'server@*'
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   check-env:
