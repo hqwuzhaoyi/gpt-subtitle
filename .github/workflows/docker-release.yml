@@ -64,7 +64,7 @@ jobs:
         with:
           images: |
             ${{ secrets.DOCKER_USERNAME }}/gpt-subtitle-api
-            ghcr.io/${{ github.repository }}
+            ghcr.io/${{ github.repository }}/api
           tags: |
             type=raw,value=latest,enable=true
             type=raw,value={{date 'YYYY-MM-DD'}},enable=true
@@ -77,7 +77,7 @@ jobs:
         with:
           images: |
             ${{ secrets.DOCKER_USERNAME }}/gpt-subtitle-web
-            ghcr.io/${{ github.repository }}
+            ghcr.io/${{ github.repository }}/web
           tags: |
             type=raw,value=latest,enable=true
             type=raw,value={{date 'YYYY-MM-DD'}},enable=true
