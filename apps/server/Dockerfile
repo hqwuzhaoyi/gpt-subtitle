@@ -37,6 +37,8 @@ ENV TURBO_TOKEN=$TURBO_TOKEN
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 RUN pnpm turbo run build --filter=api
 RUN pnpm deploy --filter=server --prod server
+RUN ls -la ./apps/server/dist
+RUN cat ./apps/server/dist/main.js
 
 FROM base AS runner
 WORKDIR /app
