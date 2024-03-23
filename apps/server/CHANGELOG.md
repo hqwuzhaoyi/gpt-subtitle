@@ -1,5 +1,11 @@
 # server
 
+## 1.8.1
+
+### Patch Changes
+
+- [`7591f50`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/7591f50d673088efeaee7d55b4e1e4031ddb0c04) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Increase automatic deployment of Docker
+
 ## 1.8.0
 
 ### Minor Changes
