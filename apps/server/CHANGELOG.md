@@ -1,5 +1,11 @@
 # server
 
+## 1.9.0
+
+### Minor Changes
+
+- [#361](https://github.com/hqwuzhaoyi/gpt-subtitle/pull/361) [`9d4a28a`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/9d4a28a3925e482dde500a7d884c8e448a4af056) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Optimize server Dockerfile to reduce size
+
 ## 1.8.1
 
 ### Patch Changes
