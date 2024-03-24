@@ -97,7 +97,7 @@ export const autoStart = async (
   model: ModelType
 ): Promise<FileListResult[]> => {
   try {
-    const response = await request.get(`/osrt/autoStart/ja/${model}`);
+    const response = await request.get(`/osrt/autoStart/${language}/${model}`);
     return response.data;
   } catch (error) {
     console.error(error);
