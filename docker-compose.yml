@@ -49,11 +49,8 @@ services:
     networks:
       - subtitle_app_network
 
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
 networks:
   subtitle_app_network:
 
-# Volume for MySQL
 volumes:
   subtitle_mysql_data:
