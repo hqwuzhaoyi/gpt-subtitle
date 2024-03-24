@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  subtitle_mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - subtitle_mysql_data:/var/lib/mysql
+    ports:
+      - ${MYSQL_PORT}:3306
+    networks:
+      - subtitle_app_network
+
+  subtitle_redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - subtitle_app_network
+
+networks:
+  subtitle_app_network:
+
+volumes:
+  subtitle_mysql_data:
