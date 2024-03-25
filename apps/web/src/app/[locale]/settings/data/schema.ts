@@ -7,6 +7,8 @@ export const profileFormSchema = z.object({
   LANGUAGE: z.nativeEnum(TranslateLanguage).optional(),
   TRANSLATE_GROUP: z.number().optional(),
   TRANSLATE_DELAY: z.number().optional(),
+  PreferredLanguage: z.number().optional(),
+  PREFERRED_LANGUAGE: z.nativeEnum(LanguageEnum).optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

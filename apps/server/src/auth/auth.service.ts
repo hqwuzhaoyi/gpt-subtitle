@@ -106,54 +106,35 @@ export class AuthService {
     };
   }
 
-  async updateProfile(
-    user,
-    {
-      username,
-      password,
-      OUTPUT_SRT_THEN_TRANSLATE,
-      TranslateModel,
-      LANGUAGE,
-      TRANSLATE_GROUP,
-      TRANSLATE_DELAY,
-    }
-  ) {
-    if (typeof OUTPUT_SRT_THEN_TRANSLATE === "boolean") {
-      this.configService.set(
-        "OUTPUT_SRT_THEN_TRANSLATE",
-        OUTPUT_SRT_THEN_TRANSLATE ? "1" : "0"
-      );
-    }
-    if (TranslateModel) {
-      this.configService.set("TranslateModel", TranslateModel);
-    }
-
-    if (LANGUAGE) {
-      this.configService.set("LANGUAGE", LANGUAGE);
-    }
-
-    if (TRANSLATE_GROUP) {
-      this.configService.set("TRANSLATE_GROUP", TRANSLATE_GROUP);
-    }
-
-    if (TRANSLATE_DELAY) {
-      this.configService.set("TRANSLATE_DELAY", TRANSLATE_DELAY);
-    }
-
-    return {
-      OUTPUT_SRT_THEN_TRANSLATE: this.configService.get(
-        "OUTPUT_SRT_THEN_TRANSLATE"
-      ),
-      TranslateModel: this.configService.get("TranslateModel"),
-      LANGUAGE: this.configService.get("LANGUAGE"),
-      TRANSLATE_GROUP: this.configService.get("TRANSLATE_GROUP"),
-      TRANSLATE_DELAY: this.configService.get("TRANSLATE_DELAY"),
+  async updateProfile(user, updates) {
+    // 定义需要特殊处理的字段
+    const specialHandling = {
+      OUTPUT_SRT_THEN_TRANSLATE: (value) => (value ? "1" : "0"),
     };
 
-    // return this.usersService.updateProfile(user.id, {
-    //   username,
-    //   password,
-    // });
+    // 遍历updates对象的所有键，动态设置配置
+    Object.keys(updates).forEach((key) => {
+      // 检查字段是否需要特殊处理
+      const value = specialHandling[key]
+        ? specialHandling[key](updates[key])
+        : updates[key];
+
+      // 如果是布尔值且不在特殊处理中，将其转换为"1"或"0"
+      if (typeof value === "boolean" && !specialHandling[key]) {
+        this.configService.set(key, value ? "1" : "0");
+      } else if (value) {
+        // 避免未定义或空值
+        this.configService.set(key, value);
+      }
+    });
+
+    // 使用同一方法获取更新后的配置值
+    const response = Object.keys(updates).reduce((acc, key) => {
+      acc[key] = this.configService.get(key);
+      return acc;
+    }, {});
+
+    return response;
   }
 
   async updateWhisper(obj) {

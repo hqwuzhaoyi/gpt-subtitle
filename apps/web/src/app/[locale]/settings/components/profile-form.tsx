@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 
 import { ProfileFormValues, profileFormSchema } from "../data/schema";
-import { TranslateLanguage, TranslateType } from "shared-types";
+import { LanguageEnum, TranslateLanguage, TranslateType } from "shared-types";
 import { setProfile } from "../api/client";
 import { useTranslations } from "next-intl";
 
@@ -207,6 +207,48 @@ export function ProfileForm({
                       <span>5000</span>
                     </div>
                   }
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-4 text-lg font-medium">
+            {t("preferenceSettings")}
+          </h3>
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="PREFERRED_LANGUAGE"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      {t("preferenceLanguage")}
+                    </FormLabel>
+                    <FormDescription>
+                      {t("Choose your preferred language")}
+                    </FormDescription>
+                  </div>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("placeholder")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(LanguageEnum)
+                        .filter(([_key, value]) => value !== LanguageEnum.Auto)
+                        .map(([key, value]) => (
+                          <SelectItem key={value} value={value}>
+                            {key}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />
