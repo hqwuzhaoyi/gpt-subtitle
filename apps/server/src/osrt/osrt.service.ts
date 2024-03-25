@@ -1,7 +1,13 @@
 import { Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOsrtDto, FileType, WhisperConfig } from "./dto/create-osrt.dto";
 import { UpdateOsrtDto } from "./dto/update-osrt.dto";
-import { AudioListResult, FileListResult } from "shared-types";
+import {
+  AudioListResult,
+  FileListResult,
+  videoExtensions,
+  audioExtensions,
+  subtitleExtensions,
+} from "shared-types";
 import * as path from "path";
 import * as fs from "fs";
 import Bull, { JobStatusClean, Queue } from "bull";
@@ -17,11 +23,7 @@ import { ListDto, PaginationDto } from "./dto/pagination.dto";
 import { CustomConfigService } from "@/config/custom-config.service";
 import { WhisperService } from "@/whisper/whisper.service";
 
-
 const autoTranslateLanguages = "ja";
-const videoExtensions = ["mp4", "mkv", "avi", "mov", "flv", "wmv"];
-const audioExtensions = ["mp3", "wav", "ogg", "flac"];
-const subtitleExtensions = ["srt", "ass"];
 
 @Injectable()
 export class OsrtService {
@@ -195,8 +197,6 @@ export class OsrtService {
       return null;
     }
   }
-
-
 
   async findAllSrt() {
     return await this.findFiles(this.staticDir, subtitleExtensions);
