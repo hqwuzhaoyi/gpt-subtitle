@@ -41,7 +41,7 @@
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.18",
     "ahooks": "^3.7.10",
-    "autoprefixer": "10.4.15",
+    "autoprefixer": "10.4.19",
     "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
