@@ -18,6 +18,7 @@ import {
 import * as fg from "fast-glob";
 import * as cheerio from "cheerio";
 import { extractMediaInfo } from "nfo-parser";
+import { inferLanguageFromFilename } from "./utils/inferSubtitleLanguageFromFilename";
 
 export interface VideoDirFileGroup {
   videoFile: string;
@@ -81,7 +82,8 @@ export class WatchService {
     filePath: string,
     repo,
     relatedEntities: any = {},
-    status = "todo"
+    status = "todo",
+    languages = null
   ) {
     const fileName = path.basename(filePath);
     const baseName = path.basename(fileName, path.extname(fileName));
@@ -101,6 +103,7 @@ export class WatchService {
       // 更新状态
       if (status) {
         existsInDb.status = status;
+        existsInDb.languages = languages;
 
         if (Object.keys(relatedEntities).length === 0) {
           // throw new Error("No fields to update for the entity.");
@@ -118,6 +121,7 @@ export class WatchService {
         baseName,
         extName,
         status,
+        languages,
         ...relatedEntities,
       });
       return await repo.save(newFile);
@@ -144,11 +148,15 @@ export class WatchService {
       //   })
       //   .getOne();
 
+      let language = inferLanguageFromFilename(subtitleFile);
+
+
       await this.saveOrUpdateFile(
         subtitleFile,
         this.subtitleFilesRepository,
         {},
-        "done"
+        "done",
+        language
       );
 
       if (audioFileIndex !== -1) {
@@ -164,7 +172,8 @@ export class WatchService {
           subtitleFile,
           this.subtitleFilesRepository,
           { audioFile: audioEntity },
-          "done"
+          "done",
+          language
         );
 
         // Save subtitle file with associated audio file entity
@@ -536,6 +545,7 @@ export class WatchService {
       const subtitleFileEntity = await this.subtitleFilesRepository.findOne({
         where: { fileName: subtitle },
       });
+      let language = inferLanguageFromFilename(subtitleFile);
 
       if (subtitleFileEntity) {
         subtitleFileEntity.status = subtitleFiles.length > 1 ? "done" : "todo";
@@ -545,6 +555,8 @@ export class WatchService {
         subtitleFileEntity.fileName = subtitle;
         subtitleFileEntity.baseName = subtitleBaseName;
         subtitleFileEntity.extName = subtitleExtName;
+        subtitleFileEntity.languages = language
+
 
         await this.subtitleFilesRepository.save(subtitleFileEntity);
       } else {
@@ -556,6 +568,7 @@ export class WatchService {
           status: subtitleFiles.length > 1 ? "done" : "todo",
           audioFile: audioFileEntity,
           videoFile: videoFileEntity,
+          languages: language
         });
         await this.subtitleFilesRepository.save(newSubtitleFileEntity);
       }

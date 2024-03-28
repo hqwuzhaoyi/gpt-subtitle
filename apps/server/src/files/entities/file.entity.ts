@@ -28,6 +28,10 @@ export class FileEntity {
 
   @Column({ nullable: true })
   status: string;
+
+
+  @Column({ length: 500, nullable: true })
+  languages: string;
 }
 
 @Entity()
@@ -43,6 +47,7 @@ export class VideoFileEntity extends FileEntity {
 
   @OneToOne("NfoFileEntity", (nfoFile: NfoFileEntity) => nfoFile.videoFile)
   nfoFile: Promise<NfoFileEntity>;
+
 }
 
 @Entity()
@@ -88,7 +93,7 @@ export class NfoFileEntity extends FileEntity {
     thumb?: string;
   }[];
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   dateadded: string;
 
   @OneToOne(() => VideoFileEntity)

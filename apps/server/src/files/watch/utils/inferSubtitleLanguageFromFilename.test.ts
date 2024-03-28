@@ -11,6 +11,12 @@ describe("inferLanguageFromFilename", () => {
     expect(zhResult).toBe(LanguageEnum.Chinese);
   });
 
+  it('chinese should be matched with "中"', () => {
+    const filename = 'John.Wick.Chapter.4.2023.2160p.WEB-DL.DDP5.1.Atmos.HDR10Plus.H.265-CM.chinese(简,shooter).default';
+    const result = inferLanguageFromFilename(filename);
+    expect(result).toBe(LanguageEnum.Chinese);
+  });
+
   it('should return "Unknown" when no matching code is found', () => {
     const filename = "example_xfr.srt";
     const result = inferLanguageFromFilename(filename);
