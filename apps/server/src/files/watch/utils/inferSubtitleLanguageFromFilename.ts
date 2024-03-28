@@ -23,11 +23,8 @@ export function inferLanguageFromFilename(
   // 构建正则表达式以匹配以_或.开头的任一语言代码
   const languageRegex = new RegExp(`[._](${languageCodes})(?=[^._]*[._]|$)`, "i");
 
-  console.log("processedFilename", processedFilename);
-  console.log("languageRegex", languageRegex);
-
   const match = processedFilename.match(languageRegex);
-  console.log("match", match);
+
   if (match && match[1]) {
     const matchedCode = match[1];
 
