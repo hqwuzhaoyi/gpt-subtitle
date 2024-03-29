@@ -61,8 +61,8 @@ importers:
         specifier: ^5.14.2
         version: 5.15.1(@bull-board/api@5.15.1)(@bull-board/express@5.15.1)(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nestjs/bull':
-        specifier: ^10.0.1
-        version: 10.1.0(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)(bull@4.12.2)
+        specifier: ^10.1.1
+        version: 10.1.1(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)(bull@4.12.2)
       '@nestjs/common':
         specifier: ^10.3.1
         version: 10.3.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
@@ -2151,14 +2151,25 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@nestjs/bull@10.1.0(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)(bull@4.12.2):
-    resolution: {integrity: sha512-JEw4eFCtgECg1A9UGxa8eJtaxjwSk2XPLAG1xahZGnoozAYlDzvO6W6mFpCbKvoBbNSh1p+p+lccUbrbQnUd8w==}
+  /@nestjs/bull-shared@10.1.1(@nestjs/common@10.3.4)(@nestjs/core@10.3.5):
+    resolution: {integrity: sha512-su7eThDrSz1oQagEi8l+1CyZ7N6nMgmyAX0DuZoXqT1KEVEDqGX7x80RlPVF60m/8SYOskckGMjJROSfNQcErw==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+    dependencies:
+      '@nestjs/common': 10.3.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      '@nestjs/core': 10.3.5(@nestjs/common@10.3.4)(@nestjs/platform-express@10.3.6)(@nestjs/websockets@10.3.4)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      tslib: 2.6.2
+    dev: false
+
+  /@nestjs/bull@10.1.1(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)(bull@4.12.2):
+    resolution: {integrity: sha512-fbhgXNk1DpV27M8hdGH94iNJ7YonZRYyusmHb2qvvYMRBxkuzN0Hjf02jYCNUiPvCpn+WZBeEiYlYK30x3HkAQ==}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
       '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
       bull: ^3.3 || ^4.0.0
     dependencies:
-      '@nestjs/bull-shared': 10.1.0(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)
+      '@nestjs/bull-shared': 10.1.1(@nestjs/common@10.3.4)(@nestjs/core@10.3.5)
       '@nestjs/common': 10.3.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nestjs/core': 10.3.5(@nestjs/common@10.3.4)(@nestjs/platform-express@10.3.6)(@nestjs/websockets@10.3.4)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       bull: 4.12.2
