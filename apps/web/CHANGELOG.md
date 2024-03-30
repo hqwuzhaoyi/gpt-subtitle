@@ -1,5 +1,11 @@
 # web
 
+## 1.10.0
+
+### Minor Changes
+
+- [`f991611`](https://github.com/hqwuzhaoyi/gpt-subtitle/commit/f9916112903b4dc5b98edc27254f0b4f544e1be9) Thanks [@hqwuzhaoyi](https://github.com/hqwuzhaoyi)! - Filter according to the following languages when opening, find videos without specified languages for translation, and translate based on whether subtitles are included when closing.
+
 ## 1.9.1
 
 ### Patch Changes
