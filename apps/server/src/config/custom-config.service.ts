@@ -48,4 +48,16 @@ export class CustomConfigService {
       threads: threads,
     };
   }
+
+  async autoStartCustomSettings(): Promise<{
+    isCustom: boolean;
+    ln: string;
+  }> {
+    const ln = await this.get("AUTO_START_PREFERRED_LANGUAGE");
+    const isCustom = await this.get("AUTO_START_FILTER");
+    return {
+      isCustom: isCustom === "1",
+      ln: ln,
+    };
+  }
 }

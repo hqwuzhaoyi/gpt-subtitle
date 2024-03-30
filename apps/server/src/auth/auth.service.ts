@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "./dto/register.dto";
@@ -8,6 +8,7 @@ import { CustomConfigService } from "@/config/custom-config.service";
 
 @Injectable()
 export class AuthService {
+  private logger: Logger = new Logger("AuthService");
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -110,7 +111,10 @@ export class AuthService {
     // 定义需要特殊处理的字段
     const specialHandling = {
       OUTPUT_SRT_THEN_TRANSLATE: (value) => (value ? "1" : "0"),
+      AUTO_START_FILTER: (value) => (value ? "1" : "0"),
     };
+
+    this.logger.log(`Updating user profile: ${JSON.stringify(updates)}`);
 
     // 遍历updates对象的所有键，动态设置配置
     Object.keys(updates).forEach((key) => {

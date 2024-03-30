@@ -32,7 +32,8 @@ export default function SettingsProfilePage() {
                 TRANSLATE_GROUP: +config.TRANSLATE_GROUP as any,
                 TRANSLATE_DELAY: +config.TRANSLATE_DELAY as any,
                 LANGUAGE: config.LANGUAGE as any,
-                PREFERRED_LANGUAGE: config.PREFERRED_LANGUAGE as any,
+                AUTO_START_PREFERRED_LANGUAGE: config.AUTO_START_PREFERRED_LANGUAGE as any,
+                AUTO_START_FILTER: config.AUTO_START_FILTER as any,
               }
             : {}
         }

@@ -13,16 +13,19 @@ type FileItem = {
 type AudioFileItem = FileItem & {
   subtitleFiles: FileItem[];
 };
+type SubtitleFileItem = FileItem & {
+  languages?: string;
+};
 
 type VideoFileItem = FileItem & {
   audio: FileItem;
-  subtitle: FileItem[];
+  subtitle: SubtitleFileItem[];
   isProcessing: boolean;
   processingJobId?: string;
 } & MediaInfo;
 
 type AudioListItem = FileItem & {
-  subtitle: FileItem[];
+  subtitle: SubtitleFileItem[];
   isProcessing: boolean;
   processingJobId?: string;
 };

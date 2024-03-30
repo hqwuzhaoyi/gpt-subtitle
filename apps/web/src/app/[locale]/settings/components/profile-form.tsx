@@ -213,13 +213,35 @@ export function ProfileForm({
           </div>
         </div>
         <div>
-          <h3 className="mb-4 text-lg font-medium">
-            {t("preferenceSettings")}
-          </h3>
+          <h3 className="mb-4 text-lg font-medium">{t("AutoStartSettings")}</h3>
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="PREFERRED_LANGUAGE"
+              name="AUTO_START_FILTER"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      {t("Custom filter settings")}
+                    </FormLabel>
+                    <FormDescription>
+                      {t(
+                        "AUTO_START_FILTER Desc"
+                      )}
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="AUTO_START_PREFERRED_LANGUAGE"
               render={({ field }) => (
                 <FormItem className="flex flex-col justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">

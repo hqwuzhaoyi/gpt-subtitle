@@ -8,7 +8,8 @@ export const profileFormSchema = z.object({
   TRANSLATE_GROUP: z.number().optional(),
   TRANSLATE_DELAY: z.number().optional(),
   PreferredLanguage: z.number().optional(),
-  PREFERRED_LANGUAGE: z.nativeEnum(LanguageEnum).optional(),
+  AUTO_START_PREFERRED_LANGUAGE: z.nativeEnum(LanguageEnum).optional(),
+  AUTO_START_FILTER: z.boolean().optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

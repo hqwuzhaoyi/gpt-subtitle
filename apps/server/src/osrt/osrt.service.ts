@@ -73,13 +73,31 @@ export class OsrtService {
 
   async autoStart(ln = autoTranslateLanguages, model) {
     const { list: allVideos } = await this.list();
-    return allVideos
-      .filter((video) => video.status === "todo")
-      .filter((video) => !video.isProcessing)
-      .map((video) => {
-        this.translate(ln, video.id + "", model);
-        return video.fileName;
-      });
+    const autoStartCustomSettings =
+      await this.customConfigService.autoStartCustomSettings();
+
+    if (autoStartCustomSettings.isCustom) {
+      return allVideos
+        .filter((video) => {
+          if (video.subtitle?.find((sub) => sub.languages?.includes(autoStartCustomSettings.ln))) {
+            return false;
+          }
+          return true;
+        })
+        .filter((video) => !video.isProcessing)
+        .map((video) => {
+          this.translate(ln, video.id + "", model);
+          return video.fileName;
+        });
+    } else {
+      return allVideos
+        .filter((video) => video.status === "todo")
+        .filter((video) => !video.isProcessing)
+        .map((video) => {
+          this.translate(ln, video.id + "", model);
+          return video.fileName;
+        });
+    }
   }
 
   filePathToUrl(filePath) {
