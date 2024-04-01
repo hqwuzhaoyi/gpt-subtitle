@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@google-cloud/translate": "^8.1.0",
-    "openai": "^4.25.0",
+    "openai": "^4.31.0",
     "p-queue": "npm:@esm2cjs/p-queue@^7.3.0",
     "shared-types": "workspace:^",
     "subtitle": "^4.2.1"
