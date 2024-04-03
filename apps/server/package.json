@@ -49,7 +49,7 @@
     "mysql2": "^3.9.3",
     "nfo-parser": "workspace:^",
     "openai": "^4.32.0",
-    "reflect-metadata": "^0.2.1",
+    "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "shared-types": "workspace:*",
     "socket.io": "4.7.4",
