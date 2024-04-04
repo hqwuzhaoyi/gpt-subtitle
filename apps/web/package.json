@@ -36,7 +36,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-table": "^8.15.0",
-    "@types/node": "20.11.30",
+    "@types/node": "20.12.4",
     "@types/ramda": "^0.29.10",
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.18",
