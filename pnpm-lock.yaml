@@ -133,8 +133,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/nfoParser
       openai:
-        specifier: ^4.32.0
-        version: 4.32.0
+        specifier: ^4.33.0
+        version: 4.33.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -582,8 +582,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       openai:
-        specifier: ^4.32.0
-        version: 4.32.0
+        specifier: ^4.33.0
+        version: 4.33.0
       p-queue:
         specifier: npm:@esm2cjs/p-queue@^7.3.0
         version: /@esm2cjs/p-queue@7.3.0
@@ -9867,8 +9867,8 @@ packages:
       mimic-fn: 4.0.0
     dev: false
 
-  /openai@4.32.0:
-    resolution: {integrity: sha512-TXmBSej7RoQ4GWgKw1Waopx6QRroWlwaLH+PkxCTN45nKNEPFcGUV7VSWQCB/DwWMQVRLSNUAH4BqFYnSCEgkQ==}
+  /openai@4.33.0:
+    resolution: {integrity: sha512-Sh4KvplkvkAREuhb8yZpohqsOo08cBBu6LNWLD8YyMxe8yCxbE+ouJYUs1X2oDPrzQGANj0rFNQYiwW9gWLBOg==}
     hasBin: true
     dependencies:
       '@types/node': 18.19.26
