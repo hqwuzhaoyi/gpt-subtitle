@@ -21,7 +21,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@bull-board/api": "^5.10.2",
+    "@bull-board/api": "^5.15.5",
     "@bull-board/express": "^5.10.2",
     "@bull-board/nestjs": "^5.14.2",
     "@nestjs/bull": "^10.1.1",
