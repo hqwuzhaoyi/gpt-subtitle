@@ -54,7 +54,7 @@
     "shared-types": "workspace:*",
     "socket.io": "4.7.4",
     "translator": "workspace:*",
-    "typeorm": "0.3.17",
+    "typeorm": "0.3.20",
     "utils": "workspace:*",
     "whisper": "workspace:*"
   },
