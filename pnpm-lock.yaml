@@ -311,8 +311,8 @@ importers:
         specifier: ^18.2.24
         version: 18.2.24
       ahooks:
-        specifier: ^3.7.10
-        version: 3.7.10(react@18.2.0)
+        specifier: ^3.7.11
+        version: 3.7.11(react@18.2.0)
       autoprefixer:
         specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -4730,8 +4730,8 @@ packages:
       humanize-ms: 1.2.1
     dev: false
 
-  /ahooks@3.7.10(react@18.2.0):
-    resolution: {integrity: sha512-/HLYif7sFA/5qSuWKrwvjDbf3bq+sdaMrUWS7XGCDRWdC2FrG/i+u5LZdakMYc6UIgJTMQ7tGiJCV7sdU4kSIw==}
+  /ahooks@3.7.11(react@18.2.0):
+    resolution: {integrity: sha512-BfSq7HJ9wk/7a2vX7WbLdwzHyQHmbNe21ipX1PfIzssXIzQfAl79WVJ9GjZaqNl4PFPsJusj/Xjg2OF+gIgGaQ==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -4742,6 +4742,7 @@ packages:
       js-cookie: 2.2.1
       lodash: 4.17.21
       react: 18.2.0
+      react-fast-compare: 3.2.2
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       tslib: 2.6.2
@@ -10366,6 +10367,10 @@ packages:
       '@babel/runtime': 7.24.1
       react: 18.2.0
     dev: true
+
+  /react-fast-compare@3.2.2:
+    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
+    dev: false
 
   /react-hook-form@7.51.1(react@18.2.0):
     resolution: {integrity: sha512-ifnBjl+kW0ksINHd+8C/Gp6a4eZOdWyvRv0UBaByShwU8JbVx5hTcTWEcd5VdybvmPTATkVVXk9npXArHmo56w==}
