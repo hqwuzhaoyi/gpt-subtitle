@@ -34,7 +34,7 @@
     "@nestjs/platform-socket.io": "^10.3.8",
     "@nestjs/serve-static": "^4.0.1",
     "@nestjs/typeorm": "^10.0.1",
-    "@nestjs/websockets": "^10.3.7",
+    "@nestjs/websockets": "^10.3.8",
     "axios": "^1.6.5",
     "bull": "^4.12.2",
     "cheerio": "1.0.0-rc.12",
