@@ -71,7 +71,7 @@
     "translator": "workspace:^",
     "typescript": "^5.4.3",
     "utils": "workspace:*",
-    "zod": "^3.22.4"
+    "zod": "^3.23.4"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.9",
