@@ -43,7 +43,7 @@
     "class-validator": "^0.14.1",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
-    "glob": "^10.3.10",
+    "glob": "^10.3.12",
     "global-agent": "^3.0.0",
     "multer": "1.4.5-lts.1",
     "mysql2": "^3.9.3",
