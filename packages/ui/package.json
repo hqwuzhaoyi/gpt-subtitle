@@ -24,13 +24,13 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/react": "^18.2.59",
+    "@types/react": "^18.3.1",
     "@types/react-dom": "^18.2.24",
     "eslint": "^8.56.0",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.7.0",
     "jest-presets": "workspace:*",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "tsconfig": "workspace:*",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3"
