@@ -32,7 +32,7 @@
     "@nestjs/mapped-types": "^2.0.4",
     "@nestjs/platform-express": "^10.3.6",
     "@nestjs/platform-socket.io": "^10.3.8",
-    "@nestjs/serve-static": "^4.0.1",
+    "@nestjs/serve-static": "^4.0.2",
     "@nestjs/typeorm": "^10.0.1",
     "@nestjs/websockets": "^10.3.8",
     "axios": "^1.6.5",
